@@ -31,6 +31,58 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+////////////////// ADD NEW CLIENT ///////////////////
+app.post(`/api/add_client`, (req, res) => {
+  const { name, email, mobile, location, website, organization } = req.body;
+
+  connection.query(
+    `INSERT INTO client (name, email, mobile, location, website, organization) VALUES (?, ?, ?, ?, ?, ?)`,
+    [name, email, mobile, location, website, organization],
+    (err, result) => {
+      if (err) {
+        console.error("Error Inserting Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to add client. Please try again later.",
+        });
+      } else {
+        res.json({ success: true, message: "Client added successfully" });
+      }
+    }
+  );
+});
+
+/////////////// FETCH CLIENT DETAILS /////////////
+app.get(`/api/get_clients`, (req, res) => {
+  connection.query(`SELECT * FROM client`, (err, result) => {
+    if (err) {
+      console.error("Error Fetching Data:", err);
+      res.status(500).json({
+        success: false,
+        error: "Failed to Fetch client. Please try again later.",
+      });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+//////////// DELETE CLIENT USING ID ///////////////
+app.delete(`/api/delete_client`, (req, res) => {
+  const { id } = req.body;
+  connection.query(`DELETE FROM client WHERE id = ?`, [id], (err, result) => {
+    if (err) {
+      console.error("Error Deleting Data:", err);
+      res.status(500).json({
+        success: false,
+        error: "Failed to Delete client. Please try again later.",
+      });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
 /////////////// SEND MAIL TO COMPANY ////////////////
 app.post("/api/company_mail", async (req, res) => {
   try {

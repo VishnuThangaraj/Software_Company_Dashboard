@@ -1,0 +1,131 @@
+@import url("https://fonts.googleapis.com/css?family=Numans");
+
+html,
+body {
+  background-image: url("../img/login_back.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100%;
+  font-family: "Numans", sans-serif;
+}
+
+.container {
+  height: 100%;
+  align-content: center;
+}
+
+.card {
+  height: 370px;
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 400px;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.social_icon span {
+  font-size: 60px;
+  margin-left: 10px;
+  color: #489396;
+}
+
+.social_icon span:hover {
+  color: white;
+  cursor: pointer;
+}
+
+.card-header h3 {
+  color: white;
+}
+
+.social_icon {
+  position: absolute;
+  right: 20px;
+  top: -45px;
+}
+
+.input-group-prepend span {
+  width: 50px;
+  background-color: #ffc312;
+  color: black;
+  border: 0 !important;
+}
+
+input:focus {
+  outline: 0 0 0 0 !important;
+  box-shadow: 0 0 0 0 !important;
+}
+
+.remember {
+  color: white;
+}
+
+.remember input {
+  width: 20px;
+  height: 20px;
+  margin-left: 15px;
+  margin-right: 5px;
+}
+
+.login_btn {
+  color: black;
+  background-color: #489396;
+  width: 100px;
+}
+
+.login_btn:hover {
+  color: black;
+  background-color: white;
+}
+
+.links {
+  color: white;
+}
+
+.links a {
+  margin-left: 4px;
+}
+#invalid_cred {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 40%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #ffffffe1;
+  box-shadow: 0px 0px 5px rgb(194, 192, 192);
+  border: 1px solid #888;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 7%/25%;
+  z-index: 1;
+}
+#try_again_btn {
+  background-color: #55b3b6;
+  border: 3px solid #489396;
+  color: black;
+}
+#try_again_btn:hover {
+  background-color: #55b3b6;
+  border: 3px solid #489396;
+}
+.make_blur {
+  filter: blur(5px);
+}
+#show_data_of_user {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 40%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #ffffffe1;
+  box-shadow: 0px 0px 5px rgb(194, 192, 192);
+  border: 1px solid #888;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 7%/10%;
+  z-index: 1;
+}
+td {
+  height: 20px;
+}

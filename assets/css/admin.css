@@ -1,6 +1,38 @@
 .hide_data {
   display: none;
 }
+.my-flex-row {
+  display: flex;
+  flex-direction: row;
+}
+.my-flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
 .table_holder {
   height: 350px;
+}
+.my-outer-layer {
+  position: fixed;
+  top: 50%;
+  left: 55%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #c4c4c4e1;
+  z-index: 1;
+}
+.my-btn-holder {
+  text-align: center;
+}
+.hide_overlay {
+  display: none;
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
 }

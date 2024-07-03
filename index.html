@@ -13,6 +13,15 @@
       type="image/x-icon"
     />
 
+    <!-- FONT AWESOME -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
     <!-- Fonts and icons -->
     <script src="assets/js/plugin/webfont/webfont.min.js"></script>
     <script>
@@ -38,10 +47,7 @@
     <link rel="stylesheet" href="assets/css/plugins.min.css" />
     <link rel="stylesheet" href="assets/css/kaiadmin.min.css" />
     <link rel="stylesheet" href="assets/css/admin.css" />
-    <ilnk rel="stylesheet" href="assets/css/clients.css" />
-
-    <!-- CSS Just for demo purpose, don't include it in your project -->
-    <link rel="stylesheet" href="assets/css/demo.css" />
+    <link rel="stylesheet" href="assets/css/clients.css" />
   </head>
   <body>
     <div class="wrapper">
@@ -88,6 +94,12 @@
                 <a href="#sidebarLayouts">
                   <i class="fas fa-user-tie"></i>
                   <p>Clients</p>
+                </a>
+              </li>
+              <li class="nav-item submenu">
+                <a href="message.html">
+                  <i class="fas fa-envelope"></i>
+                  <p>Message</p>
                 </a>
               </li>
             </ul>
@@ -644,45 +656,7 @@
                     </div>
                     <div class="card-body">
                       <div class="table_holder ps-3">
-                        <table id="client_table">
-                          <tr class="border-bottom">
-                            <th style="width: 13%">ID</th>
-                            <th style="width: 22%">Name</th>
-                            <th style="width: 24%">Email</th>
-                            <th style="width: 11%">Location</th>
-                            <th style="width: 10%">Projects</th>
-                            <!-- <th>Revenue</th> -->
-                            <th style="width: 19%">Action</th>
-                          </tr>
-                          <tr class="border-bottom">
-                            <td>CLIENT-BL1</td>
-                            <td>Vishnu Company pvt Ltd</td>
-                            <td>vishnu234@example.com</td>
-                            <td>India</td>
-                            <td>
-                              <!-- <div
-                                class="btn btn-outline-primary py-1 my-2 px-3"
-                              >
-                                ONGOING
-                              </div> -->
-                              4
-                            </td>
-                            <!-- <td>$ 2345</td> -->
-                            <td>
-                              <div class="btn btn-primary py-1 my-2 me-1 px-3">
-                                <i class="fas fa-eye"></i>
-                              </div>
-                              <div
-                                class="btn btn-secondary py-1 my-2 me-1 px-3"
-                              >
-                                <i class="far fa-edit"></i>
-                              </div>
-                              <div class="btn btn-danger py-1 my-2 px-3">
-                                <i class="fas fa-trash-alt"></i>
-                              </div>
-                            </td>
-                          </tr>
-                        </table>
+                        <table id="client_table"></table>
                       </div>
                     </div>
                   </div>
@@ -690,20 +664,17 @@
                 <div class="col-md-3">
                   <div class="card">
                     <div class="card-header">
-                      <div class="card-title text-center">Quick Message</div>
+                      <div class="card-title text-center">
+                        <i class="fa-solid fa-bolt-lightning"></i> &nbsp; Quick
+                        Message
+                      </div>
                     </div>
                     <div class="card-body" style="height: 380px">
                       <div class="company_mail_list text-center mt-2 mb-4">
                         <select
                           class="form-select form-control text-center"
                           id="company_mail_list"
-                        >
-                          <option>Vishnu thskjnfsdf</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option>4</option>
-                          <option>5</option>
-                        </select>
+                        ></select>
                       </div>
                       <div class="company_mail_subject pb-2">
                         <input
@@ -729,6 +700,7 @@
                         </div>
                         <div
                           onclick="send_mail(event)"
+                          id="client_quick_mail"
                           class="btn btn-success px-5 rounded"
                         >
                           <i class="fab fa-telegram-plane"></i> SEND
@@ -743,16 +715,159 @@
         </div>
 
         <!-- /////////////// ADD NEW CLIENT //////////// -->
+        <div
+          onclick="hide_content(event)"
+          id="add_new_client"
+          class="my-outer-layer"
+        >
+          <div
+            id="add_new_client_inner"
+            class="col-md-5 rounded-start"
+            onclick="prevent_click(event)"
+          >
+            <div class="new_client_head pb-5">NEW CLIENT</div>
+            <div class="row">
+              <div class="input-group ms-2" style="width: 400px">
+                <span class="input-group-text"
+                  ><i class="fas fa-building px-2" style="font-size: 18px"></i>
+                </span>
+                <input
+                  id="new_client_name"
+                  type="text"
+                  class="form-control add_user_input py-3"
+                  placeholder="Company Name"
+                />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="form-group ms-2">
+                <div class="input-group ms-2 pt-3" style="width: 370px">
+                  <span class="input-group-text"
+                    ><i class="fas fa-envelope px-2"></i>
+                  </span>
+                  <input
+                    id="new_client_email"
+                    type="text"
+                    class="form-control py-3"
+                    placeholder="Email Address"
+                    aria-describedby="basic-addon2"
+                  />
+                  <span class="input-group-text" id="basic-addon2"
+                    >@gmail.com</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-group ms-2 pt-3" style="width: 400px">
+                <span class="input-group-text"
+                  ><i class="fab fa-whatsapp px-2" style="font-size: 18px"></i>
+                </span>
+                <input
+                  id="new_client_mobile"
+                  type="number"
+                  class="form-control add_user_input py-3"
+                  placeholder="Mobile Number"
+                  min="1"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-group ms-2 pt-4" style="width: 400px">
+                <span class="input-group-text"
+                  ><i
+                    class="fas fa-location-arrow px-2"
+                    style="font-size: 18px"
+                  ></i>
+                </span>
+                <input
+                  id="new_client_location"
+                  type="text"
+                  class="form-control add_user_input py-3"
+                  placeholder="Location"
+                />
+              </div>
+            </div>
+
+            <div class="row mt-3" style="padding-inline: 10px">
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon3"
+                    ><i class="fab fa-internet-explorer" style="width: 35px"></i
+                  ></span>
+                  <input
+                    type="text"
+                    class="form-control ps-3"
+                    id="new_client_url"
+                    style="padding: 12px 0px"
+                    aria-describedby="basic-addon3"
+                    value="https://"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row pt-1" style="padding-inline: 10px">
+              <div class="form-group">
+                <label class="form-label pb-2">&nbsp; Organization</label>
+                <div class="selectgroup w-100">
+                  <label class="selectgroup-item">
+                    <input
+                      type="radio"
+                      name="transportation"
+                      value="PRIVATE"
+                      class="selectgroup-input new_client_organization"
+                      checked
+                    />
+                    <span
+                      class="selectgroup-button selected-group-client selectgroup-button-icon"
+                      >Private
+                    </span>
+                  </label>
+                  <label class="selectgroup-item">
+                    <input
+                      type="radio"
+                      name="transportation"
+                      value="PUBLIC"
+                      class="selectgroup-input new_client_organization"
+                    />
+                    <span
+                      class="selectgroup-button selected-group-client selectgroup-button-icon"
+                      >Public</span
+                    >
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="my-btn-holder mt-4">
+                <div
+                  class="btn btn-danger px-5 me-5"
+                  onclick="hide_new_client_form()"
+                >
+                  CLOSE
+                </div>
+                <div
+                  id="new_client_add"
+                  class="btn btn-success px-5"
+                  onclick="save_new_client()"
+                >
+                  SAVE
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- /////////////// HIDING OVERLAY /////////////// -->
+        <div id="hiding_over_client" class="hide_overlay"></div>
 
         <footer class="footer">
           <div class="container-fluid d-flex justify-content-between">
             <nav class="pull-left">
               <ul class="nav">
-                <li class="nav-item">
-                  <a class="nav-link" href="http://www.themekita.com">
-                    ThemeKita
-                  </a>
-                </li>
+                <li class="nav-item"></li>
                 <li class="nav-item">
                   <a class="nav-link" href="#"> Help </a>
                 </li>
@@ -762,12 +877,14 @@
               </ul>
             </nav>
             <div class="copyright">
-              2024, made with <i class="fa fa-heart heart text-danger"></i> by
-              <a href="http://www.themekita.com">ThemeKita</a>
+              &copy; 2024, All Rights Reserved.
+              <a href="https://github.com/VishnuThangaraj">Vishnu Thangaraj</a>
             </div>
             <div>
               Distributed by
-              <a target="_blank" href="https://themewagon.com/">ThemeWagon</a>.
+              <a target="_blank" href="https://vedhanthitechnologies.com/"
+                >Vedhanthi Technologies</a
+              >.
             </div>
           </div>
         </footer>
@@ -811,5 +928,7 @@
     <!-- External JS -->
     <script src="assets/js/admin.js"></script>
     <script src="assets/js/clients.js"></script>
+
+    <!-- INTERNAL SCRIPT -->
   </body>
 </html>
