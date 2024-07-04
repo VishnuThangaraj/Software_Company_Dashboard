@@ -52,6 +52,27 @@ app.post(`/api/add_client`, (req, res) => {
   );
 });
 
+/////////////// ADD NEW PROJECT ///////////////////
+app.post(`/api/add_project`, (req, res) => {
+  const { project_name, company_id, budget, notes, due_date } = req.body;
+
+  connection.query(
+    `INSERT INTO projects (project_name, company_id, budget, notes, due_date) VALUES (?, ?, ?, ?, ?)`,
+    [project_name, company_id, budget, notes, due_date],
+    (err, result) => {
+      if (err) {
+        console.error("Error Inserting Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to add Project. Please try again later.",
+        });
+      } else {
+        res.json({ success: true, message: "Project added successfully" });
+      }
+    }
+  );
+});
+
 /////////////// FETCH CLIENT DETAILS /////////////
 app.get(`/api/get_clients`, (req, res) => {
   connection.query(`SELECT * FROM client`, (err, result) => {
@@ -67,6 +88,97 @@ app.get(`/api/get_clients`, (req, res) => {
   });
 });
 
+////////////// FETCH PROJECT DETAILS //////////////
+app.get(`/api/get_projects`, (req, res) => {
+  connection.query(`SELECT * FROM projects`, (err, result) => {
+    if (err) {
+      console.error("Error Fetching Data:", err);
+      res.status(500).json({
+        success: false,
+        error: "Failed to Fetch Projects. Please try again later.",
+      });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+/////////////// FETCH CLIENT NAME WITH ID ////////////
+app.post(`/api/get_client_name`, (req, res) => {
+  const { id } = req.body;
+
+  connection.query(
+    `SELECT name FROM client WHERE id = ?`,
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Company Name. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
+///////////// FETCH ALL CLIENT NAMES ////////////
+
+app.get(`/api/get_all_client_names_id`, (req, res) => {
+  connection.query(`SELECT id, name FROM client`, (err, result) => {
+    if (err) {
+      console.error("Error Fetching Data:", err);
+      res.status(500).json({
+        success: false,
+        error: "Failed to Fetch Client Names. Please try again later.",
+      });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+///////////// FETCH CLIENT DETAILS WITH ID ////////////
+
+app.post(`/api/get_client_with_id`, (req, res) => {
+  const { id } = req.body;
+
+  connection.query(`SELECT * FROM client WHERE id = ?`, [id], (err, result) => {
+    if (err) {
+      console.error("Error Fetching Data:", err);
+      res.status(500).json({
+        success: false,
+        error: "Failed to Fetch Client Names. Please try again later.",
+      });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+///////////// UPDATE CLIENT DETAILS WITH ID //////////
+app.put(`/api/update_client_with_id`, (req, res) => {
+  const { id, name, email, mobile, location, website, organization } = req.body;
+
+  connection.query(
+    `UPDATE client SET name = ?, email = ?, mobile =?, location = ?, website = ?, organization = ? WHERE id = ?`,
+    [name, email, mobile, location, website, organization, id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Update Client Details. Please try again later.",
+        });
+      } else {
+        res.json({ message: "Client updated successfully", success: true });
+      }
+    }
+  );
+});
+
 //////////// DELETE CLIENT USING ID ///////////////
 app.delete(`/api/delete_client`, (req, res) => {
   const { id } = req.body;
@@ -78,7 +190,7 @@ app.delete(`/api/delete_client`, (req, res) => {
         error: "Failed to Delete client. Please try again later.",
       });
     } else {
-      res.json(result);
+      res.json({ success: true });
     }
   });
 });

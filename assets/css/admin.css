@@ -14,6 +14,7 @@
   height: 350px;
 }
 .my-outer-layer {
+  display: none;
   position: fixed;
   top: 50%;
   left: 55%;
@@ -35,4 +36,14 @@
   width: 100%;
   height: 100%;
   background-color: transparent;
+}
+.add_section_head {
+  text-align: center;
+  font-size: 22px;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+.my-slide-in {
+  transform: translateX(-100%);
+  transition: transform 1s ease;
 }

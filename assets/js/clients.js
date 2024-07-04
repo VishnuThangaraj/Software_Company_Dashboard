@@ -1,3 +1,4 @@
+// ADD CLIENT FIELD
 const new_client_name = document.getElementById(`new_client_name`);
 const new_client_email = document.getElementById(`new_client_email`);
 const new_client_mobile = document.getElementById(`new_client_mobile`);
@@ -6,6 +7,21 @@ const new_client_url = document.getElementById(`new_client_url`);
 const new_client_organization = [
   ...document.getElementsByClassName(`new_client_organization`),
 ];
+
+// EDIT CLIENT FIELDS
+const edit_client_name = document.getElementById(`edit_client_name`);
+const edit_client_email = document.getElementById(`edit_client_email`);
+const edit_client_mobile = document.getElementById(`edit_client_mobile`);
+const edit_client_location = document.getElementById(`edit_client_location`);
+const edit_client_url = document.getElementById(`edit_client_url`);
+const edit_client_organization = [
+  ...document.getElementsByClassName(`edit_client_organization`),
+];
+
+const edit_client_inner = document.getElementById(`edit_client_inner`);
+const edit_client = document.getElementById(`edit_client`);
+let current_edit_client = "";
+
 const company_mail_list = document.getElementById(`company_mail_list`);
 const client_table = document.getElementById(`client_table`);
 const client_quick_mail = document.getElementById(`client_quick_mail`);
@@ -20,13 +36,13 @@ const setup_client = () => {
       console.log(json);
       if (json.length > 0) {
         let temp = ` <tr class="border-bottom client_display">
-            <th style="width: 13%">ID</th>
-            <th style="width: 22%">Name</th>
-            <th style="width: 24%">Email</th>
-            <th style="width: 11%">Location</th>
-            <th style="width: 10%">Projects</th>
+            <th style="width: 7%">ID</th>
+            <th style="width: 10%">Name</th>
+            <th style="width: 8%">Email</th>
+            <th style="width: 9%">Location</th>
+            <th style="width: 5%">Projects</th>
             <!-- <th>Revenue</th> -->
-            <th style="width: 19%">Action</th>
+            <th style="width: 11%">Action</th>
           </tr>`;
 
         json.forEach((client) => {
@@ -47,7 +63,7 @@ const setup_client = () => {
                     <div class="btn btn-primary py-1 my-2 me-1 px-3">
                       <i class="fas fa-eye"></i>
                     </div>
-                    <div class="btn btn-secondary py-1 my-2 me-1 px-3">
+                    <div class="btn btn-secondary py-1 my-2 me-1 px-3" onclick="make_edit_pannel_visible(event)">
                       <i class="far fa-edit"></i>
                     </div>
                     <div class="btn btn-danger  py-1 my-2 px-3" onclick="delete_client(event)">
@@ -72,7 +88,7 @@ setup_client();
 ////////// SEND SMALL MAIL ///////////////
 const send_mail = (event) => {
   hiding_over_client.style.display = "block";
-  client_quick_mail.innerHTML = `'<i class="fas fa-spinner fa-spin"></i> Sending...`;
+  client_quick_mail.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Sending...`;
   const to = document.getElementById(`company_mail_list`),
     subject = document.getElementById(`company_mail_subject`),
     message = document.getElementById(`company_mail_message`);
@@ -152,15 +168,25 @@ const delete_client = (event) => {
     .then((response) => response.json())
     .then((json) => {
       let content = {};
-
-      content.message = "Existing Client Deleted from the Database";
-      content.title = "Client Deleted";
-      content.icon = "icon-user";
-      content.url = "index.html";
-      content.target = "_blank";
+      let alert_type = "";
+      if (json.success) {
+        content.message = "Existing Client Deleted from the Database";
+        content.title = "Client Deleted";
+        content.icon = "icon-user";
+        content.url = "index.html";
+        content.target = "_blank";
+        alert_type = "danger";
+      } else {
+        content.message = "Unable to Delete Client With Projects";
+        content.title = "Failed to Delete Client";
+        content.icon = "fas fa-exclamation-circle";
+        content.url = "index.html";
+        content.target = "_blank";
+        alert_type = "warning";
+      }
 
       $.notify(content, {
-        type: `danger`,
+        type: alert_type,
         placement: {
           from: `top`,
           align: `center`,
@@ -212,6 +238,98 @@ const save_new_client = () => {
       content.message = "New Client Added to the Database";
       content.title = "Client Added";
       content.icon = "icon-user";
+      content.url = "index.html";
+      content.target = "_blank";
+
+      $.notify(content, {
+        type: `success`,
+        placement: {
+          from: `top`,
+          align: `center`,
+        },
+        time: 100,
+        delay: 1000,
+      });
+
+      setTimeout(function () {
+        window.location.href = "http://127.0.0.1:5500/index.html";
+      }, 3000);
+    });
+};
+
+/////// MAKE CLIENT EDIT PANNEL VISIBLE /////////
+const make_edit_pannel_visible = (event) => {
+  let parent = event.target.parentNode;
+  while (parent.id == "") parent = parent.parentNode;
+  current_edit_client = parent.id;
+  edit_client.style.display = "block";
+
+  //// fetch data of the client and display
+  fetch("http://localhost:3005/api/get_client_with_id", {
+    method: "POST",
+    body: JSON.stringify({
+      id: parent.id,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      let company_details = json[0];
+
+      // add data to input field
+      edit_client_name.value = company_details.name;
+      edit_client_email.value = `${company_details.email}`.slice(
+        0,
+        `${company_details.email}`.indexOf("@")
+      );
+      edit_client_mobile.value = company_details.mobile;
+      edit_client_location.value = company_details.location;
+      edit_client_url.value = company_details.website;
+    });
+};
+
+//////////// HIDE EDIT FORM /////////////
+const hide_edit_client_form = () => {
+  edit_client.style.display = "none";
+};
+
+/////////// UPDATE EDITED CLIENT DETAILS ///////////
+const save_edit_client = () => {
+  hide_edit_client_form();
+  edit_client_inner.classList.add("my-slide-in");
+
+  // GET ALL EDITED DETAILS
+  let edit_client_organization_checked = `Private`;
+
+  edit_client_organization.forEach((obj) => {
+    if (obj.checked) edit_client_organization_checked = obj.value;
+  });
+
+  fetch("http://localhost:3005/api/update_client_with_id", {
+    method: "PUT",
+    body: JSON.stringify({
+      id: current_edit_client,
+      name: edit_client_name.value,
+      email: `${edit_client_email.value}@gmail.com`,
+      mobile: edit_client_mobile.value,
+      location: edit_client_location.value,
+      website: edit_client_url.value,
+      organization: edit_client_organization_checked,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      let content = {};
+
+      content.message =
+        "Updated client details have been successfully recorded.";
+      content.title = "Client Updated";
+      content.icon = "fas fa-pencil-alt";
       content.url = "index.html";
       content.target = "_blank";
 
