@@ -632,8 +632,8 @@
                 </div>
               </div>
             </div>
-            <!-- /////////////// CLIENT DISPLAY /////////////// -->
-            <div id="primary_client_display">
+            <!-- /////////////// TASK DISPLAY /////////////// -->
+            <div id="task_client_display">
               <div class="row">
                 <div class="col-md-9">
                   <div class="card">
@@ -693,6 +693,159 @@
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- /////////////// ADD NEW TASK //////////// -->
+        <div
+          onclick="hide_content(event)"
+          id="add_new_task"
+          class="my-outer-layer"
+          style="display: block"
+        >
+          <div
+            id="add_new_task_inner"
+            class="col-md-5 rounded-start"
+            onclick="prevent_click(event)"
+          >
+            <div class="add_section_head pb-5">NEW TASK</div>
+            <div class="row">
+              <div class="input-group ms-2" style="width: 400px">
+                <span class="input-group-text"
+                  ><i
+                    class="fas fa-buildingfas fa-tasks px-2"
+                    style="font-size: 18px"
+                  ></i>
+                </span>
+                <input
+                  id="new_task_name"
+                  type="text"
+                  class="form-control add_user_input py-3"
+                  placeholder="Task Name"
+                />
+              </div>
+            </div>
+
+            <div class="row pt-2">
+              <div class="form-group ms-2">
+                <div class="input-group ms-2 pt-3" style="width: 370px">
+                  <span class="input-group-text"
+                    ><i
+                      class="fas fa-sticky-note px-2"
+                      style="font-size: 20px"
+                    ></i>
+                  </span>
+                  <input
+                    id="new_task_description"
+                    type="text"
+                    class="form-control py-3"
+                    placeholder="Description"
+                    aria-describedby="basic-addon2"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-2 ps-3 pt-2" style="padding-inline: 10px">
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon3"
+                    ><i
+                      class="fas fa-user-alt"
+                      style="
+                        width: 35px;
+                        height: 40px;
+                        padding-top: 10px;
+                        font-size: 18px;
+                      "
+                    ></i>
+                  </span>
+                  <select
+                    class="form-select form-control py-3 ps-4"
+                    id="new_task_user"
+                  >
+                    <option>Vishnu Thangaraj</option>
+                    <option>PROJECT 2</option>
+                    <option>PROJECT 3</option>
+                    <option>PROJECT 4</option>
+                    <option>PROJECT 5</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row pt-2">
+              <div
+                class="input-group ms-2 pt-4"
+                style="width: 400px; padding-inline-start: 18px"
+              >
+                <span class="input-group-text" style="padding-inline: 9px"
+                  ><i class="far fa-clock px-2" style="font-size: 20px"></i>
+                </span>
+                <input
+                  style="height: 50px; width: 312px; border: 1px solid #e6e6e6"
+                  type="date"
+                  id="due_date_task"
+                  name="end_date"
+                  class="px-3 rounded-end"
+                  required=""
+                />
+              </div>
+            </div>
+
+            <div class="row mt-2 ps-3 pt-3" style="padding-inline: 10px">
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon3"
+                    ><i
+                      class="fas fa-project-diagram"
+                      style="
+                        width: 35px;
+                        height: 40px;
+                        padding-top: 10px;
+                        font-size: 18px;
+                      "
+                    ></i>
+                    Project
+                  </span>
+                  <select
+                    class="form-select form-control py-3 ps-4"
+                    id="new_task_project"
+                  >
+                    <option>PROJECT 1</option>
+                    <option>PROJECT 2</option>
+                    <option>PROJECT 3</option>
+                    <option>PROJECT 4</option>
+                    <option>PROJECT 5</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-2 ps-3 pt-2" style="padding-inline: 10px">
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-text"
+                    ><i
+                      class="fas fa-fire"
+                      style="
+                        width: 35px;
+                        height: 40px;
+                        padding-top: 10px;
+                        font-size: 18px;
+                      "
+                    ></i>
+                    Priority
+                  </span>
+                  <select
+                    class="form-select form-control py-3 ps-4"
+                    id="new_task_priority"
+                  >
+                    <option value="LOW">Low</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="HIGH">High</option>
+                  </select>
                 </div>
               </div>
             </div>

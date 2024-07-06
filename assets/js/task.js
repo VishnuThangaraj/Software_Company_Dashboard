@@ -6,6 +6,14 @@ const pending_task_count = document.getElementById(`pending_task_count`);
 const progress_task_count = document.getElementById(`progress_task_count`);
 const completed_task_count = document.getElementById(`completed_task_count`);
 
+const hiding_over_task = document.getElementById(`hiding_over_task`);
+
+// Add new Task
+const new_task_name = document.getElementById(`new_task_name`);
+const new_task_description = document.getElementById(`new_task_description`);
+const new_task_project = document.getElementById(`new_task_project`);
+const new_task_priority = document.getElementById(`new_task_priority`);
+
 const make_task_table_ready = () => {
   let total_task = 0,
     pending_task = 0,
@@ -17,9 +25,9 @@ const make_task_table_ready = () => {
                 <th style="width: 9%">Name</th>
                 <th style="width: 15%">Description</th>
                 <th style="width: 2%">Priority</th>
-                <th style="width: 8%">Due Date</th>
+                <th style="width: 7%">Due Date</th>
                 <th style="width: 3%">Status</th>
-                <th style="width: 7%">Action</th>
+                <th style="width: 8%">Action</th>
             </tr>`;
 
   fetch(`http://localhost:3005/api/get_task`)
@@ -52,12 +60,12 @@ const make_task_table_ready = () => {
         }
         temp += `<td>
                     <div
-                    class="btn btn-icon btn-round btn-secondary me-1 my-2"
+                    class="btn btn-secondary me-1 px-3 py-1 my-2"
                     >
-                    <i class="icon-note"></i>
+                    <i class="far fa-edit"></i>
                     </div>
-                    <div class="btn btn-icon btn-round btn-danger" onclick="delete_task(event)">
-                    <i class="icon-trash"></i>
+                    <div class="btn px-3 py-1 btn-danger" onclick="delete_task(event)">
+                    <i class="fas fa-trash-alt"></i>
                     </div>
                 </td>`;
         temp += `</tr>`;
@@ -74,6 +82,7 @@ make_task_table_ready();
 
 /////////// DELETE TASK //////////
 const delete_task = (event) => {
+  hiding_over_task.style.display = "block";
   let parent = event.target;
   while (parent.id == ``) parent = parent.parentNode;
 

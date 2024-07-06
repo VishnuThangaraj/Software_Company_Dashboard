@@ -60,7 +60,8 @@ CREATE TABLE software_company.task (
     name VARCHAR(255) NOT NULL,
     description TEXT,
     employee_id INT,
-    status VARCHAR(50),
+    status VARCHAR(50) DEFAULT "Pending",
+    project_id INT,
     priority VARCHAR(20),
     start_date DATE DEFAULT (current_date()),
     due_date DATE,
@@ -106,13 +107,13 @@ VALUES
     ('Daniel Wilson', 'daniel.wilson@example.com', '5556667777', 35, 'Male', '555 Pine Ln, Anycity, USA', 'Dontnet Developer', 3),
     ('Eve Taylor', 'eve.taylor@example.com', '8889990000', 27, 'Female', '987 Cedar St, Anystate, USA', 'Dotnet Developer', 2);
 
-INSERT INTO software_company.task (name, description, employee_id, status, priority, due_date)
+INSERT INTO software_company.task (name, description, employee_id, status, priority, due_date, project_id)
 VALUES
-    ('Design homepage layout', 'Create a new design for the company homepage', 1, 'Progress', 'HIGH',  '2024-07-20'),
-    ('Implement login functionality', 'Develop login feature with OAuth integration', 2, 'Completed', 'MEDIUM', '2024-07-25'),
-    ('Write API documentation', 'Document RESTful API endpoints for version 2.0', 3, 'Completed', 'LOW', '2024-07-15'),
-    ('Bug fixing in user dashboard', 'Fix reported bugs in the user dashboard module', 5, 'Progress', 'HIGH', '2024-07-18'),
-    ('Database schema optimization', 'Optimize database queries and indexes for performance', 4, 'Progress', 'MEDIUM', '2024-07-30');
+    ('Design homepage layout', 'Create a new design for the company homepage', 1, 'Progress', 'HIGH',  '2024-07-20',1),
+    ('Implement login functionality', 'Develop login feature with OAuth integration', 2, 'Completed', 'MEDIUM', '2024-07-25',1),
+    ('Write API documentation', 'Document RESTful API endpoints for version 2.0', 3, 'Completed', 'LOW', '2024-07-15',2),
+    ('Bug fixing in user dashboard', 'Fix reported bugs in the user dashboard module', 5, 'Progress', 'HIGH', '2024-07-18',3),
+    ('Database schema optimization', 'Optimize database queries and indexes for performance', 4, 'Progress', 'MEDIUM', '2024-07-30',4);
 
 
 SELECT * FROM software_company.client;
