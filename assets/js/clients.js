@@ -27,6 +27,10 @@ const client_table = document.getElementById(`client_table`);
 const client_quick_mail = document.getElementById(`client_quick_mail`);
 const hiding_over_client = document.getElementById(`hiding_over_client`);
 
+// VIEW CLIENT DETAILS
+const show_client_name = document.getElementById(`show_client_name`);
+const hide_view_client = document.getElementById(`hide_view_client`);
+
 /////////// SETUP MAIL SERVICE ///////////
 const setup_client = () => {
   // Fetch Name and Email from Database
@@ -60,7 +64,7 @@ const setup_client = () => {
           temp += `<td>${client.location}</td>`;
           temp += `<td>&nbsp;${client.projects}</td>`;
           temp += `<td>
-                    <div class="btn btn-primary py-1 my-2 me-1 px-3">
+                    <div class="btn btn-primary py-1 my-2 me-1 px-3" onclick="display_client_details(event)">
                       <i class="fas fa-eye"></i>
                     </div>
                     <div class="btn btn-secondary py-1 my-2 me-1 px-3" onclick="make_edit_pannel_visible(event)">
@@ -347,4 +351,28 @@ const save_edit_client = () => {
         window.location.href = "http://127.0.0.1:5500/index.html";
       }, 3000);
     });
+};
+
+////////// DISPLAY CLIENT DETAILS ///////////////
+const display_client_details = (event) => {
+  let parent = event.target;
+  while (parent.id == ``) parent = parent.parentNode;
+
+  hide_view_client.style.display = "block";
+
+  fetch("http://localhost:3005/api/get_client_with_id", {
+    method: "POST",
+    body: JSON.stringify({
+      id: parent.id,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      show_client_name.innerHTML = data[0].name;
+    });
+
+  console.log(parent.id);
 };

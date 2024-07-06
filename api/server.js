@@ -73,6 +73,57 @@ app.post(`/api/add_project`, (req, res) => {
   );
 });
 
+/////////////// ADD NEW EMPLOYEE ///////////////////
+// app.post(`/api/add_employee`, (req, res) => {
+//   const { name } = req.body;
+
+//   connection.query(
+//     `INSERT INTO projects (project_name, company_id, budget, notes, due_date) VALUES (?, ?, ?, ?, ?)`,
+//     [project_name, company_id, budget, notes, due_date],
+//     (err, result) => {
+//       if (err) {
+//         console.error("Error Inserting Data:", err);
+//         res.status(500).json({
+//           success: false,
+//           error: "Failed to add Project. Please try again later.",
+//         });
+//       } else {
+//         res.json({ success: true, message: "Project added successfully" });
+//       }
+//     }
+//   );
+// });
+
+/////////////// FETCH EMPLOYEE DATA /////////////
+app.get(`/api/get_employee`, (req, res) => {
+  connection.query(`SELECT * FROM employee`, (err, result) => {
+    if (err) {
+      console.error("Error Fetching Data:", err);
+      res.status(500).json({
+        success: false,
+        error: "Failed to Fetch Employee. Please try again later.",
+      });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+/////////////// FETCH TEAM LEAD /////////////
+app.get(`/api/get_teamlead`, (req, res) => {
+  connection.query(`SELECT * FROM team_lead`, (err, result) => {
+    if (err) {
+      console.error("Error Fetching Data:", err);
+      res.status(500).json({
+        success: false,
+        error: "Failed to Fetch Team Lead. Please try again later.",
+      });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
 /////////////// FETCH CLIENT DETAILS /////////////
 app.get(`/api/get_clients`, (req, res) => {
   connection.query(`SELECT * FROM client`, (err, result) => {
@@ -103,6 +154,21 @@ app.get(`/api/get_projects`, (req, res) => {
   });
 });
 
+/////////////// FETCH TASK DETAILS /////////////
+app.get(`/api/get_task`, (req, res) => {
+  connection.query(`SELECT * FROM task`, (err, result) => {
+    if (err) {
+      console.error("Error Fetching Data:", err);
+      res.status(500).json({
+        success: false,
+        error: "Failed to Fetch Task. Please try again later.",
+      });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
 /////////////// FETCH CLIENT NAME WITH ID ////////////
 app.post(`/api/get_client_name`, (req, res) => {
   const { id } = req.body;
@@ -122,6 +188,21 @@ app.post(`/api/get_client_name`, (req, res) => {
       }
     }
   );
+});
+
+///////////////// FETCH ALL TEAM LEAD NAMES //////////
+app.get(`/api/get_teamlead_id_name`, (req, res) => {
+  connection.query(`SELECT id, name FROM team_lead`, (err, result) => {
+    if (err) {
+      console.error("Error Fetching Data:", err);
+      res.status(500).json({
+        success: false,
+        error: "Failed to Teamlead Data. Please try again later.",
+      });
+    } else {
+      res.json(result);
+    }
+  });
 });
 
 ///////////// FETCH ALL CLIENT NAMES ////////////
@@ -188,6 +269,58 @@ app.delete(`/api/delete_client`, (req, res) => {
       res.status(500).json({
         success: false,
         error: "Failed to Delete client. Please try again later.",
+      });
+    } else {
+      res.json({ success: true });
+    }
+  });
+});
+
+/////////// DELETE TEAM LEAD USING ID ////////////
+app.delete(`/api/delete_teamlead`, (req, res) => {
+  const { id } = req.body;
+  connection.query(
+    `DELETE FROM team_lead WHERE id = ?`,
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Deleting Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Delete Team Lead. Please try again later.",
+        });
+      } else {
+        res.json({ success: true });
+      }
+    }
+  );
+});
+
+/////////// DELETE EMPLOYEE USING ID ////////////
+app.delete(`/api/delete_teamlead`, (req, res) => {
+  const { id } = req.body;
+  connection.query(`DELETE FROM employee WHERE id = ?`, [id], (err, result) => {
+    if (err) {
+      console.error("Error Deleting Data:", err);
+      res.status(500).json({
+        success: false,
+        error: "Failed to Delete Employee. Please try again later.",
+      });
+    } else {
+      res.json({ success: true });
+    }
+  });
+});
+
+//////////// DELETE TASK USING ID ///////////////
+app.delete(`/api/delete_task`, (req, res) => {
+  const { id } = req.body;
+  connection.query(`DELETE FROM task WHERE id = ?`, [id], (err, result) => {
+    if (err) {
+      console.error("Error Deleting Data:", err);
+      res.status(500).json({
+        success: false,
+        error: "Failed to Delete Task. Please try again later.",
       });
     } else {
       res.json({ success: true });

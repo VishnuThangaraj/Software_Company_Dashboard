@@ -31,6 +31,43 @@ CREATE TABLE software_company.projects (
     FOREIGN KEY (company_id) REFERENCES software_company.client(id)
 );
 
+CREATE TABLE software_company.team_lead (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    email VARCHAR(50),
+    phone varchar(20),
+    age INT,
+    gender VARCHAR(50),
+    address VARCHAR(100),
+    designation VARCHAR(50)
+);
+
+CREATE TABLE software_company.employee (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    email VARCHAR(50),
+    phone VARCHAR(20),
+    age INT,
+    gender VARCHAR(50),
+    address VARCHAR(100),
+    designation VARCHAR(50),
+    team_lead_id INT,
+    FOREIGN KEY (team_lead_id) REFERENCES software_company.team_lead(id)
+);
+
+CREATE TABLE software_company.task (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    employee_id INT,
+    status VARCHAR(50),
+    priority VARCHAR(20),
+    start_date DATE DEFAULT (current_date()),
+    due_date DATE,
+    FOREIGN KEY (employee_id) REFERENCES software_company.employee(id)
+);
+
+
 
 INSERT INTO software_company.admin_cred (user_id, password)
 VALUES
@@ -53,7 +90,34 @@ VALUES
     ('Project Diary', 4, 10000, 'Critical project for client X', '2024-10-31'),
     ('Project Eclipse', 2, 15000, 'Major project for client Y', '2025-03-31');
 
+INSERT INTO software_company.team_lead (name, email, phone, age, gender, address, designation) 
+VALUES 
+    ('John Doe', 'john.doe@example.com', 1234567890, 35, 'Male', '123 Main St, Anytown', 'Angular Developer'),
+    ('Jane Smith', 'jane.smith@example.com', 9876543210, 32, 'Female', '456 Oak Ave, Anycity', 'Dotnet Developer'),
+    ('Michael Johnson', 'michael.john@example.com', 5551112222, 40, 'Male', '789 Elm St, Anystate', 'Java Developer'),
+    ('Emily Brown', 'emily.brown@example.com', 3334445555, 28, 'Female', '321 Pine Rd, Anycity', 'Python Developer'),
+    ('David Wilson', 'david.wilson@example.com', 6667778888, 45, 'Male', '555 Cedar Ln, Anytown', 'React Developer');
+
+INSERT INTO software_company.employee (name, email, phone, age, gender, address, designation, team_lead_id) 
+VALUES 
+    ('Alice Johnson', 'alice.johnson@example.com', '1112223333', 30, 'Female', '789 Oak St, Anycity, USA', 'React Developer', 1),
+    ('Bob Smith', 'bob.smith@example.com', '4445556666', 25, 'Male', '456 Maple Ave, Anytown, USA', 'Java Developer', 2),
+    ('Cathy Brown', 'cathy.brown@example.com', '7778889999', 28, 'Female', '321 Elm Rd, Anystate, USA', 'Angular Developer', 1),
+    ('Daniel Wilson', 'daniel.wilson@example.com', '5556667777', 35, 'Male', '555 Pine Ln, Anycity, USA', 'Dontnet Developer', 3),
+    ('Eve Taylor', 'eve.taylor@example.com', '8889990000', 27, 'Female', '987 Cedar St, Anystate, USA', 'Dotnet Developer', 2);
+
+INSERT INTO software_company.task (name, description, employee_id, status, priority, due_date)
+VALUES
+    ('Design homepage layout', 'Create a new design for the company homepage', 1, 'Progress', 'HIGH',  '2024-07-20'),
+    ('Implement login functionality', 'Develop login feature with OAuth integration', 2, 'Completed', 'MEDIUM', '2024-07-25'),
+    ('Write API documentation', 'Document RESTful API endpoints for version 2.0', 3, 'Completed', 'LOW', '2024-07-15'),
+    ('Bug fixing in user dashboard', 'Fix reported bugs in the user dashboard module', 5, 'Progress', 'HIGH', '2024-07-18'),
+    ('Database schema optimization', 'Optimize database queries and indexes for performance', 4, 'Progress', 'MEDIUM', '2024-07-30');
+
 
 SELECT * FROM software_company.client;
 SELECT * FROM software_company.admin_cred;
 SELECT * FROM software_company.projects;
+SELECT * FROM software_company.team_lead;
+SELECT * FROM software_company.employee;
+SELECT * FROM software_company.task;

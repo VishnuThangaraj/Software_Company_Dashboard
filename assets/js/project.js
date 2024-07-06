@@ -34,13 +34,14 @@ const setup_project = async () => {
     if (json.length > 0) {
       let temp = `<tr>
                         <th style="width: 5%">ID</th>
-                        <th style="width: 7%">Project Name</th>
-                        <th style="width: 8%">Parent Company</th>
-                        <th style="width: 6%">Allocated Tasks</th>
+                        <th style="width: 8%">Project Name</th>
+                        <th style="width: 10%">Parent Company</th>
+                        <th style="width: 5%">Tasks</th>
                         <th style="width: 6%">Status</th>
-                        <th style="width: 6%">Start Date</th>
-                        <th style="width: 6%">Due Date</th>
-                        <th style="width: 5%">Action</th>
+                        <th style="width: 7%">Start Date</th>
+                        <th style="width: 7%">Due Date</th>
+                        <th style="width: 5%">Budget</th>
+                        <th style="width: 8%">Action</th>
                     </tr>`;
 
       // Fetch all client names concurrently
@@ -75,11 +76,16 @@ const setup_project = async () => {
                     ONGOING
                     </div>
                   </td>`;
+        temp += `<td>${project.budget}</td>`;
         temp += `<td>${project.start_date.slice(0, 10)}</td>`;
         temp += `<td>${project.due_date.slice(0, 10)}</td>`;
         temp += `<td>
-                    <div class="btn btn-primary py-1 my-2 me-1 px-3">
-                    <i class="fas fa-eye"></i>
+                  
+                    <div
+                    class="btn btn-secondary py-1 my-2 px-3 me-1"
+                    onclick="delete_project(event)"
+                    >
+                    <i class="far fa-edit"></i>
                     </div>
                     <div
                     class="btn btn-danger py-1 my-2 px-3"

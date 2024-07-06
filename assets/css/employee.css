@@ -1,0 +1,15 @@
+#add_new_employee_inner,
+#edit_employee_inner {
+  position: fixed;
+  top: 54.5%;
+  height: 90.5%;
+  left: 81%;
+  width: 28%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #ffffffe5;
+}
+.highlight_teamlead {
+  color: rgb(35, 202, 35);
+  font-weight: 600;
+}

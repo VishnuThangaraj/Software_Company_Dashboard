@@ -47,7 +47,7 @@
     <link rel="stylesheet" href="assets/css/plugins.min.css" />
     <link rel="stylesheet" href="assets/css/kaiadmin.min.css" />
     <link rel="stylesheet" href="assets/css/admin.css" />
-    <link rel="stylesheet" href="assets/css/project.css" />
+    <link rel="stylesheet" href="assets/css/task.css" />
   </head>
   <body>
     <div class="wrapper">
@@ -58,7 +58,7 @@
           <div class="logo-header" data-background-color="dark">
             <a href="index.html" class="logo">
               <img
-                src="assets/img/kaiadmin/logdo_light.svg"
+                src="assets/img/kaiadmin/logfo_light.svg"
                 alt="navbar brand"
                 class="navbar-brand"
                 height="20"
@@ -90,28 +90,26 @@
                 </span>
                 <h4 class="text-section">Components</h4>
               </li>
-
               <li class="nav-item submenu">
                 <a href="clients.html">
                   <i class="fas fa-user-tie"></i>
                   <p>Clients</p>
                 </a>
               </li>
-              <li class="nav-item active submenu">
+              <li class="nav-item submenu">
                 <a href="project.html">
                   <i class="fas fa-project-diagram"></i>
                   <p>Project</p>
                 </a>
               </li>
-              </li>
-              
+
               <li class="nav-item submenu">
                 <a href="employee.html">
                   <i class="fas fa-users"></i>
                   <p>Employee</p>
                 </a>
               </li>
-              <li class="nav-item submenu">
+              <li class="nav-item active submenu">
                 <a href="task.html">
                   <i class="fas fa-tasks"></i>
                   <p>Tasks</p>
@@ -531,9 +529,9 @@
                 >
                 <div
                   class="btn btn-primary btn-round"
-                  onclick="add_project_bar()"
+                  onclick="add_client_bar()"
                 >
-                  New Project
+                  New Task
                 </div>
               </div>
             </div>
@@ -545,13 +543,16 @@
                     <div class="row">
                       <div class="col-5">
                         <div class="icon-big text-center">
-                          <i class="icon-pie-chart text-warning"></i>
+                          <i
+                            class="icon-drawer text-primary"
+                            style="font-size: 35px"
+                          ></i>
                         </div>
                       </div>
                       <div class="col-7 col-stats">
                         <div class="numbers">
-                          <p class="card-category">Total Project</p>
-                          <h4 class="card-title">125</h4>
+                          <p class="card-category">Total Tasks</p>
+                          <h4 class="card-title" id="total_task_count">150</h4>
                         </div>
                       </div>
                     </div>
@@ -564,13 +565,18 @@
                     <div class="row">
                       <div class="col-5">
                         <div class="icon-big text-center">
-                          <i class="icon-wallet text-success"></i>
+                          <i
+                            class="icon-hourglass fa-3x"
+                            style="font-size: 35px; color: rgb(204, 204, 33)"
+                          ></i>
                         </div>
                       </div>
                       <div class="col-7 col-stats">
                         <div class="numbers">
-                          <p class="card-category">Ongoing</p>
-                          <h4 class="card-title">5</h4>
+                          <p class="card-category">Pending</p>
+                          <h4 class="card-title" id="pending_task_count">
+                            3345
+                          </h4>
                         </div>
                       </div>
                     </div>
@@ -583,13 +589,18 @@
                     <div class="row">
                       <div class="col-5">
                         <div class="icon-big text-center">
-                          <i class="icon-close text-danger"></i>
+                          <i
+                            class="icon-refresh text-warning"
+                            style="font-size: 35px; font-weight: 100"
+                          ></i>
                         </div>
                       </div>
                       <div class="col-7 col-stats">
                         <div class="numbers">
-                          <p class="card-category">Complated</p>
-                          <h4 class="card-title">5</h4>
+                          <p class="card-category">In Progress</p>
+                          <h4 class="card-title" id="progress_task_count">
+                            23
+                          </h4>
                         </div>
                       </div>
                     </div>
@@ -602,13 +613,18 @@
                     <div class="row">
                       <div class="col-5">
                         <div class="icon-big text-center">
-                          <i class="icon-wallet text-success"></i>
+                          <i
+                            class="icon-check text-success"
+                            style="font-size: 35px"
+                          ></i>
                         </div>
                       </div>
                       <div class="col-7 col-stats">
                         <div class="numbers">
-                          <p class="card-category">Revenue</p>
-                          <h4 class="card-title">+45K</h4>
+                          <p class="card-category">Completed</p>
+                          <h4 class="card-title" id="completed_task_count">
+                            45
+                          </h4>
                         </div>
                       </div>
                     </div>
@@ -616,14 +632,14 @@
                 </div>
               </div>
             </div>
-            <!-- /////////////// PROJECT DISPLAY /////////////// -->
-            <div id="primary_project_display">
+            <!-- /////////////// CLIENT DISPLAY /////////////// -->
+            <div id="primary_client_display">
               <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-9">
                   <div class="card">
                     <div class="card-header">
                       <div class="card-head-row">
-                        <div class="card-title">Projects</div>
+                        <div class="card-title">Tasks</div>
                         <div class="card-tools">
                           <a
                             href="#"
@@ -646,9 +662,34 @@
                         </div>
                       </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body table-responsive">
                       <div class="table_holder ps-3">
-                        <table id="project_table"></table>
+                        <table id="task_table"></table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="card-title text-center">
+                        <i class="fas fa-user-plus fa-fade"></i>
+                        &nbsp; Resource Pool
+                      </div>
+                    </div>
+                    <div
+                      class="card-body table-responsive"
+                      style="height: 380px"
+                      id="resource_pool"
+                    >
+                      <div
+                        id="3"
+                        class="border-bottom resource-txt py-2 rounded text-center my-flex-row"
+                      >
+                        <span class="pt-2">Vishnu Thangaraj </span
+                        ><span
+                          ><div class="btn btn-info py-1 px-3">VIEW</div></span
+                        >
                       </div>
                     </div>
                   </div>
@@ -658,152 +699,8 @@
           </div>
         </div>
 
-        <!-- ////////////////// ADD NEW PROJECT //////////////// -->
-        <div
-          onclick="hide_content(event)"
-          id="add_new_project"
-          class="my-outer-layer"
-        >
-          <div
-            id="add_new_project_inner"
-            class="col-md-5 rounded-start"
-            onclick="prevent_click(event)"
-          >
-            <div class="add_section_head pb-5">NEW PROJECT</div>
-            <div class="row">
-              <div class="input-group ms-2" style="width: 400px">
-                <span class="input-group-text"
-                  ><i class="fas fa-laptop px-2" style="font-size: 18px"></i>
-                </span>
-                <input
-                  id="new_project_name"
-                  type="text"
-                  class="form-control add_user_input py-3"
-                  placeholder="Project Name"
-                />
-              </div>
-            </div>
-
-            <div class="row pt-2">
-              <div class="form-group ms-2">
-                <div class="input-group ms-2 pt-3" style="width: 370px">
-                  <span class="input-group-text"
-                    ><i
-                      class="fas fa-building px-2"
-                      style="font-size: 22px"
-                    ></i>
-                  </span>
-                  <select
-                    class="form-select form-control py-3"
-                    id="new_project_clients"
-                  >
-                    <option>No Clients Available</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div
-                class="input-group ms-2 pt-4"
-                style="width: 400px; padding-inline-start: 18px"
-              >
-                <span class="input-group-text" style="padding-inline: 9px"
-                  ><i class="far fa-clock px-2" style="font-size: 20px"></i>
-                </span>
-                <input
-                  style="height: 50px; width: 312px; border: 1px solid #e6e6e6"
-                  type="date"
-                  id="end_date"
-                  name="end_date"
-                  class="px-3 rounded-end"
-                  required
-                />
-              </div>
-            </div>
-
-            <div class="row mt-3 ps-3" style="padding-inline: 10px">
-              <div class="form-group">
-                <div class="input-group">
-                  <span class="input-group-text" id="basic-addon3"
-                    ><i
-                      class="fas fa-users"
-                      style="
-                        width: 35px;
-                        height: 40px;
-                        padding-top: 10px;
-                        font-size: 18px;
-                      "
-                    ></i
-                  ></span>
-                  <select
-                    class="form-select form-control py-3"
-                    id="largeSelect"
-                  >
-                    <option>Team Lead 1</option>
-                    <option>Team Lead 2</option>
-                    <option>Team Lead 3</option>
-                    <option>Team Lead 4</option>
-                    <option>Team Lead 5</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="input-group ms-2 pt-3" style="width: 400px">
-                <span class="input-group-text"
-                  ><i
-                    class="fas fa-dollar-sign"
-                    style="font-size: 22px; padding-inline: 11px"
-                  ></i>
-                </span>
-                <input
-                  id="new_client_mobile"
-                  type="number"
-                  class="form-control add_user_input py-3"
-                  placeholder="Budget"
-                  min="1"
-                />
-              </div>
-            </div>
-            <div class="row pb-3" style="padding-top: 26px">
-              <div class="input-group ms-2" style="width: 400px; height: 55px">
-                <span class="input-group-text"
-                  ><i
-                    class="far fa-sticky-note"
-                    style="font-size: 18px; padding-inline: 10px"
-                  ></i>
-                </span>
-                <input
-                  id="new_project_name"
-                  type="text"
-                  class="form-control add_user_input py-3"
-                  placeholder="Notes"
-                />
-              </div>
-            </div>
-            <div class="row">
-              <div class="my-btn-holder mt-4">
-                <div
-                  class="btn btn-danger px-5 me-5"
-                  onclick="hide_new_project_form()"
-                >
-                  CLOSE
-                </div>
-                <div
-                  id="new_project_add"
-                  class="btn btn-success px-5"
-                  onclick="save_new_project()"
-                >
-                  SAVE
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- /////////////// HIDING OVERLAY /////////////// -->
-        <div id="hiding_over_project" class="hide_overlay"></div>
+        <div id="hiding_over_task" class="hide_overlay"></div>
 
         <footer class="footer">
           <div class="container-fluid d-flex justify-content-between">
@@ -869,7 +766,7 @@
 
     <!-- External JS -->
     <script src="assets/js/admin.js"></script>
-    <script src="assets/js/project.js"></script>
+    <script src="assets/js/task.js"></script>
 
     <!-- INTERNAL SCRIPT -->
   </body>

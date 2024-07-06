@@ -47,7 +47,7 @@
     <link rel="stylesheet" href="assets/css/plugins.min.css" />
     <link rel="stylesheet" href="assets/css/kaiadmin.min.css" />
     <link rel="stylesheet" href="assets/css/admin.css" />
-    <link rel="stylesheet" href="assets/css/clients.css" />
+    <link rel="stylesheet" href="assets/css/employee.css" />
   </head>
   <body>
     <div class="wrapper">
@@ -56,9 +56,9 @@
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="index.html" class="logo">
+            <a href="clients.html" class="logo">
               <img
-                src="assets/img/kaiadmin/logo_light.svg"
+                src="assets/img/kaiadmin/lodgo_light.svg"
                 alt="navbar brand"
                 class="navbar-brand"
                 height="20"
@@ -90,8 +90,8 @@
                 </span>
                 <h4 class="text-section">Components</h4>
               </li>
-              <li class="nav-item active submenu">
-                <a href="#sidebarLayouts">
+              <li class="nav-item submenu">
+                <a href="clients.html">
                   <i class="fas fa-user-tie"></i>
                   <p>Clients</p>
                 </a>
@@ -100,6 +100,19 @@
                 <a href="project.html">
                   <i class="fas fa-project-diagram"></i>
                   <p>Project</p>
+                </a>
+              </li>
+              
+              <li class="nav-item active submenu">
+                <a href="employee.html">
+                  <i class="fas fa-users"></i>
+                  <p>Employee</p>
+                </a>
+              </li>
+              <li class="nav-item submenu">
+                <a href="task.html">
+                  <i class="fas fa-tasks"></i>
+                  <p>Tasks</p>
                 </a>
               </li>
               <li class="nav-item submenu">
@@ -516,128 +529,107 @@
                 >
                 <div
                   class="btn btn-primary btn-round"
-                  onclick="add_client_bar()"
+                  onclick="make_add_employee_visible()"
                 >
-                  Add Clients
+                  Add Employee
                 </div>
               </div>
             </div>
             <!-- /////////////// TOP COUNTERS ////////////////// -->
-
             <div class="row">
-              <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                <div class="card">
+              <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round">
                   <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                      <div>
-                        <h5><b>Todays Income</b></h5>
-                        <p class="text-muted">All Customs Value</p>
+                    <div class="row align-items-center">
+                      <div class="col-icon">
+                        <div
+                          class="icon-big text-center icon-primary bubble-shadow-small"
+                        >
+                          <i class="fas fa-users"></i>
+                        </div>
                       </div>
-                      <h3 class="text-info fw-bold">$170</h3>
-                    </div>
-                    <div class="progress progress-sm">
-                      <div
-                        class="progress-bar bg-info w-75"
-                        role="progressbar"
-                        aria-valuenow="75"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                    <div class="d-flex justify-content-between mt-2">
-                      <p class="text-muted mb-0">Change</p>
-                      <p class="text-muted mb-0">75%</p>
+                      <div class="col col-stats ms-3 ms-sm-0">
+                        <div class="numbers">
+                          <p class="card-category">Visitors</p>
+                          <h4 class="card-title">1,294</h4>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                <div class="card">
+              <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round">
                   <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                      <div>
-                        <h5><b>Total Revenue</b></h5>
-                        <p class="text-muted">All Customs Value</p>
+                    <div class="row align-items-center">
+                      <div class="col-icon">
+                        <div
+                          class="icon-big text-center icon-info bubble-shadow-small"
+                        >
+                          <i class="fas fa-user-check"></i>
+                        </div>
                       </div>
-                      <h3 class="text-success fw-bold">$120</h3>
-                    </div>
-                    <div class="progress progress-sm">
-                      <div
-                        class="progress-bar bg-success w-25"
-                        role="progressbar"
-                        aria-valuenow="25"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                    <div class="d-flex justify-content-between mt-2">
-                      <p class="text-muted mb-0">Change</p>
-                      <p class="text-muted mb-0">25%</p>
+                      <div class="col col-stats ms-3 ms-sm-0">
+                        <div class="numbers">
+                          <p class="card-category">Subscribers</p>
+                          <h4 class="card-title">1303</h4>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                <div class="card">
+              <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round">
                   <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                      <div>
-                        <h5><b>New Orders</b></h5>
-                        <p class="text-muted">Fresh Order Amount</p>
+                    <div class="row align-items-center">
+                      <div class="col-icon">
+                        <div
+                          class="icon-big text-center icon-success bubble-shadow-small"
+                        >
+                          <i class="fas fa-luggage-cart"></i>
+                        </div>
                       </div>
-                      <h3 class="text-danger fw-bold">15</h3>
-                    </div>
-                    <div class="progress progress-sm">
-                      <div
-                        class="progress-bar bg-danger w-50"
-                        role="progressbar"
-                        aria-valuenow="50"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                    <div class="d-flex justify-content-between mt-2">
-                      <p class="text-muted mb-0">Change</p>
-                      <p class="text-muted mb-0">50%</p>
+                      <div class="col col-stats ms-3 ms-sm-0">
+                        <div class="numbers">
+                          <p class="card-category">Sales</p>
+                          <h4 class="card-title">$ 1,345</h4>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                <div class="card">
+              <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round">
                   <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                      <div>
-                        <h5><b>New Users</b></h5>
-                        <p class="text-muted">Joined New User</p>
+                    <div class="row align-items-center">
+                      <div class="col-icon">
+                        <div
+                          class="icon-big text-center icon-secondary bubble-shadow-small"
+                        >
+                          <i class="far fa-check-circle"></i>
+                        </div>
                       </div>
-                      <h3 class="text-secondary fw-bold">12</h3>
-                    </div>
-                    <div class="progress progress-sm">
-                      <div
-                        class="progress-bar bg-secondary w-25"
-                        role="progressbar"
-                        aria-valuenow="25"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                    <div class="d-flex justify-content-between mt-2">
-                      <p class="text-muted mb-0">Change</p>
-                      <p class="text-muted mb-0">25%</p>
+                      <div class="col col-stats ms-3 ms-sm-0">
+                        <div class="numbers">
+                          <p class="card-category">Order</p>
+                          <h4 class="card-title">576</h4>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <!-- /////////////// CLIENT DISPLAY /////////////// -->
-            <div id="primary_client_display">
+            <!-- /////////////// EMPLOYEE DISPLAY /////////////// -->
+            <div id="primary_employee_display">
               <div class="row">
-                <div class="col-md-9">
+                <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
                       <div class="card-head-row">
-                        <div class="card-title">Clients</div>
+                        <div class="card-title">Employee</div>
                         <div class="card-tools">
                           <a
                             href="#"
@@ -660,57 +652,10 @@
                         </div>
                       </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body table-responsive">
                       <div class="table_holder ps-3">
-                        <table id="client_table"></table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <div class="card">
-                    <div class="card-header">
-                      <div class="card-title text-center">
-                        <i class="fa-solid fa-bolt-lightning"></i> &nbsp; Quick
-                        Message
-                      </div>
-                    </div>
-                    <div class="card-body" style="height: 380px">
-                      <div class="company_mail_list text-center mt-2 mb-4">
-                        <select
-                          class="form-select form-control text-center"
-                          id="company_mail_list"
-                        ></select>
-                      </div>
-                      <div class="company_mail_subject pb-2">
-                        <input
-                          type="text"
-                          class="form-control input-full py-3"
-                          id="company_mail_subject"
-                          placeholder="Subject"
-                          required
-                        />
-                      </div>
-                      <div class="company_mail_message pb-3">
-                        <textarea
-                          class="form-control my-3"
-                          id="company_mail_message"
-                          placeholder="Message here ..."
-                          rows="5"
-                          required
-                        ></textarea>
-                      </div>
-                      <div class="company_mail_send text-center">
-                        <div class="btn btn-icon btn-round btn-info me-1">
-                          <i class="fas fa-expand-arrows-alt px-1"></i>
-                        </div>
-                        <div
-                          onclick="send_mail(event)"
-                          id="client_quick_mail"
-                          class="btn btn-success px-5 rounded"
-                        >
-                          <i class="fab fa-telegram-plane"></i> SEND
-                        </div>
+                        <table id="employee_table">
+                        </table>
                       </div>
                     </div>
                   </div>
@@ -720,28 +665,28 @@
           </div>
         </div>
 
-        <!-- /////////////// ADD NEW CLIENT //////////// -->
+        <!-- /////////////// ADD NEW EMPLOYEE //////////// -->
         <div
           onclick="hide_content(event)"
-          id="add_new_client"
+          id="add_new_employee"
           class="my-outer-layer"
         >
           <div
-            id="add_new_client_inner"
+            id="add_new_employee_inner"
             class="col-md-5 rounded-start"
             onclick="prevent_click(event)"
           >
-            <div class="add_section_head pb-5">NEW CLIENT</div>
+            <div class="add_section_head pb-4">NEW EMPLOYEE</div>
             <div class="row">
               <div class="input-group ms-2" style="width: 400px">
                 <span class="input-group-text"
-                  ><i class="fas fa-building px-2" style="font-size: 18px"></i>
+                  ><i class="icon-user-follow px-2" style="font-size: 18px"></i>
                 </span>
                 <input
-                  id="new_client_name"
+                  id="new_employee_name"
                   type="text"
                   class="form-control add_user_input py-3"
-                  placeholder="Company Name"
+                  placeholder="Employee Name"
                 />
               </div>
             </div>
@@ -750,10 +695,10 @@
               <div class="form-group ms-2">
                 <div class="input-group ms-2 pt-3" style="width: 370px">
                   <span class="input-group-text"
-                    ><i class="fas fa-envelope px-2"></i>
+                    ><i class="icon-envelope px-2"></i>
                   </span>
                   <input
-                    id="new_client_email"
+                    id="new_employee_email"
                     type="text"
                     class="form-control py-3"
                     placeholder="Email Address"
@@ -769,10 +714,10 @@
             <div class="row">
               <div class="input-group ms-2 pt-3" style="width: 400px">
                 <span class="input-group-text"
-                  ><i class="fab fa-whatsapp px-2" style="font-size: 18px"></i>
+                  ><i class="icon-phone px-2" style="font-size: 18px"></i>
                 </span>
                 <input
-                  id="new_client_mobile"
+                  id="new_employee_mobile"
                   type="number"
                   class="form-control add_user_input py-3"
                   placeholder="Mobile Number"
@@ -781,83 +726,116 @@
               </div>
             </div>
             <div class="row">
-              <div class="input-group ms-2 pt-4" style="width: 400px">
+              <div class="input-group ms-2 pt-4" style="width: 200px">
                 <span class="input-group-text"
-                  ><i
-                    class="fas fa-location-arrow px-2"
-                    style="font-size: 18px"
-                  ></i>
+                  ><i class="icon-emotsmile px-2" style="font-size: 18px"></i>
                 </span>
                 <input
-                  id="new_client_location"
-                  type="text"
+                  id="new_employee_age"
+                  type="number"
+                  min="18"
+                  max="100"
                   class="form-control add_user_input py-3"
-                  placeholder="Location"
+                  placeholder="AGE"
                 />
+              </div>
+              <div class="input-group pt-4" style="width: 200px">
+                <span class="input-group-text">
+                  <i class="icon-symbol-male" style="font-size: 18px"></i>
+                </span>
+                <select
+                  class="form-select form-control text-center ps-0"
+                  style="height: 5px"
+                  id="employee_gender_list"
+                >
+                  <option value="MALE">MALE</option>
+                  <option value="FEMALE">FEMALE</option>
+                </select>
               </div>
             </div>
 
-            <div class="row mt-3" style="padding-inline: 10px">
+            <div class="row mt-4">
+              <div class="input-group ms-2" style="width: 400px">
+                <span class="input-group-text"
+                  ><i class="icon-home px-2" style="font-size: 18px"></i>
+                </span>
+                <input
+                  id="new_employee_address"
+                  type="text"
+                  class="form-control add_user_input py-3"
+                  placeholder="Address"
+                />
+              </div>
+            </div>
+            <div class="row mt-3 ps-3" style="padding-inline: 10px">
               <div class="form-group">
                 <div class="input-group">
                   <span class="input-group-text" id="basic-addon3"
-                    ><i class="fab fa-internet-explorer" style="width: 35px"></i
+                    ><i
+                      class="icon-briefcase"
+                      style="
+                        width: 35px;
+                        height: 40px;
+                        padding-top: 10px;
+                        font-size: 18px;
+                      "
+                    ></i
                   ></span>
-                  <input
-                    type="text"
-                    class="form-control ps-3"
-                    id="new_client_url"
-                    style="padding: 12px 0px"
-                    aria-describedby="basic-addon3"
-                    value="https://"
-                  />
+                  <select
+                    class="form-select form-control py-3"
+                    id="new_employee_designation"
+                  >
+                    <option value="Angular Developer">Angular Developer</option>
+                    <option value="Dotnet Developer">Dotnet Developer</option>
+                    <option value="Java Developer">Java Developer</option>
+                    <option value="Python Developer">Python Developer</option>
+                    <option value="React Developer">React Developer</option>
+                  </select>
                 </div>
               </div>
             </div>
-            <div class="row pt-1" style="padding-inline: 10px">
-              <div class="form-group">
-                <label class="form-label pb-2">&nbsp; Organization</label>
-                <div class="selectgroup w-100">
-                  <label class="selectgroup-item">
-                    <input
-                      type="radio"
-                      name="transportation"
-                      value="PRIVATE"
-                      class="selectgroup-input new_client_organization"
-                      checked
-                    />
-                    <span
-                      class="selectgroup-button selected-group-client selectgroup-button-icon"
-                      >Private
-                    </span>
-                  </label>
-                  <label class="selectgroup-item">
-                    <input
-                      type="radio"
-                      name="transportation"
-                      value="PUBLIC"
-                      class="selectgroup-input new_client_organization"
-                    />
-                    <span
-                      class="selectgroup-button selected-group-client selectgroup-button-icon"
-                      >Public</span
-                    >
-                  </label>
-                </div>
+            <div class="row mb-3">
+              <div
+                class="input-group pt-4"
+                style="width: 210px; padding-inline-start: 24px"
+              >
+                <span class="input-group-text">
+                  <i
+                    class="icon-people"
+                    style="font-size: 20px; padding: 10px 8px"
+                  ></i>
+                </span>
+                <select
+                  class="form-select form-control text-center ps-0"
+                  id="employee_position_list"
+                  onchange="open_team_lead_list()"                  >
+                  <option value="Team Lead">Team Lead</option>
+                  <option value="Junior">Junior</option>
+                  
+                </select>
+              </div>
+              <div class="input-group pt-4" style="width: 193px">
+                </span>
+                <select
+                  class="form-select form-control text-center ps-0"
+                  id="employee_teamlead_list"
+                  disabled
+                >
+                </select>
               </div>
             </div>
             <div class="row">
               <div class="my-btn-holder mt-4">
                 <div
                   class="btn btn-danger px-5 me-5"
-                  onclick="hide_new_client_form()"
+                  onclick="make_add_employee_hidden()"
                 >
                   CLOSE
                 </div>
                 <div
                   id="new_client_add"
                   class="btn btn-success px-5"
-                  onclick="save_new_client()"
+                  onclick="save_new_employee()"
                 >
                   SAVE
                 </div>
@@ -869,25 +847,26 @@
         <!-- /////////////// EDIT EXISTING CLIENT /////////////// -->
         <div
           onclick="hide_content(event)"
-          id="edit_client"
+          id="edit_employee"
           class="my-outer-layer"
+          
         >
           <div
-            id="edit_client_inner"
+            id="edit_employee_inner"
             class="col-md-5 rounded-start"
             onclick="prevent_click(event)"
           >
-            <div class="add_section_head pb-5">EDIT CLIENT</div>
+            <div class="add_section_head pb-4">EDIT EMPLOYEE</div>
             <div class="row">
               <div class="input-group ms-2" style="width: 400px">
                 <span class="input-group-text"
-                  ><i class="fas fa-building px-2" style="font-size: 18px"></i>
+                  ><i class="icon-user-follow px-2" style="font-size: 18px"></i>
                 </span>
                 <input
-                  id="edit_client_name"
+                  id="edit_employee_name"
                   type="text"
                   class="form-control add_user_input py-3"
-                  placeholder="Company Name"
+                  placeholder="Employee Name"
                 />
               </div>
             </div>
@@ -896,10 +875,10 @@
               <div class="form-group ms-2">
                 <div class="input-group ms-2 pt-3" style="width: 370px">
                   <span class="input-group-text"
-                    ><i class="fas fa-envelope px-2"></i>
+                    ><i class="icon-envelope px-2"></i>
                   </span>
                   <input
-                    id="edit_client_email"
+                    id="edit_employee_email"
                     type="text"
                     class="form-control py-3"
                     placeholder="Email Address"
@@ -915,10 +894,10 @@
             <div class="row">
               <div class="input-group ms-2 pt-3" style="width: 400px">
                 <span class="input-group-text"
-                  ><i class="fab fa-whatsapp px-2" style="font-size: 18px"></i>
+                  ><i class="icon-phone px-2" style="font-size: 18px"></i>
                 </span>
                 <input
-                  id="edit_client_mobile"
+                  id="edit_employee_mobile"
                   type="number"
                   class="form-control add_user_input py-3"
                   placeholder="Mobile Number"
@@ -927,85 +906,118 @@
               </div>
             </div>
             <div class="row">
-              <div class="input-group ms-2 pt-4" style="width: 400px">
+              <div class="input-group ms-2 pt-4" style="width: 200px">
                 <span class="input-group-text"
-                  ><i
-                    class="fas fa-location-arrow px-2"
-                    style="font-size: 18px"
-                  ></i>
+                  ><i class="icon-emotsmile px-2" style="font-size: 18px"></i>
                 </span>
                 <input
-                  id="edit_client_location"
-                  type="text"
+                  id="edit_employee_age"
+                  type="number"
+                  min="18"
+                  max="100"
                   class="form-control add_user_input py-3"
-                  placeholder="Location"
+                  placeholder="AGE"
                 />
+              </div>
+              <div class="input-group pt-4" style="width: 200px">
+                <span class="input-group-text">
+                  <i class="icon-symbol-male" style="font-size: 18px"></i>
+                </span>
+                <select
+                  class="form-select form-control text-center ps-0"
+                  style="height: 5px"
+                  id="edit_employee_gender_list"
+                >
+                  <option value="MALE">MALE</option>
+                  <option value="FEMALE">FEMALE</option>
+                </select>
               </div>
             </div>
 
-            <div class="row mt-3" style="padding-inline: 10px">
+            <div class="row mt-4">
+              <div class="input-group ms-2" style="width: 400px">
+                <span class="input-group-text"
+                  ><i class="icon-home px-2" style="font-size: 18px"></i>
+                </span>
+                <input
+                  id="edit_employee_address"
+                  type="text"
+                  class="form-control add_user_input py-3"
+                  placeholder="Address"
+                />
+              </div>
+            </div>
+            <div class="row mt-3 ps-3" style="padding-inline: 10px">
               <div class="form-group">
                 <div class="input-group">
                   <span class="input-group-text" id="basic-addon3"
-                    ><i class="fab fa-internet-explorer" style="width: 35px"></i
+                    ><i
+                      class="icon-briefcase"
+                      style="
+                        width: 35px;
+                        height: 40px;
+                        padding-top: 10px;
+                        font-size: 18px;
+                      "
+                    ></i
                   ></span>
-                  <input
-                    type="text"
-                    class="form-control ps-3"
-                    id="edit_client_url"
-                    style="padding: 12px 0px"
-                    aria-describedby="basic-addon3"
-                    value="https://"
-                  />
+                  <select
+                    class="form-select form-control py-3"
+                    id="edit_employee_designation"
+                  >
+                    <option value="Angular Developer">Angular Developer</option>
+                    <option value="Dotnet Developer">Dotnet Developer</option>
+                    <option value="Java Developer">Java Developer</option>
+                    <option value="Python Developer">Python Developer</option>
+                    <option value="React Developer">React Developer</option>
+                  </select>
                 </div>
               </div>
             </div>
-            <div class="row pt-1" style="padding-inline: 10px">
-              <div class="form-group">
-                <label class="form-label pb-2">&nbsp; Organization</label>
-                <div class="selectgroup w-100">
-                  <label class="selectgroup-item">
-                    <input
-                      type="radio"
-                      name="transportation"
-                      value="PRIVATE"
-                      class="selectgroup-input edit_client_organization"
-                      checked
-                    />
-                    <span
-                      class="selectgroup-button selected-group-client selectgroup-button-icon"
-                      >Private
-                    </span>
-                  </label>
-                  <label class="selectgroup-item">
-                    <input
-                      type="radio"
-                      name="transportation"
-                      value="PUBLIC"
-                      class="selectgroup-input edit_client_organization"
-                    />
-                    <span
-                      class="selectgroup-button selected-group-client selectgroup-button-icon"
-                      >Public</span
-                    >
-                  </label>
-                </div>
+            <div class="row mb-3">
+              <div
+                class="input-group pt-4"
+                style="width: 210px; padding-inline-start: 24px"
+              >
+                <span class="input-group-text">
+                  <i
+                    class="icon-people"
+                    style="font-size: 20px; padding: 10px 8px"
+                  ></i>
+                </span>
+                <select
+                  class="form-select form-control text-center ps-0"
+                  id="edit_employee_position_list"
+                  onchange="open_team_lead_list()"                  >
+                  <option value="Team Lead">Team Lead</option>
+                  <option value="Junior">Junior</option>
+                  
+                </select>
+              </div>
+              <div class="input-group pt-4" style="width: 193px">
+                </span>
+                <select
+                  class="form-select form-control text-center ps-0"
+                  id="edit_employee_teamlead_list"
+                  disabled
+                >
+                </select>
               </div>
             </div>
             <div class="row">
               <div class="my-btn-holder mt-4">
                 <div
                   class="btn btn-danger px-5 me-5"
-                  onclick="hide_edit_client_form()"
+                  onclick="make_add_employee_hidden()"
                 >
                   CLOSE
                 </div>
                 <div
                   id="new_client_add"
                   class="btn btn-success px-5"
-                  onclick="save_edit_client()"
+                  onclick="save_new_employee()"
                 >
-                  UPDATE
+                  SAVE
                 </div>
               </div>
             </div>
@@ -1079,7 +1091,7 @@
 
     <!-- External JS -->
     <script src="assets/js/admin.js"></script>
-    <script src="assets/js/clients.js"></script>
+    <script src="assets/js/employee.js"></script>
 
     <!-- INTERNAL SCRIPT -->
   </body>
