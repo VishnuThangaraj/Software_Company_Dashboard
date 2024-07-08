@@ -1,19 +1,19 @@
-//////////// FORMAT THE DATE //////////
+// FORMAT THE DATE
 const formatDate = (inputDate) => {
   let [year, month, day] = inputDate.split("-");
   const months = [
-    "January",
-    "February",
-    "March",
-    "April",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
     "May",
     "June",
     "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
   month = months[parseInt(month, 10) - 1];
 
@@ -29,3 +29,34 @@ const hide_content = (event) => {
 const prevent_click = (event) => {
   event.stopPropagation();
 };
+
+// MOVE PAGE TO PROJECT SECTION
+const project_section = () => {
+  window.location.href = "/project.html";
+};
+
+// MOVE PAGE TO PROJECT SECTION
+const message_section = () => {
+  window.location.href = "/message.html";
+};
+
+// INPUT VALIDATION (GREEN)
+Array.from(document.getElementsByClassName("form_input_level")).forEach(
+  (element) => {
+    element.addEventListener("input", (event) => {
+      if (event.target.value !== "") {
+        event.target.style.border = "1px solid #6ddc70";
+      } else {
+        // If you want to remove the green border when the value is empty:
+        event.target.style.border = "1px solid #eff1f5";
+      }
+    });
+  }
+);
+
+// INPUT EDIT VALIDATION (GREEN)
+Array.from(document.getElementsByClassName("edit_form_input_level")).forEach(
+  (element) => {
+    element.style.border = "1px solid #6ddc70";
+  }
+);

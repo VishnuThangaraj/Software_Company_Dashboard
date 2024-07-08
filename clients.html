@@ -542,18 +542,16 @@
               <div class="col-sm-6 col-md-3">
                 <div class="card card-stats card-round">
                   <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-primary bubble-shadow-small"
-                        >
-                          <i class="fas fa-users"></i>
+                    <div class="row">
+                      <div class="col-5">
+                        <div class="icon-big text-center">
+                          <i class="icon-people text-warning" style="font-size: 35px;"></i>
                         </div>
                       </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
+                      <div class="col-7 col-stats">
                         <div class="numbers">
-                          <p class="card-category">Visitors</p>
-                          <h4 class="card-title">1,294</h4>
+                          <p class="card-category">Total Clients</p>
+                          <h4 class="card-title" id="client_total_count">0</h4>
                         </div>
                       </div>
                     </div>
@@ -563,18 +561,17 @@
               <div class="col-sm-6 col-md-3">
                 <div class="card card-stats card-round">
                   <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-info bubble-shadow-small"
-                        >
-                          <i class="fas fa-user-check"></i>
+                    <div class="row">
+                      <div class="col-5">
+                        <div class="icon-big text-center">
+                          <i class="far fa-building text-primary"
+                          style="font-size: 35px;"></i>
                         </div>
                       </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
+                      <div class="col-7 col-stats">
                         <div class="numbers">
-                          <p class="card-category">Subscribers</p>
-                          <h4 class="card-title">1303</h4>
+                          <p class="card-category">Private</p>
+                          <h4 class="card-title"  id="client_private_count">0</h4>
                         </div>
                       </div>
                     </div>
@@ -584,18 +581,16 @@
               <div class="col-sm-6 col-md-3">
                 <div class="card card-stats card-round">
                   <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-success bubble-shadow-small"
-                        >
-                          <i class="fas fa-luggage-cart"></i>
+                    <div class="row">
+                      <div class="col-5">
+                        <div class="icon-big text-center">
+                          <i class="fas fa-university text-success" style="font-size: 35px;"></i>
                         </div>
                       </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
+                      <div class="col-7 col-stats">
                         <div class="numbers">
-                          <p class="card-category">Sales</p>
-                          <h4 class="card-title">$ 1,345</h4>
+                          <p class="card-category">Public</p>
+                          <h4 class="card-title"  id="client_public_count">0</h4>
                         </div>
                       </div>
                     </div>
@@ -605,18 +600,16 @@
               <div class="col-sm-6 col-md-3">
                 <div class="card card-stats card-round">
                   <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-secondary bubble-shadow-small"
-                        >
-                          <i class="far fa-check-circle"></i>
+                    <div class="row">
+                      <div class="col-5">
+                        <div class="icon-big text-center">
+                          <i class="fas fa-project-diagram text-secondary" style="font-size: 25px;"></i>
                         </div>
                       </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
+                      <div class="col-7 col-stats">
                         <div class="numbers">
-                          <p class="card-category">Order</p>
-                          <h4 class="card-title">576</h4>
+                          <p class="card-category" >Projects</p>
+                          <h4 class="card-title" id="client_project_count">0</h4>
                         </div>
                       </div>
                     </div>
@@ -679,7 +672,7 @@
                       <div class="company_mail_subject pb-2">
                         <input
                           type="text"
-                          class="form-control input-full py-3"
+                          class="form_input_level form-control input-full py-3 "
                           id="company_mail_subject"
                           placeholder="Subject"
                           required
@@ -687,7 +680,7 @@
                       </div>
                       <div class="company_mail_message pb-3">
                         <textarea
-                          class="form-control my-3"
+                          class="form_input_level form-control my-3 "
                           id="company_mail_message"
                           placeholder="Message here ..."
                           rows="5"
@@ -695,7 +688,7 @@
                         ></textarea>
                       </div>
                       <div class="company_mail_send text-center">
-                        <div class="btn btn-icon btn-round btn-info me-1">
+                        <div onclick="visible_compose_mail()" class="btn btn-icon btn-round btn-info me-1">
                           <i class="fas fa-expand-arrows-alt px-1"></i>
                         </div>
                         <div
@@ -714,7 +707,7 @@
           </div>
         </div>
 
-        <!-- /////////////// ADD NEW CLIENT //////////// -->
+        <!-- //////////////////// ADD NEW CLIENT ///////////////// -->
         <div
           onclick="hide_content(event)"
           id="add_new_client"
@@ -734,7 +727,7 @@
                 <input
                   id="new_client_name"
                   type="text"
-                  class="form-control add_user_input py-3"
+                  class="form-control form_input_level add_user_input py-3"
                   placeholder="Company Name"
                 />
               </div>
@@ -749,7 +742,7 @@
                   <input
                     id="new_client_email"
                     type="text"
-                    class="form-control py-3"
+                    class="form-control form_input_level py-3"
                     placeholder="Email Address"
                     aria-describedby="basic-addon2"
                   />
@@ -768,7 +761,7 @@
                 <input
                   id="new_client_mobile"
                   type="number"
-                  class="form-control add_user_input py-3"
+                  class="form-control form_input_level add_user_input py-3"
                   placeholder="Mobile Number"
                   min="1"
                 />
@@ -785,7 +778,7 @@
                 <input
                   id="new_client_location"
                   type="text"
-                  class="form-control add_user_input py-3"
+                  class="form-control form_input_level add_user_input py-3"
                   placeholder="Location"
                 />
               </div>
@@ -799,7 +792,7 @@
                   ></span>
                   <input
                     type="text"
-                    class="form-control ps-3"
+                    class="form-control form_input_level ps-3"
                     id="new_client_url"
                     style="padding: 12px 0px"
                     aria-describedby="basic-addon3"
@@ -860,7 +853,7 @@
           </div>
         </div>
 
-        <!-- /////////////// EDIT EXISTING CLIENT /////////////// -->
+        <!-- /////////////// EDIT EXISTING CLIENT ///////////////// -->
         <div
           onclick="hide_content(event)"
           id="edit_client"
@@ -880,7 +873,7 @@
                 <input
                   id="edit_client_name"
                   type="text"
-                  class="form-control add_user_input py-3"
+                  class="form-control form_input_level edit_form_input_level add_user_input py-3"
                   placeholder="Company Name"
                 />
               </div>
@@ -895,7 +888,7 @@
                   <input
                     id="edit_client_email"
                     type="text"
-                    class="form-control py-3"
+                    class="form-control form_input_level edit_form_input_level py-3"
                     placeholder="Email Address"
                     aria-describedby="basic-addon2"
                   />
@@ -914,7 +907,7 @@
                 <input
                   id="edit_client_mobile"
                   type="number"
-                  class="form-control add_user_input py-3"
+                  class="form-control form_input_level edit_form_input_level add_user_input py-3"
                   placeholder="Mobile Number"
                   min="1"
                 />
@@ -931,7 +924,7 @@
                 <input
                   id="edit_client_location"
                   type="text"
-                  class="form-control add_user_input py-3"
+                  class="form-control form_input_level edit_form_input_level add_user_input py-3"
                   placeholder="Location"
                 />
               </div>
@@ -945,7 +938,7 @@
                   ></span>
                   <input
                     type="text"
-                    class="form-control ps-3"
+                    class="form-control form_input_level edit_form_input_level ps-3"
                     id="edit_client_url"
                     style="padding: 12px 0px"
                     aria-describedby="basic-addon3"
@@ -1006,8 +999,8 @@
           </div>
         </div>
 
-        <!-- /////////////// VIEW EXISTING CLIENT DETAILS ///////////// -->
-                 <div
+        <!-- ///////////// VIEW EXISTING CLIENT DETAILS /////////// -->
+        <div
           onclick="hide_content(event)"
           id="hide_view_client"
           class="my-outer-layer"
@@ -1018,34 +1011,46 @@
             onclick="prevent_click(event)"
           >
             <div class="add_section_head pb-3" id="show_client_name">NEW CLIENT</div>
-              <div class="project_ilst table-responsive">
-                <table>
-                  <tr>
-                    <th style="width:15%;">Project ID</th>
-                    <th style="width:15%;">Name</th>
-                    <th style="width:20%;">Project Lead</th>
-                    <th style="width:10%;">Members</th>
-                    <th style="width:10%;">Tasks</th>
-                    <th style="width: 5%;">View</th>
-                  </tr>
-                  <tr class="border-bottom">
-                    <td>PROJ-BL3</td>
-                    <td>Project AVC</td>
-                    <td>Vishnu Thangaraj</td>
-                    <td>&nbsp;&nbsp;&nbsp;4</td>
-                    <td>&nbsp;&nbsp;&nbsp;2</td>
-                    <td><div class="btn btn-info project_info_button"><i class="fa fa-share"></i></div></td>
-                  </tr>
-                  <tr  class="border-bottom">
-                    <td>PROJ-BL3</td>
-                    <td>Project AVC</td>
-                    <td>Vishnu Thangaraj</td>
-                    <td>&nbsp;&nbsp;&nbsp;4</td>
-                    <td>&nbsp;&nbsp;&nbsp;2</td>
-                    <td><div class="btn btn-info project_info_button"><i class="fa fa-share"></i></div></td>
-                  </tr>
+              <div class="project_list table-responsive" style="min-height: 100px;">
+                <table id="client_details_table" >
                 </table>
+                <div id="no_data_view_client">
+                </div>
               </div>
+          </div>
+        </div>
+
+        <!-- ///////////////// BIG MAIL TO COMPANY ////////////////// -->
+        <div
+          onclick="hide_content(event)"
+          id="big_mail"
+          class="my-outer-layer"
+        >
+          <div
+            id="big_mail_inner"
+            class="col-md-5 px-5 rounded"
+            onclick="prevent_click(event)"
+          >
+            <div class="add_section_head pb-5">COMPOSE MAIL</div>
+            <div class="big_mail_receiver">
+              <select class="form-select form-control text-center" id="big_mail_list">
+              </select>     
+            </div>
+            <div class="big_mail_subject my-4">
+              <input type="text" class="form-control input-full form_input_level" id="big_mail_subject" placeholder="Subject">
+            </div>
+            <div class="big_mail_messagea">
+              <textarea class="form-control form_input_level " id="big_mail_message" rows="6" placeholder="Message here..."></textarea>
+            </div>
+            <div class="company_mail_send text-center mt-4">
+              <div
+                onclick="send_big_mail(event)"
+                id="client_quick_big_mail"
+                class="btn btn-success px-5 rounded"
+              >
+                <i class="fab fa-telegram-plane"></i> SEND
+              </div>
+            </div>
           </div>
         </div>
 

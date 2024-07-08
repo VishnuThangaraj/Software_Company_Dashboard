@@ -1,3 +1,13 @@
+const localhost = `http://localhost:3005`;
+
+const add_new_client = document.getElementById(`add_new_client`);
+
+// TOP COUNTERS
+const client_total_count = document.getElementById(`client_total_count`);
+const client_private_count = document.getElementById(`client_private_count`);
+const client_public_count = document.getElementById(`client_public_count`);
+const client_project_count = document.getElementById(`client_project_count`);
+
 // ADD CLIENT FIELD
 const new_client_name = document.getElementById(`new_client_name`);
 const new_client_email = document.getElementById(`new_client_email`);
@@ -22,96 +32,158 @@ const edit_client_inner = document.getElementById(`edit_client_inner`);
 const edit_client = document.getElementById(`edit_client`);
 let current_edit_client = "";
 
-const company_mail_list = document.getElementById(`company_mail_list`);
 const client_table = document.getElementById(`client_table`);
 const client_quick_mail = document.getElementById(`client_quick_mail`);
 const hiding_over_client = document.getElementById(`hiding_over_client`);
+const client_details_table = document.getElementById(`client_details_table`);
 
 // VIEW CLIENT DETAILS
 const show_client_name = document.getElementById(`show_client_name`);
 const hide_view_client = document.getElementById(`hide_view_client`);
+const no_data_view_client = document.getElementById(`no_data_view_client`);
 
-/////////// SETUP MAIL SERVICE ///////////
-const setup_client = () => {
-  // Fetch Name and Email from Database
-  fetch(`http://localhost:3005/api/get_clients`)
-    .then((response) => response.json())
-    .then((json) => {
-      console.log(json);
-      if (json.length > 0) {
-        let temp = ` <tr class="border-bottom client_display">
-            <th style="width: 7%">ID</th>
-            <th style="width: 10%">Name</th>
-            <th style="width: 8%">Email</th>
-            <th style="width: 9%">Location</th>
-            <th style="width: 5%">Projects</th>
-            <!-- <th>Revenue</th> -->
-            <th style="width: 11%">Action</th>
-          </tr>`;
+// QUICK MESSAGE
+const company_mail_list = document.getElementById(`company_mail_list`);
+const company_mail_subject = document.getElementById(`company_mail_subject`);
+const company_mail_message = document.getElementById(`company_mail_message`);
 
-        json.forEach((client) => {
-          // QUICK MESSAGE
-          let new_option = document.createElement("option");
-          new_option.text = client.name;
-          new_option.value = client.email;
-          company_mail_list.append(new_option);
+// COMPOSE MAIL
+const big_mail = document.getElementById(`big_mail`);
+const big_mail_subject = document.getElementById(`big_mail_subject`);
+const big_mail_message = document.getElementById(`big_mail_message`);
+const client_quick_big_mail = document.getElementById(`client_quick_big_mail`);
+const big_mail_list = document.getElementById(`big_mail_list`);
 
-          // MAIN DASHBOARD
-          temp += `<tr id="${client.id}" class="border-bottom">`;
-          temp += `<td>CLIENT-BL${client.id}</td>`;
-          temp += `<td>${client.name}</td>`;
-          temp += `<td>${client.email}</td>`;
-          temp += `<td>${client.location}</td>`;
-          temp += `<td>&nbsp;${client.projects}</td>`;
-          temp += `<td>
-                    <div class="btn btn-primary py-1 my-2 me-1 px-3" onclick="display_client_details(event)">
-                      <i class="fas fa-eye"></i>
-                    </div>
-                    <div class="btn btn-secondary py-1 my-2 me-1 px-3" onclick="make_edit_pannel_visible(event)">
-                      <i class="far fa-edit"></i>
-                    </div>
-                    <div class="btn btn-danger  py-1 my-2 px-3" onclick="delete_client(event)">
-                      <i class="fas fa-trash-alt"></i>
-                    </div>
-                  </td>`;
-          temp += `</tr>`;
-        });
-        client_table.innerHTML = temp;
-      } else {
-        // EMPTY QUICK MESSAGE
+// SETUP CLIENT TABLE
+const setup_client = async () => {
+  let total_client_count = 0,
+    private_client_count = 0,
+    public_client_count = 0,
+    project_client_count = 0;
+
+  try {
+    // Fetch Project Count
+    const projectsResponse = await fetch(`${localhost}/api/get_projects`);
+    const projectsJson = await projectsResponse.json();
+    project_client_count = projectsJson.length;
+
+    // Fetch Name and Email from Database
+    const clientsResponse = await fetch(`${localhost}/api/get_clients`);
+    const clientsJson = await clientsResponse.json();
+
+    if (clientsJson.length > 0) {
+      total_client_count = clientsJson.length;
+
+      let temp = ` <tr class="border-bottom client_display">
+          <th style="width: 8%">ID</th>
+          <th style="width: 12%">Name</th>
+          <th style="width: 6%">Email</th>
+          <th style="width: 5%">Projects</th>
+          <th style="width: 7%">Sector</th>
+          <th style="width: 9%">Location</th>
+          <th style="width: 11%">Action</th>
+        </tr>`;
+
+      clientsJson.forEach((client) => {
+        // QUICK MESSAGE
         let new_option = document.createElement("option");
-        new_option.text = "No Clients Available";
-        new_option.value = "vishnuthangaraj.original@gmail.com";
+        new_option.text = client.name;
+        new_option.value = client.email;
         company_mail_list.append(new_option);
-      }
-    });
+
+        // BIG MAIL
+        let new_option1 = document.createElement("option");
+        new_option1.text = client.name;
+        new_option1.value = client.email;
+        big_mail_list.append(new_option1);
+
+        // MAIN DASHBOARD
+        temp += `<tr id="${client.id}" class="border-bottom" onclick="view_client_details(event)">`;
+        temp += `<td>CLNT-BL${client.id}</td>`;
+        temp += `<td>${client.name}</td>`;
+        temp += `<td>${client.email}</td>`;
+        temp += `<td>&nbsp;&nbsp;&nbsp;${client.projects}</td>`;
+        if (client.organization === "PRIVATE") {
+          temp += `<td><span class="badge badge-primary">PRIVATE</span></td>`;
+          private_client_count++;
+        } else {
+          temp += `<td><span class="badge badge-success">PUBLIC</span></td>`;
+          public_client_count++;
+        }
+        temp += `<td>${client.location}</td>`;
+        temp += `<td>
+                  <div class="btn btn-secondary py-1 my-2 me-1 px-3" onclick="make_edit_pannel_visible(event)">
+                    <i class="far fa-edit"></i>
+                  </div>
+                  <div class="btn btn-danger  py-1 my-2 px-3" onclick="delete_client(event)">
+                    <i class="fas fa-trash-alt"></i>
+                  </div>
+                </td>`;
+        temp += `</tr>`;
+      });
+
+      // Update counts and display
+      client_total_count.innerHTML = total_client_count;
+      client_private_count.innerHTML = private_client_count;
+      client_public_count.innerHTML = public_client_count;
+      client_project_count.innerHTML = project_client_count;
+      client_table.innerHTML = temp;
+    } else {
+      // If no clients available
+      let new_option = document.createElement("option");
+      new_option.text = "No Clients Available";
+      new_option.value = "vishnuthangaraj.original@gmail.com";
+      company_mail_list.append(new_option);
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    // Handle errors if necessary
+  }
 };
 
-setup_client();
-
-////////// SEND SMALL MAIL ///////////////
+// SEND SMALL MAIL
 const send_mail = (event) => {
+  const subject = company_mail_subject.value.trim();
+  const message = company_mail_message.value.trim();
+
+  if (subject === "") {
+    unsent_mail_notifications(
+      `Unable to send mail without Subject`,
+      `No Subject Provided`,
+      `fas fa-exclamation-circle`
+    );
+    company_mail_subject.style.border = `1px solid #f58389`;
+    if (message === "") company_mail_message.style.border = `1px solid #f58389`;
+    return;
+  }
+
+  if (message === "") {
+    unsent_mail_notifications(
+      `Mail Cannot Be Sent : Empty Message`,
+      `No Message Provided`,
+      `fas fa-exclamation-circle`
+    );
+    company_mail_message.style.border = `1px solid #f58389`;
+    return;
+  }
+
   hiding_over_client.style.display = "block";
   client_quick_mail.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Sending...`;
-  const to = document.getElementById(`company_mail_list`),
-    subject = document.getElementById(`company_mail_subject`),
-    message = document.getElementById(`company_mail_message`);
 
   let to_company = "";
 
-  to.childNodes.forEach((element) => {
-    if (element.value == to.value) {
+  Array.from(company_mail_list.children).forEach((element) => {
+    if (element.value === company_mail_list.value) {
       to_company = element.innerHTML;
     }
   });
 
-  fetch("http://localhost:3005/api/company_mail", {
+  fetch(`${localhost}/api/company_mail`, {
     method: "POST",
     body: JSON.stringify({
-      // to: "vishnuthangaraj.original@gmail.com",
-      to: to.value,
-      subject: subject.value,
-      message: message.value,
+      to: to_company.value,
+      subject: subject,
+      message: message,
     }),
     headers: {
       "Content-type": "application/json; charset=UTF-8",
@@ -119,48 +191,54 @@ const send_mail = (event) => {
   })
     .then((response) => response.json())
     .then((json) => {
-      let content = {};
+      console.log(json);
+      if (json.success) {
+        mail_notifications(
+          `Mail sent to ${to_company}`,
+          "Mail Sent",
+          "fas fa-envelope",
+          "success",
+          client_quick_mail
+        );
+      } else {
+        mail_notifications(
+          `Unable to send Mail to ${to_company}`,
+          "Sent Failed",
+          "fas fa-envelope",
+          "warning",
+          client_quick_mail
+        );
+      }
 
-      content.message = `Mail send to ${to_company}`;
-      content.title = "Mail Send";
-      content.icon = "fas fa-envelope";
-      content.url = "index.html";
-      content.target = "_blank";
+      // Clear input fields after sending mail
+      company_mail_subject.value = "";
+      company_mail_message.value = "";
 
-      $.notify(content, {
-        type: `success`,
-        placement: {
-          from: `top`,
-          align: `center`,
-        },
-        time: 100,
-        delay: 1000,
-      });
-
-      // SENT MAIL
-      client_quick_mail.innerHTML = `<i class="fas fa-check"></i> DONE`;
-      subject.value = "";
-      message.value = "";
-
-      setTimeout(function () {
+      setTimeout(() => {
+        hiding_over_client.style.display = "none";
         client_quick_mail.innerHTML = `<i class="fab fa-telegram-plane"></i> SEND`;
+        window.location.href = "/clients.html";
       }, 2000);
-      hiding_over_client.style.display = "none";
+    })
+    .catch((error) => {
+      console.error("Error sending mail:", error);
+      // Handle error scenarios if necessary
     });
 };
 
-//////////// ADD NEW CLIENT ////////////
+// ADD NEW CLIENT
 const add_client_bar = () => {
-  document.getElementById(`add_new_client`).style.display = "block";
+  add_new_client.style.display = "block";
 };
 
-//////////// DELETE CLIENT ////////////
+// DELETE CLIENT
 const delete_client = (event) => {
+  event.stopPropagation();
   hiding_over_client.style.display = "block";
   let parent = event.target;
   while (parent.id == ``) parent = parent.parentNode;
 
-  fetch("http://localhost:3005/api/delete_client", {
+  fetch(`${localhost}/api/delete_client`, {
     method: "DELETE",
     body: JSON.stringify({
       id: parent.id,
@@ -171,21 +249,20 @@ const delete_client = (event) => {
   })
     .then((response) => response.json())
     .then((json) => {
-      let content = {};
+      let content = {
+        url: "clients.html",
+        target: "_blank",
+      };
       let alert_type = "";
       if (json.success) {
         content.message = "Existing Client Deleted from the Database";
         content.title = "Client Deleted";
         content.icon = "icon-user";
-        content.url = "index.html";
-        content.target = "_blank";
         alert_type = "danger";
       } else {
         content.message = "Unable to Delete Client With Projects";
         content.title = "Failed to Delete Client";
         content.icon = "fas fa-exclamation-circle";
-        content.url = "index.html";
-        content.target = "_blank";
         alert_type = "warning";
       }
 
@@ -200,19 +277,19 @@ const delete_client = (event) => {
       });
 
       setTimeout(function () {
-        hiding_over_client.style.display = "none";
-        window.location.href = "http://127.0.0.1:5500/index.html";
+        window.location.href = "/clients.html";
       }, 3000);
     });
 };
 
-///////// HIDE ADD NEW CLIENT ///////////
+// HIDE ADD NEW CLIENT
 const hide_new_client_form = () => {
-  document.getElementById(`add_new_client`).style.display = "none";
+  add_new_client.style.display = "none";
 };
 
-//////// ADD NEW CLIENT TO DATABASE //////
+// ADD NEW CLIENT TO DATABASE
 const save_new_client = () => {
+  hiding_over_client.style.display = "block";
   hide_new_client_form();
 
   let new_client_organization_checked = `Private`;
@@ -221,7 +298,7 @@ const save_new_client = () => {
     if (obj.checked) new_client_organization_checked = obj.value;
   });
 
-  fetch("http://localhost:3005/api/add_client", {
+  fetch(`${localhost}/api/add_client`, {
     method: "POST",
     body: JSON.stringify({
       name: new_client_name.value,
@@ -237,13 +314,13 @@ const save_new_client = () => {
   })
     .then((response) => response.json())
     .then((json) => {
-      let content = {};
-
-      content.message = "New Client Added to the Database";
-      content.title = "Client Added";
-      content.icon = "icon-user";
-      content.url = "index.html";
-      content.target = "_blank";
+      let content = {
+        message: "New Client Added to the Database",
+        title: "Client Added",
+        icon: "icon-user",
+        url: "clients.html",
+        target: "_blank",
+      };
 
       $.notify(content, {
         type: `success`,
@@ -256,20 +333,22 @@ const save_new_client = () => {
       });
 
       setTimeout(function () {
-        window.location.href = "http://127.0.0.1:5500/index.html";
+        window.location.href = "/clients.html";
       }, 3000);
     });
 };
 
-/////// MAKE CLIENT EDIT PANNEL VISIBLE /////////
+// MAKE CLIENT EDIT PANNEL VISIBLE
 const make_edit_pannel_visible = (event) => {
+  event.stopPropagation();
+
   let parent = event.target.parentNode;
   while (parent.id == "") parent = parent.parentNode;
   current_edit_client = parent.id;
   edit_client.style.display = "block";
 
-  //// fetch data of the client and display
-  fetch("http://localhost:3005/api/get_client_with_id", {
+  // fetch data of the client and display
+  fetch(`${localhost}/api/get_client_with_id`, {
     method: "POST",
     body: JSON.stringify({
       id: parent.id,
@@ -294,14 +373,15 @@ const make_edit_pannel_visible = (event) => {
     });
 };
 
-//////////// HIDE EDIT FORM /////////////
+// HIDE EDIT FORM
 const hide_edit_client_form = () => {
   edit_client.style.display = "none";
 };
 
-/////////// UPDATE EDITED CLIENT DETAILS ///////////
+// UPDATE EDITED CLIENT DETAILS
 const save_edit_client = () => {
   hide_edit_client_form();
+  hiding_over_client.style.display = "block";
   edit_client_inner.classList.add("my-slide-in");
 
   // GET ALL EDITED DETAILS
@@ -311,7 +391,7 @@ const save_edit_client = () => {
     if (obj.checked) edit_client_organization_checked = obj.value;
   });
 
-  fetch("http://localhost:3005/api/update_client_with_id", {
+  fetch(`${localhost}/api/update_client_with_id`, {
     method: "PUT",
     body: JSON.stringify({
       id: current_edit_client,
@@ -328,14 +408,13 @@ const save_edit_client = () => {
   })
     .then((response) => response.json())
     .then((json) => {
-      let content = {};
-
-      content.message =
-        "Updated client details have been successfully recorded.";
-      content.title = "Client Updated";
-      content.icon = "fas fa-pencil-alt";
-      content.url = "index.html";
-      content.target = "_blank";
+      let content = {
+        message: "Updated client details have been successfully recorded.",
+        title: "Client Updated",
+        icon: "fas fa-pencil-alt",
+        url: "clients.html",
+        target: "_blank",
+      };
 
       $.notify(content, {
         type: `success`,
@@ -348,19 +427,21 @@ const save_edit_client = () => {
       });
 
       setTimeout(function () {
-        window.location.href = "http://127.0.0.1:5500/index.html";
+        window.location.href = "/clients.html";
       }, 3000);
     });
 };
 
-////////// DISPLAY CLIENT DETAILS ///////////////
-const display_client_details = (event) => {
+// DISPLAY CLIENT DETAILS
+const view_client_details = (event) => {
   let parent = event.target;
   while (parent.id == ``) parent = parent.parentNode;
 
   hide_view_client.style.display = "block";
+  no_data_view_client.innerHTML = "";
 
-  fetch("http://localhost:3005/api/get_client_with_id", {
+  // Fetch Client With ID
+  fetch(`${localhost}/api/get_client_with_id`, {
     method: "POST",
     body: JSON.stringify({
       id: parent.id,
@@ -374,5 +455,205 @@ const display_client_details = (event) => {
       show_client_name.innerHTML = data[0].name;
     });
 
-  console.log(parent.id);
+  // Fetch Projects with Client ID
+  fetch(`${localhost}/api/get_project_with_client_id`, {
+    method: "POST",
+    body: JSON.stringify({
+      id: parent.id,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
+    .then((response) => response.json())
+    .then((projects) => {
+      let temp = `<tr class="border-bottom">
+                    <th style="width:15%;">Project ID</th>
+                    <th style="width:15%;">Name</th>
+                    <th style="width:20%;">Project Lead</th>
+                    <th style="width:10%;">Members</th>
+                    <th style="width:10%;">Tasks</th>
+                    <th style="width: 5%;">View</th>
+                  </tr>`;
+
+      if (projects.length > 0) {
+        let fetchTasksPromises = [];
+
+        projects.forEach((project) => {
+          let task_count = 0;
+          let member_count = 0;
+
+          // Fetch Members of the Task
+          let fetchPromise = fetch(`${localhost}/api/task_with_projectid`, {
+            method: "POST",
+            body: JSON.stringify({
+              id: project.id,
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          })
+            .then((response) => response.json())
+            .then((tasks) => {
+              task_count = tasks.length;
+              tasks.forEach((task) => {
+                if (task.employee_id != null) member_count++;
+              });
+
+              // Update the row in the table after fetching tasks
+              temp += `<tr id="${project.id}">`;
+              temp += `<td>PROJ-BL${project.id}</td>`;
+              temp += `<td>${project.project_name}</td>`;
+              temp += `<td>Vishnu Thangaraj</td>`;
+              temp += `<td>&nbsp;&nbsp;&nbsp;${member_count}</td>`;
+              temp += `<td>&nbsp;&nbsp;&nbsp;${task_count}</td>`;
+              temp += `<td><div onclick="project_section()" class="btn btn-info project_info_button my-2"><i class="fa fa-share"></i></div></td>`;
+              temp += `</tr>`;
+
+              // Update the table with the latest HTML
+              client_details_table.innerHTML = temp;
+            })
+            .catch((error) => {
+              console.error("Error fetching tasks:", error);
+            });
+
+          fetchTasksPromises.push(fetchPromise);
+        });
+
+        Promise.all(fetchTasksPromises)
+          .then(() => {
+            client_details_table.innerHTML = temp;
+          })
+          .catch((error) => {
+            console.error("Error fetching tasks for all projects:", error);
+          });
+      } else {
+        console.log(`no data`);
+        no_data_view_client.innerHTML = `<div class="fa-fade text-center no_projects my-4">NO PROJECTS AVAILABLE</div>`;
+        client_details_table.innerHTML = temp;
+      }
+    });
 };
+
+// MAKE COMPOSE MAIL VISIBLE
+const visible_compose_mail = () => {
+  big_mail_subject.value =
+    document.getElementById(`company_mail_subject`).value;
+  big_mail_message.value =
+    document.getElementById(`company_mail_message`).value;
+  big_mail.style.display = "block";
+};
+
+const send_big_mail = () => {
+  if (big_mail_subject.value == "") {
+    unsent_mail_notifications(
+      `Unable to send mail without Subject`,
+      `No Subject Provided`,
+      `fas fa-exclamation-circle`
+    );
+    return;
+  } else if (big_mail_message.value == "") {
+    unsent_mail_notifications(
+      `Mail Cannot Be Sent : Empty Message`,
+      `No Message Provided`,
+      `fas fa-exclamation-circle`
+    );
+    return;
+  }
+
+  hiding_over_client.style.display = "block";
+  client_quick_big_mail.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Sending...`;
+
+  const to = big_mail_list;
+
+  let to_company = "";
+
+  to.childNodes.forEach((element) => {
+    if (element.value == to.value) {
+      to_company = element.innerHTML;
+    }
+  });
+
+  fetch(`${localhost}/api/company_mail`, {
+    method: "POST",
+    body: JSON.stringify({
+      to: to.value,
+      subject: big_mail_subject.value,
+      message: big_mail_message.value,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      if (json.success) {
+        mail_notifications(
+          `Mail sent to ${to_company}`,
+          "Mail Sent",
+          "fas fa-envelope",
+          "success",
+          client_quick_big_mail
+        );
+      } else {
+        mail_notifications(
+          `Unable to send Mail to ${to_company}`,
+          "Sent Failed",
+          "fas fa-envelope",
+          "warning",
+          client_quick_big_mail
+        );
+      }
+      setTimeout(function () {
+        big_mail.style.display = "none";
+        hiding_over_client.style.display = "none";
+      }, 1000);
+    });
+};
+
+// NOTIFICATION FOR MAIL
+const mail_notifications = (to_company, title, icon, type, send_btn) => {
+  let content = {
+    message: to_company,
+    title: title,
+    icon: icon,
+    url: "clients.html",
+    target: "_blank",
+  };
+
+  $.notify(content, {
+    type: type,
+    placement: {
+      from: `top`,
+      align: `center`,
+    },
+    time: 100,
+    delay: 1000,
+  });
+
+  // SENT MAIL
+  send_btn.innerHTML = `<i class="fas fa-check"></i> DONE`;
+};
+
+// NOTIFICATION FOR UNSENT MAIL
+const unsent_mail_notifications = (message, title, icon) => {
+  let content = {
+    message: message,
+    title: title,
+    icon: icon,
+    url: "clients.html",
+    target: "_blank",
+  };
+
+  $.notify(content, {
+    type: "warning",
+    placement: {
+      from: `top`,
+      align: `center`,
+    },
+    time: 100,
+    delay: 1000,
+  });
+};
+
+setup_client();

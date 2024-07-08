@@ -1,4 +1,5 @@
-#add_new_task_inner {
+#add_new_task_inner,
+#edit_task_inner {
   position: fixed;
   top: 54.5%;
   height: 90.5%;

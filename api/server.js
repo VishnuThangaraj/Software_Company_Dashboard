@@ -73,6 +73,28 @@ app.post(`/api/add_project`, (req, res) => {
   );
 });
 
+////////////// ADD NEW TASK //////////////////
+app.post(`/api/add_task`, (req, res) => {
+  const { name, description, employee_id, priority, due_date, project_id } =
+    req.body;
+
+  connection.query(
+    `INSERT INTO task (name, description, employee_id, priority, due_date, project_id) VALUES (?, ?, ?, ?, ?, ?)`,
+    [name, description, employee_id, priority, due_date, project_id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Inserting Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to add Task. Please try again later.",
+        });
+      } else {
+        res.json({ success: true, message: "Task added successfully" });
+      }
+    }
+  );
+});
+
 /////////////// ADD NEW EMPLOYEE ///////////////////
 // app.post(`/api/add_employee`, (req, res) => {
 //   const { name } = req.body;
@@ -190,6 +212,65 @@ app.post(`/api/get_client_name`, (req, res) => {
   );
 });
 
+/////////////// FETCH PROJECT WITH CLIENT ID ////////////
+app.post(`/api/get_project_with_client_id`, (req, res) => {
+  const { id } = req.body;
+
+  connection.query(
+    `SELECT * FROM projects WHERE company_id = ?`,
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Project Data. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
+////////////// FETCH TASK WITH ID //////////////////
+app.post(`/api/get_task_with_id`, (req, res) => {
+  const { id } = req.body;
+
+  connection.query(`SELECT * FROM task WHERE id = ?`, [id], (err, result) => {
+    if (err) {
+      console.error("Error Fetching Data:", err);
+      res.status(500).json({
+        success: false,
+        error: "Failed to Fetch Task Details. Please try again later.",
+      });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+////////////// FETCH TASK WITH PROJECT ID //////////////////
+app.post(`/api/task_with_projectid`, (req, res) => {
+  const { id } = req.body;
+
+  connection.query(
+    `SELECT * FROM task WHERE project_id = ?`,
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Task Details. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
 ///////////////// FETCH ALL TEAM LEAD NAMES //////////
 app.get(`/api/get_teamlead_id_name`, (req, res) => {
   connection.query(`SELECT id, name FROM team_lead`, (err, result) => {
@@ -239,7 +320,7 @@ app.post(`/api/get_client_with_id`, (req, res) => {
   });
 });
 
-///////////// UPDATE CLIENT DETAILS WITH ID //////////
+///////////// UPDATE CLIENT WITH ID //////////////
 app.put(`/api/update_client_with_id`, (req, res) => {
   const { id, name, email, mobile, location, website, organization } = req.body;
 
@@ -255,6 +336,28 @@ app.put(`/api/update_client_with_id`, (req, res) => {
         });
       } else {
         res.json({ message: "Client updated successfully", success: true });
+      }
+    }
+  );
+});
+
+///////////// UPDATE TASK WITH ID /////////////////
+app.put(`/api/edit_task_with_id`, (req, res) => {
+  const { name, description, employee_id, project_id, priority, due_date, id } =
+    req.body;
+
+  connection.query(
+    `UPDATE task SET name = ?, description = ?, employee_id =?, project_id = ?, priority = ?, due_date = ? WHERE id = ?`,
+    [name, description, employee_id, project_id, priority, due_date, id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Update Task Details. Please try again later.",
+        });
+      } else {
+        res.json({ message: "Task updated successfully", success: true });
       }
     }
   );
@@ -342,10 +445,10 @@ app.post("/api/company_mail", async (req, res) => {
       text,
     });
 
-    res.json({ message: "Email sent successfully!" });
+    res.json({ success: true, message: "Email sent successfully!" });
   } catch (error) {
     console.error("Error sending email:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ success: true, error: "Internal server error" });
   }
 });
 
