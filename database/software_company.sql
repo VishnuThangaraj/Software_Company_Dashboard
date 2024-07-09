@@ -9,26 +9,12 @@ CREATE TABLE software_company.client(
     mobile VARCHAR(20),
     location VARCHAR(50),
     website VARCHAR(50),
-    organization VARCHAR(50),
-    projects INT DEFAULT 0
+    organization VARCHAR(50)
 );
 
 CREATE TABLE software_company.admin_cred (
 	user_id VARCHAR(20),
     password VARCHAR (50)
-);
-
-CREATE TABLE software_company.projects (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    project_name VARCHAR(50),
-    company_id INT,
-    budget INT,
-    notes VARCHAR(100),
-    tasks INT DEFAULT 0,
-    status VARCHAR(10) DEFAULT "ongoing",
-    start_date DATE DEFAULT (current_date()),
-    due_date DATE,
-    FOREIGN KEY (company_id) REFERENCES software_company.client(id)
 );
 
 CREATE TABLE software_company.team_lead (
@@ -40,6 +26,20 @@ CREATE TABLE software_company.team_lead (
     gender VARCHAR(50),
     address VARCHAR(100),
     designation VARCHAR(50)
+);
+
+CREATE TABLE software_company.projects (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    project_name VARCHAR(50),
+    company_id INT,
+    budget INT,
+    notes VARCHAR(100),
+    team_lead_id INT,
+    status VARCHAR(10) DEFAULT "ongoing",
+    start_date DATE DEFAULT (current_date()),
+    due_date DATE,
+    FOREIGN KEY (company_id) REFERENCES software_company.client(id),
+    FOREIGN KEY (team_lead_id) REFERENCES software_company.team_lead(id)
 );
 
 CREATE TABLE software_company.employee (
@@ -65,31 +65,22 @@ CREATE TABLE software_company.task (
     priority VARCHAR(20),
     start_date DATE DEFAULT (current_date()),
     due_date DATE,
-    FOREIGN KEY (employee_id) REFERENCES software_company.employee(id)
+    FOREIGN KEY (employee_id) REFERENCES software_company.employee(id),
+    FOREIGN KEY (project_id) REFERENCES software_company.projects(id)
 );
-
-
 
 INSERT INTO software_company.admin_cred (user_id, password)
 VALUES
 	("admin","admin123");
     
 
-INSERT INTO software_company.client (name, email, mobile, location, website, organization, projects)
+INSERT INTO software_company.client (name, email, mobile, location, website, organization)
 VALUES
-    ('ABC Corporation', 'abc@example.com', '1234567890', 'New York', 'http://www.abc.com', 'PRIVATE', 1),
-    ('XYZ Industries', 'info@xyz.com', '4567890123', 'Los Angeles', 'http://www.xyzindustries.com', 'PRIVATE',2),
-    ('Tech Solutions Ltd.', 'info@techsolutions.com', '7890123456', 'San Francisco', 'http://www.techsolutions.com', 'PRIVATE',1),
-    ('Global Innovations Inc.', 'contact@globalinno.com', '2345678901', 'London', 'http://www.globalinnovations.com', 'PUBLIC',1),
-    ('Innovate Now Ltd.', 'support@innovatenow.com', '5678901234', 'Berlin', 'http://www.innovatenow.com', 'PUBLIC',0);
-
-INSERT INTO software_company.projects (project_name, company_id, budget, notes, due_date)
-VALUES 
-    ('Project Alpha', 1, 5000, 'Initial project for client X', '2024-09-30'),
-    ('Project Beta', 2, 8000, 'Expansion project for client Y', '2024-09-30'),
-    ('Project Cherry', 3, 12000, 'Enhancement project for client Z', '2024-12-31'),
-    ('Project Diary', 4, 10000, 'Critical project for client X', '2024-10-31'),
-    ('Project Eclipse', 2, 15000, 'Major project for client Y', '2025-03-31');
+    ('ABC Corporation', 'abc@example.com', '1234567890', 'New York', 'http://www.abc.com', 'PRIVATE'),
+    ('XYZ Industries', 'info@xyz.com', '4567890123', 'Los Angeles', 'http://www.xyzindustries.com', 'PRIVATE'),
+    ('Tech Solutions Ltd.', 'info@techsolutions.com', '7890123456', 'San Francisco', 'http://www.techsolutions.com', 'PRIVATE'),
+    ('Global Innovations Inc.', 'contact@globalinno.com', '2345678901', 'London', 'http://www.globalinnovations.com', 'PUBLIC'),
+    ('Innovate Now Ltd.', 'support@innovatenow.com', '5678901234', 'Berlin', 'http://www.innovatenow.com', 'PUBLIC');
 
 INSERT INTO software_company.team_lead (name, email, phone, age, gender, address, designation) 
 VALUES 
@@ -98,6 +89,16 @@ VALUES
     ('Michael Johnson', 'michael.john@example.com', 5551112222, 40, 'Male', '789 Elm St, Anystate', 'Java Developer'),
     ('Emily Brown', 'emily.brown@example.com', 3334445555, 28, 'Female', '321 Pine Rd, Anycity', 'Python Developer'),
     ('David Wilson', 'david.wilson@example.com', 6667778888, 45, 'Male', '555 Cedar Ln, Anytown', 'React Developer');
+
+
+INSERT INTO software_company.projects (project_name, company_id, budget, notes, due_date, team_lead_id, status)
+VALUES 
+    ('Project Alpha', 1, 5000, 'Initial project for client X', '2024-09-30',1, 'ongoing'),
+    ('Project Beta', 2, 8000, 'Expansion project for client Y', '2024-09-30',2, 'ongoing'),
+    ('Project Cherry', 3, 12000, 'Enhancement project for client Z', '2024-12-31',3, 'completed'),
+    ('Project Diary', 4, 10000, 'Critical project for client X', '2024-10-31',4, 'ongoing'),
+    ('Project Eclipse', 2, 15000, 'Major project for client Y', '2025-03-31',5, 'completed');
+
 
 INSERT INTO software_company.employee (name, email, phone, age, gender, address, designation, team_lead_id) 
 VALUES 

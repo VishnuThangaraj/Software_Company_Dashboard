@@ -10,7 +10,8 @@
   background-color: #c4c4c4e1;
   z-index: 1;
 }
-#add_new_project_inner {
+#add_new_project_inner,
+#edit_project_inner {
   position: fixed;
   top: 54.5%;
   height: 90.5%;

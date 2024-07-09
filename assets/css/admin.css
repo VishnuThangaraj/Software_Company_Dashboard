@@ -60,3 +60,10 @@ tr:hover {
 tr:hover {
   background-color: rgba(190, 190, 190, 0.185);
 }
+.hidden_no_data_table {
+  text-align: center;
+  font-size: 20px;
+  padding-top: 120px;
+  display: none;
+  /* <div id="clients_no_data" class="hidden_no_data_table fa-fade">No Client Data Available</div> */
+}

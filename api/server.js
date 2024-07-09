@@ -31,7 +31,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-////////////////// ADD NEW CLIENT ///////////////////
+// ADD NEW CLIENT
 app.post(`/api/add_client`, (req, res) => {
   const { name, email, mobile, location, website, organization } = req.body;
 
@@ -52,13 +52,14 @@ app.post(`/api/add_client`, (req, res) => {
   );
 });
 
-/////////////// ADD NEW PROJECT ///////////////////
+// ADD NEW PROJECT
 app.post(`/api/add_project`, (req, res) => {
-  const { project_name, company_id, budget, notes, due_date } = req.body;
+  const { project_name, company_id, budget, notes, due_date, team_lead_id } =
+    req.body;
 
   connection.query(
-    `INSERT INTO projects (project_name, company_id, budget, notes, due_date) VALUES (?, ?, ?, ?, ?)`,
-    [project_name, company_id, budget, notes, due_date],
+    `INSERT INTO projects (project_name, company_id, budget, notes, due_date, team_lead_id) VALUES (?, ?, ?, ?, ?, ?)`,
+    [project_name, company_id, budget, notes, due_date, team_lead_id],
     (err, result) => {
       if (err) {
         console.error("Error Inserting Data:", err);
@@ -73,7 +74,7 @@ app.post(`/api/add_project`, (req, res) => {
   );
 });
 
-////////////// ADD NEW TASK //////////////////
+// ADD NEW TASK
 app.post(`/api/add_task`, (req, res) => {
   const { name, description, employee_id, priority, due_date, project_id } =
     req.body;
@@ -95,28 +96,7 @@ app.post(`/api/add_task`, (req, res) => {
   );
 });
 
-/////////////// ADD NEW EMPLOYEE ///////////////////
-// app.post(`/api/add_employee`, (req, res) => {
-//   const { name } = req.body;
-
-//   connection.query(
-//     `INSERT INTO projects (project_name, company_id, budget, notes, due_date) VALUES (?, ?, ?, ?, ?)`,
-//     [project_name, company_id, budget, notes, due_date],
-//     (err, result) => {
-//       if (err) {
-//         console.error("Error Inserting Data:", err);
-//         res.status(500).json({
-//           success: false,
-//           error: "Failed to add Project. Please try again later.",
-//         });
-//       } else {
-//         res.json({ success: true, message: "Project added successfully" });
-//       }
-//     }
-//   );
-// });
-
-/////////////// FETCH EMPLOYEE DATA /////////////
+// FETCH EMPLOYEE DATA
 app.get(`/api/get_employee`, (req, res) => {
   connection.query(`SELECT * FROM employee`, (err, result) => {
     if (err) {
@@ -131,7 +111,7 @@ app.get(`/api/get_employee`, (req, res) => {
   });
 });
 
-/////////////// FETCH TEAM LEAD /////////////
+// FETCH TEAM LEAD
 app.get(`/api/get_teamlead`, (req, res) => {
   connection.query(`SELECT * FROM team_lead`, (err, result) => {
     if (err) {
@@ -146,7 +126,7 @@ app.get(`/api/get_teamlead`, (req, res) => {
   });
 });
 
-/////////////// FETCH CLIENT DETAILS /////////////
+// FETCH CLIENT DETAILS
 app.get(`/api/get_clients`, (req, res) => {
   connection.query(`SELECT * FROM client`, (err, result) => {
     if (err) {
@@ -161,7 +141,7 @@ app.get(`/api/get_clients`, (req, res) => {
   });
 });
 
-////////////// FETCH PROJECT DETAILS //////////////
+// FETCH PROJECT DETAILS
 app.get(`/api/get_projects`, (req, res) => {
   connection.query(`SELECT * FROM projects`, (err, result) => {
     if (err) {
@@ -176,7 +156,7 @@ app.get(`/api/get_projects`, (req, res) => {
   });
 });
 
-/////////////// FETCH TASK DETAILS /////////////
+// FETCH TASK DETAILS
 app.get(`/api/get_task`, (req, res) => {
   connection.query(`SELECT * FROM task`, (err, result) => {
     if (err) {
@@ -191,7 +171,7 @@ app.get(`/api/get_task`, (req, res) => {
   });
 });
 
-/////////////// FETCH CLIENT NAME WITH ID ////////////
+// FETCH CLIENT NAME WITH ID
 app.post(`/api/get_client_name`, (req, res) => {
   const { id } = req.body;
 
@@ -212,7 +192,7 @@ app.post(`/api/get_client_name`, (req, res) => {
   );
 });
 
-/////////////// FETCH PROJECT WITH CLIENT ID ////////////
+// FETCH PROJECT WITH CLIENT ID
 app.post(`/api/get_project_with_client_id`, (req, res) => {
   const { id } = req.body;
 
@@ -233,7 +213,28 @@ app.post(`/api/get_project_with_client_id`, (req, res) => {
   );
 });
 
-////////////// FETCH TASK WITH ID //////////////////
+// FETCH PROJECT WITH ID
+app.post(`/api/get_project_with_id`, (req, res) => {
+  const { id } = req.body;
+
+  connection.query(
+    `SELECT * FROM projects WHERE id = ?`,
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Project Data. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
+// FETCH TASK WITH ID
 app.post(`/api/get_task_with_id`, (req, res) => {
   const { id } = req.body;
 
@@ -250,7 +251,7 @@ app.post(`/api/get_task_with_id`, (req, res) => {
   });
 });
 
-////////////// FETCH TASK WITH PROJECT ID //////////////////
+// FETCH TASK WITH PROJECT ID
 app.post(`/api/task_with_projectid`, (req, res) => {
   const { id } = req.body;
 
@@ -271,7 +272,7 @@ app.post(`/api/task_with_projectid`, (req, res) => {
   );
 });
 
-///////////////// FETCH ALL TEAM LEAD NAMES //////////
+// FETCH ALL TEAM LEAD NAMES
 app.get(`/api/get_teamlead_id_name`, (req, res) => {
   connection.query(`SELECT id, name FROM team_lead`, (err, result) => {
     if (err) {
@@ -286,8 +287,7 @@ app.get(`/api/get_teamlead_id_name`, (req, res) => {
   });
 });
 
-///////////// FETCH ALL CLIENT NAMES ////////////
-
+// FETCH ALL CLIENT NAMES
 app.get(`/api/get_all_client_names_id`, (req, res) => {
   connection.query(`SELECT id, name FROM client`, (err, result) => {
     if (err) {
@@ -302,8 +302,7 @@ app.get(`/api/get_all_client_names_id`, (req, res) => {
   });
 });
 
-///////////// FETCH CLIENT DETAILS WITH ID ////////////
-
+// FETCH CLIENT DETAILS WITH ID
 app.post(`/api/get_client_with_id`, (req, res) => {
   const { id } = req.body;
 
@@ -320,7 +319,7 @@ app.post(`/api/get_client_with_id`, (req, res) => {
   });
 });
 
-///////////// UPDATE CLIENT WITH ID //////////////
+// UPDATE CLIENT WITH ID
 app.put(`/api/update_client_with_id`, (req, res) => {
   const { id, name, email, mobile, location, website, organization } = req.body;
 
@@ -329,7 +328,7 @@ app.put(`/api/update_client_with_id`, (req, res) => {
     [name, email, mobile, location, website, organization, id],
     (err, result) => {
       if (err) {
-        console.error("Error Fetching Data:", err);
+        console.error("Error Updating Data:", err);
         res.status(500).json({
           success: false,
           error: "Failed to Update Client Details. Please try again later.",
@@ -341,7 +340,7 @@ app.put(`/api/update_client_with_id`, (req, res) => {
   );
 });
 
-///////////// UPDATE TASK WITH ID /////////////////
+// UPDATE TASK WITH ID
 app.put(`/api/edit_task_with_id`, (req, res) => {
   const { name, description, employee_id, project_id, priority, due_date, id } =
     req.body;
@@ -351,7 +350,7 @@ app.put(`/api/edit_task_with_id`, (req, res) => {
     [name, description, employee_id, project_id, priority, due_date, id],
     (err, result) => {
       if (err) {
-        console.error("Error Fetching Data:", err);
+        console.error("Error Updating Data:", err);
         res.status(500).json({
           success: false,
           error: "Failed to Update Task Details. Please try again later.",
@@ -363,7 +362,36 @@ app.put(`/api/edit_task_with_id`, (req, res) => {
   );
 });
 
-//////////// DELETE CLIENT USING ID ///////////////
+// UPDATE PROJECT WITH ID
+app.put(`/api/update_project_with_id`, (req, res) => {
+  const {
+    id,
+    project_name,
+    company_id,
+    budget,
+    notes,
+    team_lead_id,
+    due_date,
+  } = req.body;
+
+  connection.query(
+    `UPDATE projects SET project_name = ?, company_id = ?, budget =?, notes = ?, team_lead_id = ?, due_date = ? WHERE id = ?`,
+    [project_name, company_id, budget, notes, team_lead_id, due_date, id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Updating Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Update Project Details. Please try again later.",
+        });
+      } else {
+        res.json({ message: "Project updated successfully", success: true });
+      }
+    }
+  );
+});
+
+// DELETE CLIENT USING ID
 app.delete(`/api/delete_client`, (req, res) => {
   const { id } = req.body;
   connection.query(`DELETE FROM client WHERE id = ?`, [id], (err, result) => {
@@ -379,7 +407,23 @@ app.delete(`/api/delete_client`, (req, res) => {
   });
 });
 
-/////////// DELETE TEAM LEAD USING ID ////////////
+// DELETE PROJECT USING ID
+app.delete(`/api/delete_project`, (req, res) => {
+  const { id } = req.body;
+  connection.query(`DELETE FROM projects WHERE id = ?`, [id], (err, result) => {
+    if (err) {
+      console.error("Error Deleting Data:", err);
+      res.status(500).json({
+        success: false,
+        error: "Failed to Delete Project. Please try again later.",
+      });
+    } else {
+      res.json({ success: true });
+    }
+  });
+});
+
+// DELETE TEAM LEAD USING ID
 app.delete(`/api/delete_teamlead`, (req, res) => {
   const { id } = req.body;
   connection.query(
@@ -399,7 +443,7 @@ app.delete(`/api/delete_teamlead`, (req, res) => {
   );
 });
 
-/////////// DELETE EMPLOYEE USING ID ////////////
+// DELETE EMPLOYEE USING ID
 app.delete(`/api/delete_teamlead`, (req, res) => {
   const { id } = req.body;
   connection.query(`DELETE FROM employee WHERE id = ?`, [id], (err, result) => {
@@ -415,7 +459,7 @@ app.delete(`/api/delete_teamlead`, (req, res) => {
   });
 });
 
-//////////// DELETE TASK USING ID ///////////////
+// DELETE TASK USING ID
 app.delete(`/api/delete_task`, (req, res) => {
   const { id } = req.body;
   connection.query(`DELETE FROM task WHERE id = ?`, [id], (err, result) => {
@@ -431,7 +475,7 @@ app.delete(`/api/delete_task`, (req, res) => {
   });
 });
 
-/////////////// SEND MAIL TO COMPANY ////////////////
+// SEND MAIL TO COMPANY
 app.post("/api/company_mail", async (req, res) => {
   try {
     let { to, subject, message } = req.body;

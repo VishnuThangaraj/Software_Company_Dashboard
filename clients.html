@@ -523,7 +523,6 @@
             >
               <div>
                 <h3 class="fw-bold mb-3">Dashboard</h3>
-                <!-- <h6 class="op-7 mb-2">Free Bootstrap 5 Admin Dashboard</h6> -->
               </div>
               <div class="ms-md-auto py-2 py-md-0">
                 <a href="#" class="btn btn-label-info btn-round me-2"
@@ -651,6 +650,7 @@
                       <div class="table_holder ps-3">
                         <table id="client_table"></table>
                       </div>
+                      <div id="clients_no_data" class="hidden_no_data_table fa-fade">No Client Data Available</div>
                     </div>
                   </div>
                 </div>
@@ -1011,12 +1011,14 @@
             onclick="prevent_click(event)"
           >
             <div class="add_section_head pb-3" id="show_client_name">NEW CLIENT</div>
-              <div class="project_list table-responsive" style="min-height: 100px;">
+              <div class="project_list table-responsive-min" style="min-height: 100px;">
                 <table id="client_details_table" >
                 </table>
                 <div id="no_data_view_client">
                 </div>
               </div>
+              <div class="btn_holder my-4 text-center"><div onclick="hide_client_details()" class="btn py-1 btn-danger">Close</div></div>
+              
           </div>
         </div>
 
@@ -1056,6 +1058,30 @@
 
         <!-- /////////////// HIDING OVERLAY /////////////// -->
         <div id="hiding_over_client" class="hide_overlay"></div>
+        
+        <!-- ///////////// DELETE CONFIRMATION OVERLAY //////////// -->
+      <div id="delete_overlay" class="swal-overlay swal-overlay--show-modal" tabindex="-1" style="display: none;">
+      <div class="swal-modal" role="dialog" aria-modal="true"><div class="swal-title">Are you sure?</div><div class="swal-text" >You won't be able to revert this!</div><div class="swal-footer"><div class="swal-button-container">
+
+        <button id="delete_confirmation" class="swal-button  swal-button--confirm btn btn-success">Yes, delete it!</button>
+
+        <div class="swal-button__loader">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+
+      </div><div class="swal-button-container">
+
+        <button id="cancel_client_delete" class="swal-button swal-button--cancel btn btn-danger">Cancel</button>
+
+        <div class="swal-button__loader">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+
+      </div></div></div></div>
 
         <footer class="footer">
           <div class="container-fluid d-flex justify-content-between">

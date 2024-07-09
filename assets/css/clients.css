@@ -49,3 +49,13 @@
   font-size: 19px;
   font-weight: 500;
 }
+
+.table-responsive-min {
+  height: 240px;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+.table-responsive-min::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}

@@ -1,6 +1,7 @@
 const localhost = `http://localhost:3005`;
 
 const add_new_client = document.getElementById(`add_new_client`);
+const clients_no_data = document.getElementById(`clients_no_data`);
 
 // TOP COUNTERS
 const client_total_count = document.getElementById(`client_total_count`);
@@ -71,10 +72,7 @@ const setup_client = async () => {
     const clientsResponse = await fetch(`${localhost}/api/get_clients`);
     const clientsJson = await clientsResponse.json();
 
-    if (clientsJson.length > 0) {
-      total_client_count = clientsJson.length;
-
-      let temp = ` <tr class="border-bottom client_display">
+    let temp = ` <tr class="border-bottom client_display">
           <th style="width: 8%">ID</th>
           <th style="width: 12%">Name</th>
           <th style="width: 6%">Email</th>
@@ -84,7 +82,13 @@ const setup_client = async () => {
           <th style="width: 11%">Action</th>
         </tr>`;
 
-      clientsJson.forEach((client) => {
+    if (clientsJson.length > 0) {
+      total_client_count = clientsJson.length;
+
+      // Loop through clients and dynamically build table rows
+      for (let i = 0; i < clientsJson.length; i++) {
+        const client = clientsJson[i];
+
         // QUICK MESSAGE
         let new_option = document.createElement("option");
         new_option.text = client.name;
@@ -97,30 +101,53 @@ const setup_client = async () => {
         new_option1.value = client.email;
         big_mail_list.append(new_option1);
 
-        // MAIN DASHBOARD
-        temp += `<tr id="${client.id}" class="border-bottom" onclick="view_client_details(event)">`;
-        temp += `<td>CLNT-BL${client.id}</td>`;
-        temp += `<td>${client.name}</td>`;
-        temp += `<td>${client.email}</td>`;
-        temp += `<td>&nbsp;&nbsp;&nbsp;${client.projects}</td>`;
+        // Fetch Projects with Client ID
+        const projectsResponse = await fetch(
+          `${localhost}/api/get_project_with_client_id`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              id: client.id,
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          }
+        );
+
+        const projects = await projectsResponse.json();
+
+        // Update counts based on client organization type
         if (client.organization === "PRIVATE") {
-          temp += `<td><span class="badge badge-primary">PRIVATE</span></td>`;
           private_client_count++;
         } else {
-          temp += `<td><span class="badge badge-success">PUBLIC</span></td>`;
           public_client_count++;
         }
-        temp += `<td>${client.location}</td>`;
-        temp += `<td>
-                  <div class="btn btn-secondary py-1 my-2 me-1 px-3" onclick="make_edit_pannel_visible(event)">
-                    <i class="far fa-edit"></i>
-                  </div>
-                  <div class="btn btn-danger  py-1 my-2 px-3" onclick="delete_client(event)">
-                    <i class="fas fa-trash-alt"></i>
-                  </div>
-                </td>`;
-        temp += `</tr>`;
-      });
+
+        // Build HTML for each client row
+        temp += `<tr id="${
+          client.id
+        }" class="border-bottom" onclick="view_client_details(event)">
+                  <td>CLNT-BL${client.id}</td>
+                  <td>${client.name}</td>
+                  <td>${client.email}</td>
+                  <td>&nbsp;&nbsp;&nbsp;${projects.length}</td>
+                  <td><span class="badge ${
+                    client.organization === "PRIVATE"
+                      ? "badge-primary"
+                      : "badge-success"
+                  }">${client.organization}</span></td>
+                  <td>${client.location}</td>
+                  <td>
+                    <div class="btn btn-secondary py-1 my-2 me-1 px-3" onclick="make_edit_pannel_visible(event)">
+                      <i class="far fa-edit"></i>
+                    </div>
+                    <div class="btn btn-danger  py-1 my-2 px-3" onclick="delete_client(event)">
+                      <i class="fas fa-trash-alt"></i>
+                    </div>
+                  </td>
+                </tr>`;
+      }
 
       // Update counts and display
       client_total_count.innerHTML = total_client_count;
@@ -134,6 +161,10 @@ const setup_client = async () => {
       new_option.text = "No Clients Available";
       new_option.value = "vishnuthangaraj.original@gmail.com";
       company_mail_list.append(new_option);
+
+      // No data for client
+      client_table.innerHTML = temp;
+      clients_no_data.style.display = "block";
     }
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -231,9 +262,41 @@ const add_client_bar = () => {
   add_new_client.style.display = "block";
 };
 
+// GET CONFIRMATION FOR DELETION
+const get_delete_confirmation = () => {
+  return new Promise((resolve) => {
+    // Get the confirmation and cancel buttons
+    const confirmationButton = document.getElementById("delete_confirmation");
+    const cancelButton = document.getElementById("cancel_client_delete");
+
+    // Function to handle confirmation
+    const handleConfirmation = () => {
+      resolve(true); // Resolve with true when confirmation button is clicked
+    };
+
+    // Function to handle cancellation
+    const handleCancellation = () => {
+      resolve(false); // Resolve with false when cancel button is clicked
+    };
+
+    // Attach click event listeners to buttons
+    confirmationButton.addEventListener("click", handleConfirmation);
+    cancelButton.addEventListener("click", handleCancellation);
+  });
+};
+
 // DELETE CLIENT
-const delete_client = (event) => {
+const delete_client = async (event) => {
   event.stopPropagation();
+  document.getElementById(`delete_overlay`).style.display = "block";
+
+  let confirmation = await get_delete_confirmation();
+  document.getElementById(`delete_overlay`).style.display = "none"; // Hide SweetAlert
+
+  if (!confirmation) {
+    return;
+  }
+
   hiding_over_client.style.display = "block";
   let parent = event.target;
   while (parent.id == ``) parent = parent.parentNode;
@@ -289,6 +352,51 @@ const hide_new_client_form = () => {
 
 // ADD NEW CLIENT TO DATABASE
 const save_new_client = () => {
+  const formElements = [
+    new_client_name,
+    new_client_email,
+    new_client_mobile,
+    new_client_location,
+    new_client_url,
+  ];
+
+  let validator = false;
+
+  formElements.forEach((element) => {
+    if (
+      element.value === "" ||
+      (element === new_client_url && element.value === "https://")
+    ) {
+      element.style.border = "1px solid #f58389";
+      validator = true;
+    } else {
+      element.style.border = "1px solid #6ddc70";
+    }
+  });
+
+  if (validator) {
+    // Notification
+    let content = {
+      message: "Please fill out all fields correctly to add a new client.",
+      title: "Incomplete Client Information",
+      icon: "icon-user",
+      url: "clients.html",
+      target: "_blank",
+    };
+
+    $.notify(content, {
+      type: "warning",
+      placement: {
+        from: "top",
+        align: "center",
+      },
+      time: 100,
+      delay: 1000,
+    });
+
+    return;
+  }
+
   hiding_over_client.style.display = "block";
   hide_new_client_form();
 
@@ -340,6 +448,7 @@ const save_new_client = () => {
 
 // MAKE CLIENT EDIT PANNEL VISIBLE
 const make_edit_pannel_visible = (event) => {
+  make_edit_input_green();
   event.stopPropagation();
 
   let parent = event.target.parentNode;
@@ -380,9 +489,53 @@ const hide_edit_client_form = () => {
 
 // UPDATE EDITED CLIENT DETAILS
 const save_edit_client = () => {
+  const formElements = [
+    edit_client_name,
+    edit_client_email,
+    edit_client_mobile,
+    edit_client_location,
+    edit_client_url,
+  ];
+
+  let validator = false;
+
+  formElements.forEach((element) => {
+    if (
+      element.value === "" ||
+      (element === edit_client_url && element.value === "https://")
+    ) {
+      element.style.border = "1px solid #f58389";
+      validator = true;
+    } else {
+      element.style.border = "1px solid #6ddc70";
+    }
+  });
+
+  if (validator) {
+    // Notification
+    let content = {
+      message: "Please fill out all fields correctly to Edit client.",
+      title: "Incomplete Client Information",
+      icon: "icon-user",
+      url: "clients.html",
+      target: "_blank",
+    };
+
+    $.notify(content, {
+      type: "warning",
+      placement: {
+        from: "top",
+        align: "center",
+      },
+      time: 100,
+      delay: 1000,
+    });
+
+    return;
+  }
+
   hide_edit_client_form();
   hiding_over_client.style.display = "block";
-  edit_client_inner.classList.add("my-slide-in");
 
   // GET ALL EDITED DETAILS
   let edit_client_organization_checked = `Private`;
@@ -410,7 +563,7 @@ const save_edit_client = () => {
     .then((json) => {
       let content = {
         message: "Updated client details have been successfully recorded.",
-        title: "Client Updated",
+        title: "Client Details Updated",
         icon: "fas fa-pencil-alt",
         url: "clients.html",
         target: "_blank",
@@ -535,6 +688,11 @@ const view_client_details = (event) => {
     });
 };
 
+// HIDE CLIENT DETAILS
+const hide_client_details = () => {
+  hide_view_client.style.display = "none";
+};
+
 // MAKE COMPOSE MAIL VISIBLE
 const visible_compose_mail = () => {
   big_mail_subject.value =
@@ -544,20 +702,27 @@ const visible_compose_mail = () => {
   big_mail.style.display = "block";
 };
 
+// SEND COMPOSED LARGE MAIL
 const send_big_mail = () => {
-  if (big_mail_subject.value == "") {
+  if (big_mail_subject.value === "") {
     unsent_mail_notifications(
       `Unable to send mail without Subject`,
       `No Subject Provided`,
       `fas fa-exclamation-circle`
     );
+    big_mail_subject.style.border = `1px solid #f58389`;
+    if (big_mail_message.value === "")
+      big_mail_message.style.border = `1px solid #f58389`;
     return;
-  } else if (big_mail_message.value == "") {
+  }
+
+  if (big_mail_message.value === "") {
     unsent_mail_notifications(
       `Mail Cannot Be Sent : Empty Message`,
       `No Message Provided`,
       `fas fa-exclamation-circle`
     );
+    big_mail_message.style.border = `1px solid #f58389`;
     return;
   }
 

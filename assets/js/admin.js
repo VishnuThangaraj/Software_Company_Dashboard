@@ -17,7 +17,7 @@ const formatDate = (inputDate) => {
   ];
   month = months[parseInt(month, 10) - 1];
 
-  return `${parseInt(day, 10)} ${month} ${year}`;
+  return `${parseInt(day, 10) + 1} ${month} ${year}`;
 };
 
 // HIDE CONTENT
@@ -47,7 +47,6 @@ Array.from(document.getElementsByClassName("form_input_level")).forEach(
       if (event.target.value !== "") {
         event.target.style.border = "1px solid #6ddc70";
       } else {
-        // If you want to remove the green border when the value is empty:
         event.target.style.border = "1px solid #eff1f5";
       }
     });
@@ -55,8 +54,12 @@ Array.from(document.getElementsByClassName("form_input_level")).forEach(
 );
 
 // INPUT EDIT VALIDATION (GREEN)
-Array.from(document.getElementsByClassName("edit_form_input_level")).forEach(
-  (element) => {
-    element.style.border = "1px solid #6ddc70";
-  }
-);
+const make_edit_input_green = () => {
+  Array.from(document.getElementsByClassName("edit_form_input_level")).forEach(
+    (element) => {
+      element.style.border = "1px solid #6ddc70";
+    }
+  );
+};
+
+make_edit_input_green();
