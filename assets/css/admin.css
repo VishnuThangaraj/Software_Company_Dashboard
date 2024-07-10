@@ -60,10 +60,29 @@ tr:hover {
 tr:hover {
   background-color: rgba(190, 190, 190, 0.185);
 }
+.make_green {
+  color: rgb(36, 124, 24);
+}
 .hidden_no_data_table {
   text-align: center;
   font-size: 20px;
   padding-top: 120px;
   display: none;
   /* <div id="clients_no_data" class="hidden_no_data_table fa-fade">No Client Data Available</div> */
+}
+
+.table-responsive-min {
+  height: 240px;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+.table-responsive-min::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/*  INPUT FIELD  */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
 }

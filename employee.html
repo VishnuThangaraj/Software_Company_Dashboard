@@ -13,6 +13,10 @@
       type="image/x-icon"
     />
 
+    <!-- Bootstrap Icons CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+
     <!-- FONT AWESOME -->
     <link
       rel="stylesheet"
@@ -540,18 +544,16 @@
               <div class="col-sm-6 col-md-3">
                 <div class="card card-stats card-round">
                   <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-primary bubble-shadow-small"
-                        >
-                          <i class="fas fa-users"></i>
+                    <div class="row">
+                      <div class="col-5">
+                        <div class="icon-big text-center">
+                          <i class="icon-people text-secondary" style="font-size: 35px;"></i>
                         </div>
                       </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
+                      <div class="col-7 col-stats">
                         <div class="numbers">
-                          <p class="card-category">Visitors</p>
-                          <h4 class="card-title">1,294</h4>
+                          <p class="card-category">Total Members</p>
+                          <h4 class="card-title" id="total_employee">0</h4>
                         </div>
                       </div>
                     </div>
@@ -561,18 +563,16 @@
               <div class="col-sm-6 col-md-3">
                 <div class="card card-stats card-round">
                   <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-info bubble-shadow-small"
-                        >
-                          <i class="fas fa-user-check"></i>
+                    <div class="row">
+                      <div class="col-5">
+                        <div class="icon-big text-center">
+                          <i class="icon-badge text-warning" style="font-size: 35px;"></i>
                         </div>
                       </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
+                      <div class="col-7 col-stats">
                         <div class="numbers">
-                          <p class="card-category">Subscribers</p>
-                          <h4 class="card-title">1303</h4>
+                          <p class="card-category">Teamlead</p>
+                          <h4 class="card-title" id="teamlead_employee">0</h4>
                         </div>
                       </div>
                     </div>
@@ -582,18 +582,16 @@
               <div class="col-sm-6 col-md-3">
                 <div class="card card-stats card-round">
                   <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-success bubble-shadow-small"
-                        >
-                          <i class="fas fa-luggage-cart"></i>
+                    <div class="row">
+                      <div class="col-5">
+                        <div class="icon-big text-center"> 
+                          <i class="icon-screen-desktop text-primary" style="font-size: 35px;"></i>
                         </div>
                       </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
+                      <div class="col-7 col-stats">
                         <div class="numbers">
-                          <p class="card-category">Sales</p>
-                          <h4 class="card-title">$ 1,345</h4>
+                          <p class="card-category">Developers</p>
+                          <h4 class="card-title" id="developer_employee">0</h4>
                         </div>
                       </div>
                     </div>
@@ -603,18 +601,16 @@
               <div class="col-sm-6 col-md-3">
                 <div class="card card-stats card-round">
                   <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-secondary bubble-shadow-small"
-                        >
-                          <i class="far fa-check-circle"></i>
+                    <div class="row">
+                      <div class="col-5">
+                        <div class="icon-big text-center">
+                          <i class="icon-user-follow text-success" style="font-size: 35px;"></i>
                         </div>
                       </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
+                      <div class="col-7 col-stats">
                         <div class="numbers">
-                          <p class="card-category">Order</p>
-                          <h4 class="card-title">576</h4>
+                          <p class="card-category">On Bench </p>
+                          <h4 class="card-title" id="bench_employee">0</h4>
                         </div>
                       </div>
                     </div>
@@ -656,6 +652,7 @@
                       <div class="table_holder ps-3">
                         <table id="employee_table">
                         </table>
+                        <div id="employee_no_data" class="hidden_no_data_table fa-fade">Employee Data Unavailable</div>
                       </div>
                     </div>
                   </div>
@@ -685,7 +682,7 @@
                 <input
                   id="new_employee_name"
                   type="text"
-                  class="form-control add_user_input py-3"
+                  class="form-control form_input_level add_user_input py-3"
                   placeholder="Employee Name"
                 />
               </div>
@@ -700,7 +697,7 @@
                   <input
                     id="new_employee_email"
                     type="text"
-                    class="form-control py-3"
+                    class="form-control form_input_level py-3"
                     placeholder="Email Address"
                     aria-describedby="basic-addon2"
                   />
@@ -719,7 +716,7 @@
                 <input
                   id="new_employee_mobile"
                   type="number"
-                  class="form-control add_user_input py-3"
+                  class="form-control form_input_level add_user_input py-3"
                   placeholder="Mobile Number"
                   min="1"
                 />
@@ -735,7 +732,7 @@
                   type="number"
                   min="18"
                   max="100"
-                  class="form-control add_user_input py-3"
+                  class="form-control form_input_level add_user_input py-3"
                   placeholder="AGE"
                 />
               </div>
@@ -744,7 +741,7 @@
                   <i class="icon-symbol-male" style="font-size: 18px"></i>
                 </span>
                 <select
-                  class="form-select form-control text-center ps-0"
+                  class="form-select form_input_level form-control text-center ps-0"
                   style="height: 5px"
                   id="employee_gender_list"
                 >
@@ -762,7 +759,7 @@
                 <input
                   id="new_employee_address"
                   type="text"
-                  class="form-control add_user_input py-3"
+                  class="form-control form_input_level add_user_input py-3"
                   placeholder="Address"
                 />
               </div>
@@ -782,7 +779,7 @@
                     ></i
                   ></span>
                   <select
-                    class="form-select form-control py-3"
+                    class="form-select form-control form_input_level py-3"
                     id="new_employee_designation"
                   >
                     <option value="Angular Developer">Angular Developer</option>
@@ -806,18 +803,18 @@
                   ></i>
                 </span>
                 <select
-                  class="form-select form-control text-center ps-0"
+                  class="form-select form_input_level form-control text-center ps-0"
                   id="employee_position_list"
                   onchange="open_team_lead_list()"                  >
                   <option value="Team Lead">Team Lead</option>
-                  <option value="Junior">Junior</option>
+                  <option value="Developer">Developer</option>
                   
                 </select>
               </div>
               <div class="input-group pt-4" style="width: 193px">
                 </span>
                 <select
-                  class="form-select form-control text-center ps-0"
+                  class="form-select form_input_level form-control text-center ps-0"
                   id="employee_teamlead_list"
                   disabled
                 >
@@ -844,12 +841,11 @@
           </div>
         </div>
 
-        <!-- /////////////// EDIT EXISTING CLIENT /////////////// -->
+        <!-- /////////////// EDIT EXISTING EMPLOYEE /////////////// -->
         <div
           onclick="hide_content(event)"
           id="edit_employee"
           class="my-outer-layer"
-          
         >
           <div
             id="edit_employee_inner"
@@ -865,7 +861,7 @@
                 <input
                   id="edit_employee_name"
                   type="text"
-                  class="form-control add_user_input py-3"
+                  class="form-control edit_form_input_level form_input_level add_user_input py-3"
                   placeholder="Employee Name"
                 />
               </div>
@@ -880,7 +876,7 @@
                   <input
                     id="edit_employee_email"
                     type="text"
-                    class="form-control py-3"
+                    class="form-control edit_form_input_level form_input_level py-3"
                     placeholder="Email Address"
                     aria-describedby="basic-addon2"
                   />
@@ -899,7 +895,7 @@
                 <input
                   id="edit_employee_mobile"
                   type="number"
-                  class="form-control add_user_input py-3"
+                  class="form-control edit_form_input_level form_input_level add_user_input py-3"
                   placeholder="Mobile Number"
                   min="1"
                 />
@@ -915,7 +911,7 @@
                   type="number"
                   min="18"
                   max="100"
-                  class="form-control add_user_input py-3"
+                  class="form-control edit_form_input_level form_input_level add_user_input py-3"
                   placeholder="AGE"
                 />
               </div>
@@ -924,12 +920,12 @@
                   <i class="icon-symbol-male" style="font-size: 18px"></i>
                 </span>
                 <select
-                  class="form-select form-control text-center ps-0"
+                  class="form-select edit_form_input_level form_input_level form-control text-center ps-0"
                   style="height: 5px"
                   id="edit_employee_gender_list"
                 >
-                  <option value="MALE">MALE</option>
-                  <option value="FEMALE">FEMALE</option>
+                  <option value="Male">MALE</option>
+                  <option value="Female">FEMALE</option>
                 </select>
               </div>
             </div>
@@ -942,7 +938,7 @@
                 <input
                   id="edit_employee_address"
                   type="text"
-                  class="form-control add_user_input py-3"
+                  class="form-control edit_form_input_level form_input_level add_user_input py-3"
                   placeholder="Address"
                 />
               </div>
@@ -962,7 +958,7 @@
                     ></i
                   ></span>
                   <select
-                    class="form-select form-control py-3"
+                    class="form-select form-control edit_form_input_level form_input_level py-3"
                     id="edit_employee_designation"
                   >
                     <option value="Angular Developer">Angular Developer</option>
@@ -986,18 +982,18 @@
                   ></i>
                 </span>
                 <select
-                  class="form-select form-control text-center ps-0"
+                  class="form-select edit_form_input_level form_input_level form-control text-center ps-0"
                   id="edit_employee_position_list"
-                  onchange="open_team_lead_list()"                  >
+                  onchange="open_team_lead_list_edit()"                  >
                   <option value="Team Lead">Team Lead</option>
-                  <option value="Junior">Junior</option>
+                  <option value="Developer">Developer</option>
                   
                 </select>
               </div>
               <div class="input-group pt-4" style="width: 193px">
                 </span>
                 <select
-                  class="form-select form-control text-center ps-0"
+                  class="form-select form-control edit_form_input_level form_input_level text-center ps-0"
                   id="edit_employee_teamlead_list"
                   disabled
                 >
@@ -1008,14 +1004,14 @@
               <div class="my-btn-holder mt-4">
                 <div
                   class="btn btn-danger px-5 me-5"
-                  onclick="make_add_employee_hidden()"
+                  onclick="hide_edit_employee()"
                 >
                   CLOSE
                 </div>
                 <div
                   id="new_client_add"
                   class="btn btn-success px-5"
-                  onclick="save_new_employee()"
+                  onclick="save_edited_employee()"
                 >
                   SAVE
                 </div>
@@ -1024,8 +1020,32 @@
           </div>
         </div>
 
+                <!-- ///////////// DELETE CONFIRMATION OVERLAY //////////// -->
+      <div id="delete_overlay_employee" class="swal-overlay swal-overlay--show-modal" tabindex="-1" style="display: none;">
+      <div class="swal-modal" role="dialog" aria-modal="true"><div class="swal-title">Are you sure?</div><div class="swal-text" >You won't be able to revert this!</div><div class="swal-footer"><div class="swal-button-container">
+
+        <button id="confirm_employee_delete" class="swal-button  swal-button--confirm btn btn-success">Yes, delete it!</button>
+
+        <div class="swal-button__loader">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+
+      </div><div class="swal-button-container">
+
+        <button id="cancel_employee_delete" class="swal-button swal-button--cancel btn btn-danger">Cancel</button>
+
+        <div class="swal-button__loader">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+
+      </div></div></div></div>
+
         <!-- /////////////// HIDING OVERLAY /////////////// -->
-        <div id="hiding_over_client" class="hide_overlay"></div>
+        <div id="hiding_over_employee" class="hide_overlay"></div>
 
         <footer class="footer">
           <div class="container-fluid d-flex justify-content-between">
@@ -1090,6 +1110,7 @@
     <script src="assets/js/kaiadmin.min.js"></script>
 
     <!-- External JS -->
+    <script src="assets/js/config.js"></script>
     <script src="assets/js/admin.js"></script>
     <script src="assets/js/employee.js"></script>
 

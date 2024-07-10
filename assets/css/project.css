@@ -21,3 +21,19 @@
   padding: 20px;
   background-color: #ffffffe5;
 }
+
+#view_project_inner {
+  position: fixed;
+  top: 54.5%;
+  height: 50%;
+  left: 55%;
+  width: 43%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #ffffffe5;
+}
+.no_tasks {
+  padding-top: 55px;
+  font-size: 19px;
+  font-weight: 500;
+}

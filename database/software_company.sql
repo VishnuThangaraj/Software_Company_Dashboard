@@ -113,7 +113,7 @@ VALUES
     ('Design homepage layout', 'Create a new design for the company homepage', 1, 'Progress', 'HIGH',  '2024-07-20',1),
     ('Implement login functionality', 'Develop login feature with OAuth integration', 2, 'Completed', 'MEDIUM', '2024-07-25',1),
     ('Write API documentation', 'Document RESTful API endpoints for version 2.0', 3, 'Completed', 'LOW', '2024-07-15',2),
-    ('Bug fixing in user dashboard', 'Fix reported bugs in the user dashboard module', 5, 'Progress', 'HIGH', '2024-07-18',3),
+    ('Bug fixing in user dashboard', 'Fix reported bugs in the user dashboard module', 4, 'Progress', 'HIGH', '2024-07-18',3),
     ('Database schema optimization', 'Optimize database queries and indexes for performance', 4, 'Progress', 'MEDIUM', '2024-07-30',4);
 
 

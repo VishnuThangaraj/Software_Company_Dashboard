@@ -1,5 +1,3 @@
-const localhost = `http://localhost:3005`;
-
 const add_new_client = document.getElementById(`add_new_client`);
 const clients_no_data = document.getElementById(`clients_no_data`);
 
@@ -681,7 +679,6 @@ const view_client_details = (event) => {
             console.error("Error fetching tasks for all projects:", error);
           });
       } else {
-        console.log(`no data`);
         no_data_view_client.innerHTML = `<div class="fa-fade text-center no_projects my-4">NO PROJECTS AVAILABLE</div>`;
         client_details_table.innerHTML = temp;
       }

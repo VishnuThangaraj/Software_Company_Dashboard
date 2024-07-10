@@ -96,6 +96,57 @@ app.post(`/api/add_task`, (req, res) => {
   );
 });
 
+// ADD NEW TEAMLEAD
+app.post(`/api/add_teamlead`, (req, res) => {
+  const { name, email, phone, age, gender, address, designation } = req.body;
+
+  connection.query(
+    `INSERT INTO team_lead (name, email, phone, age, gender, address, designation) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [name, email, phone, age, gender, address, designation],
+    (err, result) => {
+      if (err) {
+        console.error("Error Inserting Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to add Teamlead. Please try again later.",
+        });
+      } else {
+        res.json({ success: true, message: "Teamlead added successfully" });
+      }
+    }
+  );
+});
+
+// ADD NEW EMPLOYEE
+app.post(`/api/add_employee`, (req, res) => {
+  const {
+    name,
+    email,
+    phone,
+    age,
+    gender,
+    address,
+    designation,
+    team_lead_id,
+  } = req.body;
+
+  connection.query(
+    `INSERT INTO employee (name, email, phone, age, gender, address, designation, team_lead_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    [name, email, phone, age, gender, address, designation, team_lead_id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Inserting Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to add Employee. Please try again later.",
+        });
+      } else {
+        res.json({ success: true, message: "Employee added successfully" });
+      }
+    }
+  );
+});
+
 // FETCH EMPLOYEE DATA
 app.get(`/api/get_employee`, (req, res) => {
   connection.query(`SELECT * FROM employee`, (err, result) => {
@@ -169,6 +220,24 @@ app.get(`/api/get_task`, (req, res) => {
       res.json(result);
     }
   });
+});
+
+// FETCH COUNT OF EMPLOYEE WITHOUT TASK
+app.get(`/api/get_bench_employee_count`, (req, res) => {
+  connection.query(
+    `SELECT count(e.id) AS bench FROM employee e LEFT JOIN task t ON e.id = t.employee_id WHERE t.employee_id IS NULL;`,
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Employee Count. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
 });
 
 // FETCH CLIENT NAME WITH ID
@@ -272,6 +341,27 @@ app.post(`/api/task_with_projectid`, (req, res) => {
   );
 });
 
+// FETCH TASK WITH EMPLOYEE ID
+app.post(`/api/task_with_employeeid`, (req, res) => {
+  const { id } = req.body;
+
+  connection.query(
+    `SELECT * FROM task WHERE employee_id = ?`,
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Task Details. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
 // FETCH ALL TEAM LEAD NAMES
 app.get(`/api/get_teamlead_id_name`, (req, res) => {
   connection.query(`SELECT id, name FROM team_lead`, (err, result) => {
@@ -302,6 +392,48 @@ app.get(`/api/get_all_client_names_id`, (req, res) => {
   });
 });
 
+// FETCH ALL EMPLOYEE WITH ID
+app.post(`/api/get_employee_with_id`, (req, res) => {
+  const { id } = req.body;
+
+  connection.query(
+    `SELECT * FROM employee WHERE id = ?`,
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Employee Details. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
+// FETCH TEAMLEAD WITH ID
+app.post(`/api/get_teamlead_with_id`, (req, res) => {
+  const { id } = req.body;
+
+  connection.query(
+    `SELECT * FROM team_lead WHERE id = ?`,
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch TeamLead Details. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
 // FETCH CLIENT DETAILS WITH ID
 app.post(`/api/get_client_with_id`, (req, res) => {
   const { id } = req.body;
@@ -317,6 +449,27 @@ app.post(`/api/get_client_with_id`, (req, res) => {
       res.json(result);
     }
   });
+});
+
+// FETCH EMPLOYEE NAME WITH ID
+app.post(`/api/get_employee_with_id`, (req, res) => {
+  const { id } = req.body;
+
+  connection.query(
+    `SELECT * FROM employee WHERE id = ?`,
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Employee Name. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
 });
 
 // UPDATE CLIENT WITH ID
@@ -372,11 +525,21 @@ app.put(`/api/update_project_with_id`, (req, res) => {
     notes,
     team_lead_id,
     due_date,
+    status,
   } = req.body;
 
   connection.query(
-    `UPDATE projects SET project_name = ?, company_id = ?, budget =?, notes = ?, team_lead_id = ?, due_date = ? WHERE id = ?`,
-    [project_name, company_id, budget, notes, team_lead_id, due_date, id],
+    `UPDATE projects SET project_name = ?, company_id = ?, budget =?, notes = ?, team_lead_id = ?, due_date = ?, status = ? WHERE id = ?`,
+    [
+      project_name,
+      company_id,
+      budget,
+      notes,
+      team_lead_id,
+      due_date,
+      status,
+      id,
+    ],
     (err, result) => {
       if (err) {
         console.error("Error Updating Data:", err);
@@ -386,6 +549,59 @@ app.put(`/api/update_project_with_id`, (req, res) => {
         });
       } else {
         res.json({ message: "Project updated successfully", success: true });
+      }
+    }
+  );
+});
+
+// UPDATE EMPLOYEE WITH ID
+app.put(`/api/update_employee_with_id`, (req, res) => {
+  const {
+    id,
+    name,
+    email,
+    phone,
+    age,
+    gender,
+    address,
+    designation,
+    team_lead_id,
+  } = req.body;
+
+  connection.query(
+    `UPDATE employee SET name = ?, email = ?, phone =?, age = ?, gender = ?, address = ?, designation = ?, team_lead_id = ?  WHERE id = ?`,
+    [name, email, phone, age, gender, address, designation, team_lead_id, id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Updating Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Update Employee Details. Please try again later.",
+        });
+      } else {
+        res.json({ message: "Employee updated successfully", success: true });
+      }
+    }
+  );
+});
+
+// UPDATE TEAMLEAD WITH ID
+app.put(`/api/update_teamlead_with_id`, (req, res) => {
+  const { id, name, email, phone, age, gender, address, designation } =
+    req.body;
+
+  connection.query(
+    `UPDATE team_lead SET name = ?, email = ?, phone =?, age = ?, gender = ?, address = ?, designation = ? WHERE id = ?`,
+    [name, email, phone, age, gender, address, designation, id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Updating Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Update Teamlead Details. Please try again later.",
+        });
+      } else {
+        res.json({ message: "Teamlead updated successfully", success: true });
       }
     }
   );
@@ -444,7 +660,7 @@ app.delete(`/api/delete_teamlead`, (req, res) => {
 });
 
 // DELETE EMPLOYEE USING ID
-app.delete(`/api/delete_teamlead`, (req, res) => {
+app.delete(`/api/delete_employee`, (req, res) => {
   const { id } = req.body;
   connection.query(`DELETE FROM employee WHERE id = ?`, [id], (err, result) => {
     if (err) {

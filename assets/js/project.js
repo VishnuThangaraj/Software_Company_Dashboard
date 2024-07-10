@@ -1,11 +1,10 @@
-const localhost = `http://localhost:3005`;
-
 const project_table = document.getElementById(`project_table`);
 const hiding_over_project = document.getElementById(`hiding_over_project`);
 const project_no_data = document.getElementById(`project_no_data`);
 const delete_overlay_project = document.getElementById(
   `delete_overlay_project`
 );
+const hide_view_project = document.getElementById(`hide_view_project`);
 
 // TOP COUNTERS
 const total_project = document.getElementById(`total_project`);
@@ -33,6 +32,12 @@ const edit_teamlead_list_project = document.getElementById(
 );
 const edit_project_budget = document.getElementById(`edit_project_budget`);
 const edit_project_desc = document.getElementById(`edit_project_desc`);
+const edit_status_project = document.getElementById(`edit_status_project`);
+
+// VIEW PROJECT
+const show_project_name = document.getElementById(`show_project_name`);
+const project_details_table = document.getElementById(`project_details_table`);
+const no_data_view_project = document.getElementById(`no_data_view_project`);
 
 // MAKE PROEJCTS READY
 const setup_project = async () => {
@@ -98,10 +103,10 @@ const setup_project = async () => {
                     <th style="width: 5%">ID</th>
                     <th style="width: 8%">Project Name</th>
                     <th style="width: 10%">Parent Company</th>
+                    <th style="width: 7%">TeamLead</th>
                     <th style="width: 5%">Tasks</th>
                     <th style="width: 6%">Status</th>
                     <th style="width: 5%">Budget</th>
-                    <th style="width: 7%">Start Date</th>
                     <th style="width: 7%">Due Date</th>
                     <th style="width: 8%">Action</th>
                 </tr>`;
@@ -128,9 +133,9 @@ const setup_project = async () => {
         const clientName =
           clientNameJson.length > 0 ? clientNameJson[0].name : "";
 
-        // Fetch projects with client ID
+        // Fetch tasks count for each project
         const projectsWithClientResponse = await fetch(
-          `${localhost}/api/get_project_with_client_id`,
+          `${localhost}/api/task_with_projectid`,
           {
             method: "POST",
             body: JSON.stringify({
@@ -144,17 +149,22 @@ const setup_project = async () => {
         const projectsWithClientJson = await projectsWithClientResponse.json();
         const tasksCount = projectsWithClientJson.length;
 
+        // Fetch team lead name for each project
+        const teamLeadName = await fetchTeamLeadName(project.team_lead_id);
+
         return {
           clientName,
           tasksCount,
+          teamLeadName,
         };
       });
 
-      // Wait for all client names and tasks count fetches to complete
+      // Wait for all client names, tasks count, and team lead names fetches to complete
       const clientNamesAndTasks = await Promise.all(fetchClientNamesAndTasks);
 
       projectsJson.forEach((project, index) => {
-        const { clientName, tasksCount } = clientNamesAndTasks[index];
+        const { clientName, tasksCount, teamLeadName } =
+          clientNamesAndTasks[index];
 
         temp += `<tr id="${
           project.id
@@ -162,6 +172,7 @@ const setup_project = async () => {
                     <td>PROJ-BL${project.id}</td>
                     <td>${project.project_name}</td>
                     <td>${clientName}</td>
+                    <td>${teamLeadName}</td>
                     <td>&nbsp;&nbsp;&nbsp;${tasksCount}</td>
                     <td>${
                       project.status === "ongoing"
@@ -169,7 +180,6 @@ const setup_project = async () => {
                         : '<span class="badge badge-success">COMPLETED</span>'
                     }</td>
                     <td>&nbsp;${project.budget}</td>
-                    <td>${formatDate(project.start_date.slice(0, 10))}</td>
                     <td>${formatDate(project.due_date.slice(0, 10))}</td>
                     <td>
                       <div class="btn btn-secondary py-1 my-2 px-3 me-2" onclick="visible_edit_project(event)">
@@ -206,6 +216,26 @@ const setup_project = async () => {
     }
   } catch (error) {
     console.error("Error fetching data:", error);
+  }
+};
+
+// Function to fetch team lead name asynchronously
+const fetchTeamLeadName = async (teamLeadId) => {
+  try {
+    const response = await fetch(`${localhost}/api/get_teamlead_with_id`, {
+      method: "POST",
+      body: JSON.stringify({
+        id: teamLeadId,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const json = await response.json();
+    return json.length > 0 ? json[0].name : "";
+  } catch (error) {
+    console.error("Error fetching team lead name:", error);
+    return ""; // Return empty string if an error occurs
   }
 };
 
@@ -439,7 +469,7 @@ const visible_edit_project = (event) => {
   fetch(`${localhost}/api/get_teamlead_id_name`)
     .then((response) => response.json())
     .then((json) => {
-      edit_teamlead_list_project.innerHTML = ""; // Clear previous options
+      edit_teamlead_list_project.innerHTML = "";
       if (json.length > 0) {
         json.forEach((teamlead) => {
           let new_option = new Option(teamlead.name, teamlead.id);
@@ -541,6 +571,7 @@ const update_project_details = () => {
       notes: edit_project_desc.value,
       team_lead_id: edit_teamlead_list_project.value,
       due_date: edit_project_end_date.value,
+      status: edit_status_project.value,
     }),
     headers: {
       "Content-type": "application/json; charset=UTF-8",
@@ -575,9 +606,104 @@ const update_project_details = () => {
 // VIEW TASK OF THE CURRENT PROJECT
 const view_tasks = (event) => {
   let parent = event.target;
-  while (parent.id == ``) parent = parent.parentNode;
+  while (parent.id == "") parent = parent.parentNode;
 
   console.log(parent.id);
+  hide_view_project.style.display = "block";
+
+  // Fetch project Name
+  fetch(`${localhost}/api/get_project_with_id`, {
+    method: "POST",
+    body: JSON.stringify({
+      id: parent.id,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      show_project_name.innerHTML = `${json[0].project_name}`;
+    })
+    .catch((error) => {
+      console.error("Error fetching project details:", error);
+    });
+
+  // Fetch tasks associated with the project
+  fetch(`${localhost}/api/task_with_projectid`, {
+    method: "POST",
+    body: JSON.stringify({
+      id: parent.id,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
+    .then((response) => response.json())
+    .then((tasks) => {
+      if (tasks.length > 0) {
+        let temp = `<tr>
+                      <th style="width: 7%;">TaskID</th>
+                      <th style="width: 13%;">Name</th>
+                      <th style="width: 8%;">Status</th>
+                      <th style="width: 10%;">Due Date</th>
+                      <th style="width: 12%;">Member</th>
+                    </tr>`;
+
+        // Use Promise.all to handle asynchronous employee detail fetching
+        const fetchEmployees = tasks.map((data) => {
+          return fetch(`${localhost}/api/get_employee_with_id`, {
+            method: "POST",
+            body: JSON.stringify({
+              id: data.employee_id,
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          })
+            .then((response) => response.json())
+            .then((employee) => {
+              // Update the temp HTML with employee name
+              temp += `<tr class="border-bottom">`;
+              temp += `<td>TSK-BL${data.id}</td>`;
+              temp += `<td>${data.name}</td>`;
+              if (data.status == "Progress") {
+                temp += `<td><span class="badge badge-warning">IN PROGRESS</span></td>`;
+              } else if (data.status == "Completed") {
+                temp += `<td><span class="badge badge-success">COMPLETED</span></td>`;
+              } else {
+                temp += `<td><span class="badge badge-black">PENDING</span></td>`;
+              }
+              temp += `<td>${formatDate(data.due_date.slice(0, 10))}</td>`;
+              temp += `<td>${employee[0].name}</td>`;
+              temp += `</tr>`;
+            })
+            .catch((error) => {
+              console.error("Error fetching employee details:", error);
+            });
+        });
+
+        // After all fetches are complete, update the table
+        Promise.all(fetchEmployees).then(() => {
+          project_details_table.innerHTML = temp;
+        });
+
+        // Clear the "no tasks available" message
+        no_data_view_project.innerHTML = "";
+      } else {
+        // No tasks available
+        no_data_view_project.innerHTML = `<div class="fa-fade text-center no_tasks my-4">NO TASKS AVAILABLE</div>`;
+        project_details_table.innerHTML = "";
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching tasks:", error);
+    });
+};
+
+// HIDE PROJECT DETAILS
+const hide_project_details = () => {
+  hide_view_project.style.display = "none";
 };
 
 setup_project();
