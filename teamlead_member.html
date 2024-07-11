@@ -14,8 +14,10 @@
     />
 
     <!-- Bootstrap Icons CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
 
     <!-- FONT AWESOME -->
     <link
@@ -95,32 +97,25 @@
                 <h4 class="text-section">Components</h4>
               </li>
               <li class="nav-item submenu">
-                <a href="clients.html">
-                  <i class="fas fa-user-tie"></i>
-                  <p>Clients</p>
-                </a>
-              </li>
-              <li class="nav-item submenu">
-                <a href="project.html">
+                <a href="teamlead.html">
                   <i class="fas fa-project-diagram"></i>
                   <p>Project</p>
                 </a>
               </li>
-              
               <li class="nav-item active submenu">
-                <a href="employee.html">
+                <a href="teamlead_member.html">
                   <i class="fas fa-users"></i>
-                  <p>Employee</p>
+                  <p>Team Members</p>
                 </a>
               </li>
               <li class="nav-item submenu">
-                <a href="task.html">
+                <a href="teamlead_task.html">
                   <i class="fas fa-tasks"></i>
                   <p>Tasks</p>
                 </a>
               </li>
               <li class="nav-item submenu">
-                <a href="message.html">
+                <a href="teamlead_message.html">
                   <i class="fas fa-envelope"></i>
                   <p>Message</p>
                 </a>
@@ -507,7 +502,12 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">Account Setting</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#" onclick="logout_admin()">Logout</a>
+                        <a
+                          class="dropdown-item"
+                          href="#"
+                          onclick="logout_admin()"
+                          >Logout</a
+                        >
                       </li>
                     </div>
                   </ul>
@@ -524,8 +524,7 @@
               class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
             >
               <div>
-                <h3 class="fw-bold mb-3">Dashboard</h3>
-                <!-- <h6 class="op-7 mb-2">Free Bootstrap 5 Admin Dashboard</h6> -->
+                <h3 class="fw-bold mb-3">Teamlead Dashboard</h3>
               </div>
               <div class="ms-md-auto py-2 py-md-0">
                 <a href="#" class="btn btn-label-info btn-round me-2"
@@ -535,19 +534,22 @@
                   class="btn btn-primary btn-round"
                   onclick="make_add_employee_visible()"
                 >
-                  Add Employee
+                  Add Member
                 </div>
               </div>
             </div>
             <!-- /////////////// TOP COUNTERS ////////////////// -->
             <div class="row">
-              <div class="col-sm-6 col-md-3">
+              <div class="col-sm-6 col-md-4">
                 <div class="card card-stats card-round">
                   <div class="card-body">
                     <div class="row">
                       <div class="col-5">
                         <div class="icon-big text-center">
-                          <i class="icon-people text-secondary" style="font-size: 35px;"></i>
+                          <i
+                            class="icon-people text-secondary"
+                            style="font-size: 35px"
+                          ></i>
                         </div>
                       </div>
                       <div class="col-7 col-stats">
@@ -560,32 +562,16 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6 col-md-3">
+              <div class="col-sm-6 col-md-4">
                 <div class="card card-stats card-round">
                   <div class="card-body">
                     <div class="row">
                       <div class="col-5">
                         <div class="icon-big text-center">
-                          <i class="icon-badge text-warning" style="font-size: 35px;"></i>
-                        </div>
-                      </div>
-                      <div class="col-7 col-stats">
-                        <div class="numbers">
-                          <p class="card-category">Teamlead</p>
-                          <h4 class="card-title" id="teamlead_employee">0</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-5">
-                        <div class="icon-big text-center"> 
-                          <i class="icon-screen-desktop text-primary" style="font-size: 35px;"></i>
+                          <i
+                            class="icon-screen-desktop text-primary"
+                            style="font-size: 35px"
+                          ></i>
                         </div>
                       </div>
                       <div class="col-7 col-stats">
@@ -598,18 +584,21 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6 col-md-3">
+              <div class="col-sm-6 col-md-4">
                 <div class="card card-stats card-round">
                   <div class="card-body">
                     <div class="row">
                       <div class="col-5">
                         <div class="icon-big text-center">
-                          <i class="icon-user-follow text-success" style="font-size: 35px;"></i>
+                          <i
+                            class="icon-user-follow text-success"
+                            style="font-size: 35px"
+                          ></i>
                         </div>
                       </div>
                       <div class="col-7 col-stats">
                         <div class="numbers">
-                          <p class="card-category">On Bench </p>
+                          <p class="card-category">On Bench</p>
                           <h4 class="card-title" id="bench_employee">0</h4>
                         </div>
                       </div>
@@ -625,7 +614,7 @@
                   <div class="card">
                     <div class="card-header">
                       <div class="card-head-row">
-                        <div class="card-title">Employee</div>
+                        <div class="card-title">Team Members</div>
                         <div class="card-tools">
                           <a
                             href="#"
@@ -650,9 +639,13 @@
                     </div>
                     <div class="card-body table-responsive">
                       <div class="table_holder ps-3">
-                        <table id="employee_table">
-                        </table>
-                        <div id="employee_no_data" class="hidden_no_data_table fa-fade">Employee Data Unavailable</div>
+                        <table id="employee_table"></table>
+                        <div
+                          id="employee_no_data"
+                          class="hidden_no_data_table fa-fade"
+                        >
+                          Employee Data Unavailable
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -673,7 +666,7 @@
             class="col-md-5 rounded-start"
             onclick="prevent_click(event)"
           >
-            <div class="add_section_head pb-4">NEW EMPLOYEE</div>
+            <div class="add_section_head pb-4 mb-4">NEW EMPLOYEE</div>
             <div class="row">
               <div class="input-group ms-2" style="width: 400px">
                 <span class="input-group-text"
@@ -791,37 +784,7 @@
                 </div>
               </div>
             </div>
-            <div class="row mb-3">
-              <div
-                class="input-group pt-4"
-                style="width: 210px; padding-inline-start: 24px"
-              >
-                <span class="input-group-text">
-                  <i
-                    class="icon-people"
-                    style="font-size: 20px; padding: 10px 8px"
-                  ></i>
-                </span>
-                <select
-                  class="form-select form_input_level form-control text-center ps-0"
-                  id="employee_position_list"
-                  onchange="open_team_lead_list()"                  >
-                  <option value="Team Lead">Team Lead</option>
-                  <option value="Developer">Developer</option>
-                  
-                </select>
-              </div>
-              <div class="input-group pt-4" style="width: 193px">
-                </span>
-                <select
-                  class="form-select form_input_level form-control text-center ps-0"
-                  id="employee_teamlead_list"
-                  disabled
-                >
-                </select>
-              </div>
-            </div>
-            <div class="row">
+            <div class="row mt-3">
               <div class="my-btn-holder mt-4">
                 <div
                   class="btn btn-danger px-5 me-5"
@@ -902,7 +865,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="input-group ms-2 pt-4" style="width: 200px">
+              <div class="input-group ms-2 pt-4" style="width: 400px">
                 <span class="input-group-text"
                   ><i class="icon-emotsmile px-2" style="font-size: 18px"></i>
                 </span>
@@ -915,13 +878,15 @@
                   placeholder="AGE"
                 />
               </div>
-              <div class="input-group pt-4" style="width: 200px">
-                <span class="input-group-text">
-                  <i class="icon-symbol-male" style="font-size: 18px"></i>
+              <div class="input-group pt-4 ms-2" style="width: 400px">
+                <span class="input-group-text p-3">
+                  <i
+                    class="icon-symbol-male"
+                    style="font-size: 18px; padding-inline: 5px"
+                  ></i>
                 </span>
                 <select
                   class="form-select edit_form_input_level form_input_level form-control text-center ps-0"
-                  style="height: 5px"
                   id="edit_employee_gender_list"
                 >
                   <option value="Male">MALE</option>
@@ -963,41 +928,13 @@
                   >
                     <option value="Angular Developer">Angular Developer</option>
                     <option value="Dotnet Developer">Dotnet Developer</option>
+                    <option value="Ios Developer">IOS Developer</option>
                     <option value="Java Developer">Java Developer</option>
+                    <option value="Network Engineer">IOS Developer</option>
                     <option value="Python Developer">Python Developer</option>
                     <option value="React Developer">React Developer</option>
                   </select>
                 </div>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <div
-                class="input-group pt-4"
-                style="width: 210px; padding-inline-start: 24px"
-              >
-                <span class="input-group-text">
-                  <i
-                    class="icon-people"
-                    style="font-size: 20px; padding: 10px 8px"
-                  ></i>
-                </span>
-                <select
-                  class="form-select edit_form_input_level form_input_level form-control text-center ps-0"
-                  id="edit_employee_position_list"
-                  onchange="open_team_lead_list_edit()"                  >
-                  <option value="Team Lead">Team Lead</option>
-                  <option value="Developer">Developer</option>
-                  
-                </select>
-              </div>
-              <div class="input-group pt-4" style="width: 193px">
-                </span>
-                <select
-                  class="form-select form-control edit_form_input_level form_input_level text-center ps-0"
-                  id="edit_employee_teamlead_list"
-                  disabled
-                >
-                </select>
               </div>
             </div>
             <div class="row">
@@ -1020,29 +957,48 @@
           </div>
         </div>
 
-                <!-- ///////////// DELETE CONFIRMATION OVERLAY //////////// -->
-      <div id="delete_overlay_employee" class="swal-overlay swal-overlay--show-modal" tabindex="-1" style="display: none;">
-      <div class="swal-modal" role="dialog" aria-modal="true"><div class="swal-title">Are you sure?</div><div class="swal-text" >You won't be able to revert this!</div><div class="swal-footer"><div class="swal-button-container">
+        <!-- ///////////// DELETE CONFIRMATION OVERLAY //////////// -->
+        <div
+          id="delete_overlay_employee"
+          class="swal-overlay swal-overlay--show-modal"
+          tabindex="-1"
+          style="display: none"
+        >
+          <div class="swal-modal" role="dialog" aria-modal="true">
+            <div class="swal-title">Are you sure?</div>
+            <div class="swal-text">You won't be able to revert this!</div>
+            <div class="swal-footer">
+              <div class="swal-button-container">
+                <button
+                  id="confirm_employee_delete"
+                  class="swal-button swal-button--confirm btn btn-success"
+                >
+                  Yes, delete it!
+                </button>
 
-        <button id="confirm_employee_delete" class="swal-button  swal-button--confirm btn btn-success">Yes, delete it!</button>
+                <div class="swal-button__loader">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              </div>
+              <div class="swal-button-container">
+                <button
+                  id="cancel_employee_delete"
+                  class="swal-button swal-button--cancel btn btn-danger"
+                >
+                  Cancel
+                </button>
 
-        <div class="swal-button__loader">
-          <div></div>
-          <div></div>
-          <div></div>
+                <div class="swal-button__loader">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
-      </div><div class="swal-button-container">
-
-        <button id="cancel_employee_delete" class="swal-button swal-button--cancel btn btn-danger">Cancel</button>
-
-        <div class="swal-button__loader">
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-
-      </div></div></div></div>
 
         <!-- /////////////// HIDING OVERLAY /////////////// -->
         <div id="hiding_over_employee" class="hide_overlay"></div>
@@ -1112,7 +1068,7 @@
     <!-- External JS -->
     <script src="assets/js/config.js"></script>
     <script src="assets/js/admin.js"></script>
-    <script src="assets/js/employee.js"></script>
+    <script src="assets/js/teamlead_member.js"></script>
 
     <!-- INTERNAL SCRIPT -->
   </body>

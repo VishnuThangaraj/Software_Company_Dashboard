@@ -1,3 +1,9 @@
+// CREDENTIALS VALIDATION
+// const credential = sessionStorage.getItem("log_cred");
+// if (credential !== `admin`) {
+//   window.location.href = "./login.html";
+// }
+
 // FORMAT THE DATE
 const formatDate = (inputDate) => {
   let [year, month, day] = inputDate.split("-");
@@ -62,4 +68,17 @@ const make_edit_input_green = () => {
   );
 };
 
+// LOGOUT FUNCTIONALITY
+const logout_admin = () => {
+  sessionStorage.removeItem("log_cred");
+  window.location.href = "/login.html";
+};
+
+const teamlead_id = 3;
+
 make_edit_input_green();
+
+// TEAMLEAD FUNCTIONALITIES
+// const teamlead_name = document.getElementById(`teamlead_name`);
+// const teamlead_name2 = document.getElementById(`teamlead_name2`);
+// const teamlead_email = document.getElementById(`teamlead_email`);

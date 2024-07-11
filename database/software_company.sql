@@ -105,7 +105,7 @@ VALUES
     ('Alice Johnson', 'alice.johnson@example.com', '1112223333', 30, 'Female', '789 Oak St, Anycity, USA', 'React Developer', 1),
     ('Bob Smith', 'bob.smith@example.com', '4445556666', 25, 'Male', '456 Maple Ave, Anytown, USA', 'Java Developer', 2),
     ('Cathy Brown', 'cathy.brown@example.com', '7778889999', 28, 'Female', '321 Elm Rd, Anystate, USA', 'Angular Developer', 1),
-    ('Daniel Wilson', 'daniel.wilson@example.com', '5556667777', 35, 'Male', '555 Pine Ln, Anycity, USA', 'Dontnet Developer', 3),
+    ('Daniel Wilson', 'daniel.wilson@example.com', '5556667777', 35, 'Male', '555 Pine Ln, Anycity, USA', 'Dotnet Developer', 3),
     ('Eve Taylor', 'eve.taylor@example.com', '8889990000', 27, 'Female', '987 Cedar St, Anystate, USA', 'Dotnet Developer', 2);
 
 INSERT INTO software_company.task (name, description, employee_id, status, priority, due_date, project_id)

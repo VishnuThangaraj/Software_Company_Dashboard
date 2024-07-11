@@ -1,16 +1,29 @@
-const username = document.getElementById(`trainer_login_id`);
-const password = document.getElementById(`trainer_login_password`);
-const invalid_cred = document.getElementById(`invalid_cred`);
-const main_ccs = document.getElementById(`main_cc`);
+const username = document.getElementById(`login_id`);
+const password = document.getElementById(`login_password`);
 
 function validate_Login() {
-  if (username.value == "admin" && password.value == "admin123") {
-    window.location.href = "http://127.0.0.1:5501/clients.html";
+  if (username.value == "admin") {
+    fetch(`http://localhost:3005/api/admin_login`, {
+      method: "POST",
+      body: JSON.stringify({
+        user_id: login_id.value,
+        password: password.value,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json);
+        if (json.length > 0) {
+          sessionStorage.setItem("log_cred", username.value);
+          window.location.href = "/clients.html";
+        } else {
+          Swal.fire("Invalid Credentails!");
+        }
+      });
   } else {
-    Swal.fire("Invalid Credentails!");
+    console.log("dfg");
   }
-}
-
-function refresh_page() {
-  window.location.href = "http://127.0.0.1:5501/login.html";
 }
