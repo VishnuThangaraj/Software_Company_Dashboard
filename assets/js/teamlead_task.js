@@ -49,7 +49,15 @@ const make_task_table_ready = () => {
                 <th style="width: 8%">Action</th>
             </tr>`;
 
-  fetch(`${localhost}/api/get_task`)
+  fetch(`${localhost}/api/get_task_tl_id`, {
+    method: "POST",
+    body: JSON.stringify({
+      id: teamlead_id,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       total_task = data.length;
@@ -97,65 +105,62 @@ const make_task_table_ready = () => {
       completed_task_count.innerHTML = completed_task;
     });
 
-  // Render Employee list
-  fetch(`${localhost}/api/get_employee`)
+  // Resource Pool
+  fetch(`${localhost}/api/get_employee_task_tl`, {
+    method: "POST",
+    body: JSON.stringify({
+      id: teamlead_id,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
-      let temp = ``;
-      if (data.length > 0) {
-        new_task_user.innerHTML = "";
-        data.forEach((employee) => {
-          let new_option = document.createElement("option");
-          new_option.text = employee.name;
-          new_option.value = employee.id;
-          new_task_user.append(new_option);
-
-          // Resource Pool
-          fetch(`${localhost}/api/task_with_employeeid`, {
-            method: "POST",
-            body: JSON.stringify({
-              id: employee.id,
-            }),
-            headers: {
-              "Content-type": "application/json; charset=UTF-8",
-            },
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              temp += `<div id="${
-                employee.id
-              }" class="border-bottom resource-txt py-2 rounded text-center my-flex-row">
+      let temp = "";
+      data.forEach((employee) => {
+        temp += `<div id="${
+          employee.id
+        }" class="border-bottom resource-txt py-2 rounded text-center my-flex-row">
                     <span class="pt-2 ${
                       data.length == 0 ? "make_green fa-fade" : ""
-                    }">${employee.name} </span>
+                    }">${employee.employee_name} </span>
                     <span class="pt-2" >
-                    <span class="badge badge-count">${data.length} Task</span>
+                    <span class="badge badge-count">${
+                      employee.task_count
+                    } Task</span>
                     </span>
                   </div>`;
-              resource_pool.innerHTML = temp;
-            });
-        });
-      } else {
-        let new_option = document.createElement("option");
-        new_option.text = `No Employee Available`;
-        new_option.value = `No Employee Available`;
-        new_task_user.append(new_option);
-        new_task_user.disabled = true;
-      }
-      new_task_user.value = "";
+        resource_pool.innerHTML = temp;
+      });
     });
 
   // Render Project List
-  fetch(`${localhost}/api/get_projects`)
+  fetch(`${localhost}/api/get_projects_teamlead_id`, {
+    method: "POST",
+    body: JSON.stringify({
+      id: teamlead_id,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       if (data.length > 0) {
         new_task_project.innerHTML = "";
+        edit_task_project.innerHTML = "";
         data.forEach((project) => {
           let new_option = document.createElement("option");
           new_option.text = project.project_name;
           new_option.value = project.id;
           new_task_project.append(new_option);
+
+          // Edit
+          let new_option1 = document.createElement("option");
+          new_option1.text = project.project_name;
+          new_option1.value = project.id;
+          edit_task_project.append(new_option1);
         });
       } else {
         let new_option = document.createElement("option");
@@ -163,6 +168,54 @@ const make_task_table_ready = () => {
         new_option.value = `No Project Available`;
         new_task_project.append(new_option);
         new_task_project.disabled = true;
+
+        // Edit
+        let new_option1 = document.createElement("option");
+        new_option1.text = `No Project Available`;
+        new_option1.value = `No Project Available`;
+        edit_task_project.append(new_option1);
+        edit_task_project.disabled = true;
+      }
+    });
+
+  // Render Employee list
+  fetch(`${localhost}/api/get_employee_tl`, {
+    method: "POST",
+    body: JSON.stringify({
+      id: teamlead_id,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.length > 0) {
+        data.forEach((employee) => {
+          let new_option = document.createElement("option");
+          new_option.text = employee.name;
+          new_option.value = employee.id;
+          new_task_user.append(new_option);
+
+          // Edit
+          let new_option1 = document.createElement("option");
+          new_option1.text = employee.name;
+          new_option1.value = employee.id;
+          edit_task_user.append(new_option1);
+        });
+      } else {
+        let new_option = document.createElement("option");
+        new_option.text = `No Employee Available`;
+        new_option.value = `No Employee Available`;
+        new_task_user.append(new_option);
+        new_task_user.disabled = true;
+
+        // Edit
+        let new_option1 = document.createElement("option");
+        new_option1.text = `No Employee Available`;
+        new_option1.value = `No Employee Available`;
+        edit_task_user.append(new_option1);
+        edit_task_user.disabled = true;
       }
     });
 };
@@ -218,7 +271,7 @@ const delete_task = async (event) => {
     .then((response) => response.json())
     .then((data) => {
       let content = {
-        url: "task.html",
+        url: "teamlead_task.html",
         target: "_blank",
       };
       let alert_type = "";
@@ -246,7 +299,7 @@ const delete_task = async (event) => {
       });
 
       setTimeout(function () {
-        window.location.href = "/task.html";
+        window.location.href = "/teamlead_task.html";
       }, 3000);
     });
 };
@@ -279,7 +332,7 @@ const save_new_task = () => {
       message: "Please fill out all fields correctly to add a new Task.",
       title: "Incomplete Task Details",
       icon: "fas fa-tasks",
-      url: "task.html",
+      url: "teamlead_task.html",
       target: "_blank",
     };
 
@@ -316,7 +369,7 @@ const save_new_task = () => {
     .then((response) => response.json())
     .then((json) => {
       let content = {
-        url: "task.html",
+        url: "teamlead_task.html",
         target: "_blank",
       };
       let alert_type = "";
@@ -344,7 +397,7 @@ const save_new_task = () => {
       });
 
       setTimeout(function () {
-        window.location.href = "/task.html";
+        window.location.href = "/teamlead_task.html";
       }, 3000);
     });
 };
@@ -377,7 +430,7 @@ const update_task = () => {
       message: "Please fill out all fields correctly to Edit Task.",
       title: "Incomplete Task Details",
       icon: "fas fa-tasks",
-      url: "task.html",
+      url: "teamlead_task.html",
       target: "_blank",
     };
 
@@ -415,7 +468,7 @@ const update_task = () => {
     .then((response) => response.json())
     .then((json) => {
       let content = {
-        url: "task.html",
+        url: "teamlead_task.html",
         target: "_blank",
       };
       let alert_type = "";
@@ -442,7 +495,7 @@ const update_task = () => {
       });
 
       setTimeout(function () {
-        window.location.href = "/task.html";
+        window.location.href = "/teamlead_task.html";
       }, 3000);
     });
 };
@@ -457,67 +510,6 @@ const view_add_task_form = () => {
   add_new_task.style.display = "block";
 };
 
-// RENDER MEMBERS TO ADD NEW TASK
-const render_members = () => {
-  new_task_user.innerHTML = "";
-  fetch(`${localhost}/api/get_employee_tl`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ id: new_task_project.value }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.length > 0) {
-        new_task_user.disabled = false;
-        data.forEach((employee) => {
-          let new_option = document.createElement("option");
-          new_option.text = `${employee.name}`;
-          new_option.value = `${employee.id}`;
-          new_task_user.append(new_option);
-        });
-      } else {
-        let new_option = document.createElement("option");
-        new_option.text = `No Employee Available`;
-        new_option.value = `No Employee Available`;
-        new_task_user.append(new_option);
-        new_task_user.disabled = true;
-      }
-    });
-};
-
-// RENDER MEMBERS TO ADD NEW TASK
-const render_members_edit = () => {
-  edit_task_user.innerHTML = "";
-  edit_task_user.value = "";
-  fetch(`${localhost}/api/get_employee_tl`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ id: edit_task_project.value }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.length > 0) {
-        edit_task_user.disabled = false;
-        data.forEach((employee) => {
-          let new_option = document.createElement("option");
-          new_option.text = `${employee.name}`;
-          new_option.value = `${employee.id}`;
-          edit_task_user.append(new_option);
-        });
-      } else {
-        let new_option = document.createElement("option");
-        new_option.text = `No Employee Available`;
-        new_option.value = `No Employee Available`;
-        edit_task_user.append(new_option);
-        edit_task_user.disabled = true;
-      }
-    });
-};
-
 // HIDE EDIT TASK FORM
 const hide_edit_task_form = () => {
   edit_task.style.display = "none";
@@ -526,51 +518,9 @@ const hide_edit_task_form = () => {
 // VIEW EDIT TASK FORM
 const view_edit_task_form = (event) => {
   event.stopPropagation();
-  edit_task_user.innerHTML = "";
   let parent = event.target;
   while (parent.id == ``) parent = parent.parentNode;
 
-  // Render Employee list
-  fetch(`${localhost}/api/get_employee`)
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.length > 0) {
-        data.forEach((employee) => {
-          let new_option = document.createElement("option");
-          new_option.text = employee.name;
-          new_option.value = employee.id;
-          edit_task_user.append(new_option);
-        });
-      } else {
-        let new_option = document.createElement("option");
-        new_option.text = `No Employee Available`;
-        new_option.value = `No Employee Available`;
-        edit_task_user.append(new_option);
-        edit_task_user.disabled = true;
-      }
-    });
-
-  // Render Project List
-  fetch(`${localhost}/api/get_projects`)
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.length > 0) {
-        data.forEach((project) => {
-          let new_option = document.createElement("option");
-          new_option.text = project.project_name;
-          new_option.value = project.id;
-          edit_task_project.append(new_option);
-        });
-      } else {
-        let new_option = document.createElement("option");
-        new_option.text = `No Project Available`;
-        new_option.value = `No Project Available`;
-        edit_task_project.append(new_option);
-        edit_task_project.disabled = true;
-      }
-    });
-
-  render_members_edit();
   // Fetch Task List With ID
   fetch(`${localhost}/api/get_task_with_id`, {
     method: "POST",

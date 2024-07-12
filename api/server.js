@@ -101,8 +101,8 @@ app.post(`/api/add_teamlead`, (req, res) => {
   const { name, email, phone, age, gender, address, designation } = req.body;
 
   connection.query(
-    `INSERT INTO team_lead (name, email, phone, age, gender, address, designation) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [name, email, phone, age, gender, address, designation],
+    `INSERT INTO team_lead (name, email, phone, age, gender, address, designation, password) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [name, email, phone, age, gender, address, designation, `${name}+123`],
     (err, result) => {
       if (err) {
         console.error("Error Inserting Data:", err);
@@ -131,8 +131,18 @@ app.post(`/api/add_employee`, (req, res) => {
   } = req.body;
 
   connection.query(
-    `INSERT INTO employee (name, email, phone, age, gender, address, designation, team_lead_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    [name, email, phone, age, gender, address, designation, team_lead_id],
+    `INSERT INTO employee (name, email, phone, age, gender, address, designation, team_lead_id, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      name,
+      email,
+      phone,
+      age,
+      gender,
+      address,
+      designation,
+      team_lead_id,
+      `${name}+123`,
+    ],
     (err, result) => {
       if (err) {
         console.error("Error Inserting Data:", err);
@@ -241,6 +251,37 @@ app.get(`/api/get_task`, (req, res) => {
       res.json(result);
     }
   });
+});
+
+// FETCH TASK WITH TEAMLEAD ID
+app.post(`/api/get_task_tl_id`, (req, res) => {
+  const { id } = req.body;
+
+  connection.query(
+    `SELECT t.id AS id,
+       t.name AS name,
+       t.description AS description,
+       t.status AS status,
+       t.priority AS priority,
+       t.start_date AS start_date,
+       t.due_date AS due_date
+    FROM software_company.task AS t
+    JOIN software_company.employee AS e ON t.employee_id = e.id
+    JOIN software_company.team_lead AS tl ON e.team_lead_id = tl.id
+    WHERE tl.id = ?;`,
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Task. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
 });
 
 // FETCH COUNT OF EMPLOYEE WITHOUT TASK
@@ -358,6 +399,59 @@ app.post(`/api/get_projects_teamlead_id`, (req, res) => {
         res.status(500).json({
           success: false,
           error: "Failed to Fetch Project Data. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
+// FETCH PROJECT WITH MEMBER ID (MEMBER)
+app.post(`/api/get_projects_member_id`, (req, res) => {
+  const { id } = req.body;
+
+  connection.query(
+    `SELECT p.id, p.project_name, p.company_id, p.budget, p.notes, p.team_lead_id, p.status, p.start_date, p.due_date
+      FROM software_company.projects p
+      JOIN software_company.team_lead tl ON p.team_lead_id = tl.id
+      JOIN software_company.employee e ON tl.id = e.team_lead_id
+      WHERE e.id = ?;`,
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Project Data. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
+// FETCH MEMBERS WITH TASK USING TEAMLEAD ID(TEAMLEAD)
+app.post(`/api/get_employee_task_tl`, (req, res) => {
+  const { id } = req.body;
+
+  connection.query(
+    `SELECT e.id AS employee_id,
+       e.name AS employee_name,
+       COUNT(t.id) AS task_count
+      FROM software_company.employee AS e
+      LEFT JOIN software_company.task AS t ON e.id = t.employee_id
+      WHERE e.team_lead_id = ?
+      GROUP BY e.id, e.name
+      ORDER BY e.name;`,
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Employee Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Employee Data. Please try again later.",
         });
       } else {
         res.json(result);
@@ -564,6 +658,48 @@ app.put(`/api/edit_task_with_id`, (req, res) => {
   connection.query(
     `UPDATE task SET name = ?, description = ?, employee_id =?, project_id = ?, priority = ?, due_date = ? WHERE id = ?`,
     [name, description, employee_id, project_id, priority, due_date, id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Updating Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Update Task Details. Please try again later.",
+        });
+      } else {
+        res.json({ message: "Task updated successfully", success: true });
+      }
+    }
+  );
+});
+
+// UPDATE TASK STATUS WITH ID
+app.put(`/api/update_task_status`, (req, res) => {
+  const { id, status, percentage } = req.body;
+
+  connection.query(
+    `UPDATE task SET status = ?, percentage = ? WHERE id = ?`,
+    [status, percentage, id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Updating Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Update Task Details. Please try again later.",
+        });
+      } else {
+        res.json({ message: "Task updated successfully", success: true });
+      }
+    }
+  );
+});
+
+// UPDATE TASK STATUS WITH ID
+app.put(`/api/update_task_status_comment`, (req, res) => {
+  const { id, status, percentage, comment } = req.body;
+
+  connection.query(
+    `UPDATE task SET status = ?, percentage = ?, comments = ? WHERE id = ?`,
+    [status, percentage, comment, id],
     (err, result) => {
       if (err) {
         console.error("Error Updating Data:", err);
@@ -806,10 +942,52 @@ app.post("/api/admin_login", (req, res) => {
     [user_id, password],
     (err, result) => {
       if (err) {
-        console.error("Error Deleting Data:", err);
+        console.error("Error Validating Data:", err);
         res.status(500).json({
           success: false,
-          error: "Failed to Delete Task. Please try again later.",
+          error: "Failed to Validate Admin. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
+// TEAMLEAD LOGIN
+app.post("/api/teamlead_login", (req, res) => {
+  const { user_id, password } = req.body;
+
+  connection.query(
+    `SELECT * FROM team_lead WHERE id = ? and password = ?`,
+    [user_id, password],
+    (err, result) => {
+      if (err) {
+        console.error("Error Validating Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Validate Teamlead Task. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
+// EMPLOYEE LOGIN
+app.post("/api/employee_login", (req, res) => {
+  const { user_id, password } = req.body;
+
+  connection.query(
+    `SELECT * FROM employee WHERE id = ? and password = ?`,
+    [user_id, password],
+    (err, result) => {
+      if (err) {
+        console.error("Error Validating Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Validate Employee. Please try again later.",
         });
       } else {
         res.json(result);

@@ -1,8 +1,32 @@
 // CREDENTIALS VALIDATION
-// const credential = sessionStorage.getItem("log_cred");
-// if (credential !== `admin`) {
-//   window.location.href = "./login.html";
-// }
+let teamlead_id = 0,
+  developer_id = 0;
+const localhosts = `http://127.0.0.1:5501`;
+
+const credential = sessionStorage.getItem("log_cred");
+if (credential === undefined || credential === null) {
+  window.location.href = "./login.html";
+} else if (credential.startsWith("DEV-TL")) {
+  teamlead_id = credential.slice(6);
+  if (
+    window.location.href == `${localhosts}/clients.html` ||
+    window.location.href == `${localhosts}/task.html` ||
+    window.location.href == `${localhosts}/employee.html`
+  ) {
+    window.location.href = "/teamlead.html";
+  }
+} else if (credential.startsWith("DEV-JD")) {
+  developer_id = credential.slice(6);
+} else if (!credential.startsWith("admin")) {
+  window.location.href = "/login.html";
+  if (
+    window.location.href == `${localhosts}/teamlead.html` ||
+    window.location.href == `${localhosts}/teamlead_task.html` ||
+    window.location.href == `${localhosts}/teamlead_member.html`
+  ) {
+    window.location.href = "/clients.html";
+  }
+}
 
 // FORMAT THE DATE
 const formatDate = (inputDate) => {
@@ -73,8 +97,6 @@ const logout_admin = () => {
   sessionStorage.removeItem("log_cred");
   window.location.href = "/login.html";
 };
-
-const teamlead_id = 3;
 
 make_edit_input_green();
 

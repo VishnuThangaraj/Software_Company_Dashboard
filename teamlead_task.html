@@ -91,32 +91,25 @@
                 <h4 class="text-section">Components</h4>
               </li>
               <li class="nav-item submenu">
-                <a href="clients.html">
-                  <i class="fas fa-user-tie"></i>
-                  <p>Clients</p>
-                </a>
-              </li>
-              <li class="nav-item submenu">
-                <a href="project.html">
+                <a href="teamlead.html">
                   <i class="fas fa-project-diagram"></i>
                   <p>Project</p>
                 </a>
               </li>
-
               <li class="nav-item submenu">
-                <a href="employee.html">
+                <a href="teamlead_member.html">
                   <i class="fas fa-users"></i>
-                  <p>Employee</p>
+                  <p>Team Members</p>
                 </a>
               </li>
               <li class="nav-item active submenu">
-                <a href="task.html">
+                <a href="teamlead_task.html">
                   <i class="fas fa-tasks"></i>
                   <p>Tasks</p>
                 </a>
               </li>
               <li class="nav-item submenu">
-                <a href="message.html">
+                <a href="teamlead_message.html">
                   <i class="fas fa-envelope"></i>
                   <p>Message</p>
                 </a>
@@ -525,8 +518,7 @@
               class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
             >
               <div>
-                <h3 class="fw-bold mb-3">Dashboard</h3>
-                <!-- <h6 class="op-7 mb-2">Free Bootstrap 5 Admin Dashboard</h6> -->
+                <h3 class="fw-bold mb-3">Teamlead Dashboard</h3>
               </div>
               <div class="ms-md-auto py-2 py-md-0">
                 <a href="#" class="btn btn-label-info btn-round me-2"
@@ -776,7 +768,6 @@
                   <select
                     class="form-select form_input_level form-control py-3 ps-4"
                     id="new_task_project"
-                    onchange="render_members()"
                   ></select>
                 </div>
               </div>
@@ -800,7 +791,6 @@
                   <select
                     class="form-select form_input_level form-control py-3 ps-4"
                     id="new_task_user"
-                    disabled
                   ></select>
                 </div>
               </div>
@@ -938,7 +928,6 @@
                   <select
                     class="form-select edit_form_input_level form-control py-3 ps-4"
                     id="edit_task_project"
-                    onclick="render_members_edit()"
                   ></select>
                 </div>
               </div>
@@ -1123,7 +1112,7 @@
     <!-- External JS -->
     <script src="assets/js/config.js"></script>
     <script src="assets/js/admin.js"></script>
-    <script src="assets/js/task.js"></script>
+    <script src="assets/js/teamlead_task.js"></script>
 
     <!-- INTERNAL SCRIPT -->
   </body>

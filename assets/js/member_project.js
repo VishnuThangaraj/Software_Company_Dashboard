@@ -12,12 +12,24 @@ const ongoing_project = document.getElementById(`ongoing_project`);
 const completed_project = document.getElementById(`completed_project`);
 const revenue_project = document.getElementById(`revenue_project`);
 
+// ADD NEW PROJECT
+const add_new_project = document.getElementById(`add_new_project`);
+const new_project_name = document.getElementById(`new_project_name`);
+const new_project_project = document.getElementById(`new_project_clients`);
+const add_project_end_date = document.getElementById(`add_project_end_date`);
+const teamlead_list_project = document.getElementById(`teamlead_list_project`);
+const add_project_budget = document.getElementById(`add_project_budget`);
+const new_project_desc = document.getElementById(`new_project_desc`);
+
 // EDIT PROJECT
 let current_edit_project = 0;
 const edit_project = document.getElementById(`edit_project`);
 const edit_project_name = document.getElementById(`edit_project_name`);
 const edit_project_clients = document.getElementById(`edit_project_clients`);
 const edit_project_end_date = document.getElementById(`edit_project_end_date`);
+const edit_teamlead_list_project = document.getElementById(
+  `edit_teamlead_list_project`
+);
 const edit_project_budget = document.getElementById(`edit_project_budget`);
 const edit_project_desc = document.getElementById(`edit_project_desc`);
 const edit_status_project = document.getElementById(`edit_status_project`);
@@ -37,15 +49,15 @@ const setup_project = async () => {
   try {
     // Fetch all projects
     const projectsResponse = await fetch(
-      `${localhost}/api/get_projects_teamlead_id`,
+      `${localhost}/api/get_projects_member_id`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
-          id: teamlead_id,
+          id: developer_id,
         }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
       }
     );
     const projectsJson = await projectsResponse.json();
@@ -54,10 +66,10 @@ const setup_project = async () => {
                     <th style="width: 5%">ID</th>
                     <th style="width: 8%">Project Name</th>
                     <th style="width: 10%">Parent Company</th>
+                    <th style="width: 7%">TeamLead</th>
                     <th style="width: 5%">Tasks</th>
                     <th style="width: 6%">Status</th>
                     <th style="width: 5%">Budget</th>
-                    <th style="width: 7%">Start Date</th>
                     <th style="width: 7%">Due Date</th>
                     <th style="width: 8%">Action</th>
                 </tr>`;
@@ -123,6 +135,7 @@ const setup_project = async () => {
                     <td>PROJ-BL${project.id}</td>
                     <td>${project.project_name}</td>
                     <td>${clientName}</td>
+                    <td>${teamLeadName}</td>
                     <td>&nbsp;&nbsp;&nbsp;${tasksCount}</td>
                     <td>${
                       project.status === "ongoing"
@@ -130,7 +143,6 @@ const setup_project = async () => {
                         : '<span class="badge badge-success">COMPLETED</span>'
                     }</td>
                     <td>&nbsp;${project.budget}</td>
-                    <td>${formatDate(project.start_date.slice(0, 10))}</td>
                     <td>${formatDate(project.due_date.slice(0, 10))}</td>
                     <td>
                       <div class="btn btn-secondary py-1 my-2 px-3 me-2" onclick="visible_edit_project(event)">
@@ -190,241 +202,54 @@ const fetchTeamLeadName = async (teamLeadId) => {
   }
 };
 
-// GET CONFIRMATION FOR DELETION
-const get_delete_confirmation = () => {
-  return new Promise((resolve) => {
-    // Get the confirmation and cancel buttons
-    const confirmationButton = document.getElementById("delete_confirmation");
-    const cancelButton = document.getElementById("cancel_project_delete");
+// EDIT EXISTING PROJECT
+const visible_edit_project = (event) => {
+  event.stopPropagation();
 
-    // Function to handle confirmation
-    const handleConfirmation = () => {
-      resolve(true); // Resolve with true when confirmation button is clicked
-    };
+  let content = {
+    url: "member.html",
+    target: "_blank",
+  };
+  let alert_type = "";
+  content.message = "Not Allowed to Edit Project";
+  content.title = "Access Denied";
+  content.icon = "fas fa-ban";
+  alert_type = "secondary";
 
-    // Function to handle cancellation
-    const handleCancellation = () => {
-      resolve(false); // Resolve with false when cancel button is clicked
-    };
-
-    // Attach click event listeners to buttons
-    confirmationButton.addEventListener("click", handleConfirmation);
-    cancelButton.addEventListener("click", handleCancellation);
+  $.notify(content, {
+    type: alert_type,
+    placement: {
+      from: `top`,
+      align: `center`,
+    },
+    time: 100,
+    delay: 1000,
   });
 };
 
 // DELETE EXISTING PROJECT
 const delete_project = async (event) => {
   event.stopPropagation();
-  delete_overlay_project.style.display = "block";
 
-  let confirmation = await get_delete_confirmation();
-  delete_overlay_project.style.display = "none"; // Hide SweetAlert
+  let content = {
+    url: "member.html",
+    target: "_blank",
+  };
+  let alert_type = "";
+  content.message = "Not Allowed to remove Project from Database";
+  content.title = "Access Denied";
+  content.icon = "fas fa-ban";
+  alert_type = "secondary";
 
-  if (!confirmation) {
-    return;
-  }
-
-  let parent = event.target;
-
-  while (parent.id == ``) parent = parent.parentNode;
-
-  hiding_over_project.style.display = "block";
-  fetch(`${localhost}/api/delete_project`, {
-    method: "DELETE",
-    body: JSON.stringify({
-      id: parent.id,
-    }),
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
+  $.notify(content, {
+    type: alert_type,
+    placement: {
+      from: `top`,
+      align: `center`,
     },
-  })
-    .then((response) => response.json())
-    .then((json) => {
-      let content = {
-        url: "teamlead.html",
-        target: "_blank",
-      };
-      let alert_type = "";
-      if (json.success) {
-        content.message = "Existing Project Removed from the Database";
-        content.title = "Project Deleted";
-        content.icon = "fas fa-project-diagram";
-        alert_type = "danger";
-      } else {
-        content.message = "Unable to Delete Project with Tasks";
-        content.title = "Failed to Delete Project";
-        content.icon = "fas fa-exclamation-circle";
-        alert_type = "warning";
-      }
-
-      $.notify(content, {
-        type: alert_type,
-        placement: {
-          from: `top`,
-          align: `center`,
-        },
-        time: 100,
-        delay: 1000,
-      });
-
-      setTimeout(function () {
-        window.location.href = "/teamlead.html";
-      }, 3000);
-    });
-};
-
-// HIDE EDIT PROJECT FORM
-const hide_edit_project_form = () => {
-  edit_project.style.display = "none";
-};
-
-// VISIBLE EDIT PROJECT FORM
-const visible_edit_project = (event) => {
-  event.stopPropagation();
-  let parent = event.target;
-  while (parent.id === "") {
-    parent = parent.parentNode;
-  }
-  current_edit_project = parent.id;
-  make_edit_input_green();
-
-  edit_project.style.display = "block";
-  edit_project_clients.innerHTML = "";
-
-  // Fetch Parent Company List
-  fetch(`${localhost}/api/get_all_client_names_id`)
-    .then((response) => response.json())
-    .then((json) => {
-      edit_project_clients.innerHTML = ""; // Clear previous options
-      if (json.length > 0) {
-        json.forEach((company) => {
-          let new_option = new Option(company.name, company.id);
-          edit_project_clients.add(new_option);
-        });
-      } else {
-        let new_option = new Option(
-          "No Clients Available",
-          "No Clients Available"
-        );
-        edit_project_clients.add(new_option);
-        edit_project_clients.disabled = true;
-      }
-    })
-    .catch((error) => {
-      console.error("Error fetching client list:", error);
-    });
-
-  // Fetch Project Details
-  fetch(`${localhost}/api/get_project_with_id`, {
-    method: "POST",
-    body: JSON.stringify({
-      id: current_edit_project,
-    }),
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-  })
-    .then((response) => response.json())
-    .then((json) => {
-      edit_project_name.value = json[0].project_name;
-      edit_project_end_date.value = json[0].due_date.slice(0, 10);
-      edit_project_budget.value = json[0].budget;
-      edit_project_desc.value = json[0].notes;
-      edit_project_clients.value = json[0].company_id;
-    })
-    .catch((error) => {
-      console.error("Error fetching project details:", error);
-    });
-};
-
-// UPDATE PROJECT DETAILS
-const update_project_details = () => {
-  const formElements = [
-    edit_project_name,
-    edit_project_clients,
-    edit_project_end_date,
-    edit_project_budget,
-    edit_project_desc,
-  ];
-
-  let validator = false;
-
-  formElements.forEach((element) => {
-    if (element.value === "") {
-      element.style.border = "1px solid #f58389";
-      validator = true;
-    } else {
-      element.style.border = "1px solid #6ddc70";
-    }
+    time: 100,
+    delay: 1000,
   });
-
-  if (validator) {
-    // Notification
-    let content = {
-      message: "Please fill out all fields correctly to Edit Project.",
-      title: "Incomplete Project Information",
-      icon: "fas fa-project-diagram",
-      url: "teamlead.html",
-      target: "_blank",
-    };
-
-    $.notify(content, {
-      type: "warning",
-      placement: {
-        from: "top",
-        align: "center",
-      },
-      time: 100,
-      delay: 1000,
-    });
-
-    return;
-  }
-
-  hiding_over_project.style.display = "block";
-  hide_edit_project_form();
-
-  // Add updated project to Database
-  fetch(`${localhost}/api/update_project_id_tl`, {
-    method: "PUT",
-    body: JSON.stringify({
-      id: current_edit_project,
-      project_name: edit_project_name.value,
-      company_id: edit_project_clients.value,
-      budget: edit_project_budget.value,
-      notes: edit_project_desc.value,
-      due_date: edit_project_end_date.value,
-      status: edit_status_project.value,
-    }),
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-  })
-    .then((response) => response.json())
-    .then((json) => {
-      let content = {
-        message: "Updated Project details have been successfully recorded.",
-        title: "Project Details Updated",
-        icon: "fas fa-pencil-alt",
-        url: "teamlead.html",
-        target: "_blank",
-      };
-
-      $.notify(content, {
-        type: `success`,
-        placement: {
-          from: `top`,
-          align: `center`,
-        },
-        time: 100,
-        delay: 1000,
-      });
-
-      setTimeout(function () {
-        window.location.href = "/teamlead.html";
-      }, 2500);
-    });
 };
 
 // VIEW TASK OF THE CURRENT PROJECT
