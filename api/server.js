@@ -157,6 +157,27 @@ app.post(`/api/add_employee`, (req, res) => {
   );
 });
 
+// ADD NEW EVENT
+app.post(`/api/add_event`, (req, res) => {
+  const { name, description, evnt_date, access } = req.body;
+
+  connection.query(
+    `INSERT INTO events (name, description, evnt_date, access) VALUES (?, ?, ?, ?)`,
+    [name, description, evnt_date, access],
+    (err, result) => {
+      if (err) {
+        console.error("Error Inserting Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to add Event. Please try again later.",
+        });
+      } else {
+        res.json({ success: true, message: "Event added successfully" });
+      }
+    }
+  );
+});
+
 // FETCH EMPLOYEE DATA
 app.get(`/api/get_employee`, (req, res) => {
   connection.query(`SELECT * FROM employee`, (err, result) => {
@@ -571,60 +592,14 @@ app.post(`/api/get_employee_with_id`, (req, res) => {
 });
 
 // FETCH EVENTS USING DATE
-app.post(`/api/get_events`, (req, res) => {
-  const { date } = req.body;
-
-  connection.query(
-    `SELECT 
-    e.id AS event_id,
-    e.name AS event_name,
-    e.evnt_date AS event_date,
-    e.access AS event_access,
-    COUNT(DISTINCT p.id) AS project_count,
-    COUNT(t.id) AS task_count
-    FROM
-        software_company.events e
-    LEFT JOIN
-        software_company.projects p ON e.evnt_date = p.due_date
-    LEFT JOIN
-        software_company.task t ON p.id = t.project_id AND e.evnt_date = t.due_date
-    WHERE
-        e.evnt_date = ?
-    GROUP BY
-        e.id, e.name, e.evnt_date, e.access;
-    `,
-    [date],
-    (err, result) => {
-      if (err) {
-        console.error("Error Fetching Data:", err);
-        res.status(500).json({
-          success: false,
-          error: "Failed to Fetch Events. Please try again later.",
-        });
-      } else {
-        res.json(result);
-      }
-    }
-  );
-});
-
-// FETCH EVENTS USING DATE
 app.post(`/api/get_events_count`, (req, res) => {
   const { date } = req.body;
 
   connection.query(
     `SELECT
-        COUNT(DISTINCT p.id) AS project_count,
-        COUNT(DISTINCT e.id) AS event_count,
-        COUNT(DISTINCT t.id) AS task_count
-    FROM
-        software_company.projects p
-        LEFT JOIN software_company.events e ON p.id = e.id
-        LEFT JOIN software_company.task t ON p.id = t.project_id
-    WHERE
-        p.due_date = ?
-        OR e.evnt_date = ?
-        OR t.due_date = ?`,
+    (SELECT COUNT(*) FROM software_company.events WHERE evnt_date = ? ) AS event_count,
+    (SELECT COUNT(*) FROM software_company.projects WHERE due_date = ? ) AS project_count,
+    (SELECT COUNT(*) FROM software_company.task WHERE due_date = ? ) AS task_count; `,
     [date, date, date],
     (err, result) => {
       if (err) {

@@ -5,7 +5,7 @@ const localhosts = `http://127.0.0.1:5501`;
 
 const credential = sessionStorage.getItem("log_cred");
 
-// Function to check the credential and redirect accordingly
+// Function to check the credential and redirect
 function checkCredential() {
   if (credential === null) {
     window.location.href = "/login.html";
@@ -131,8 +131,3 @@ const logout_admin = () => {
 };
 
 make_edit_input_green();
-
-// TEAMLEAD FUNCTIONALITIES
-// const teamlead_name = document.getElementById(`teamlead_name`);
-// const teamlead_name2 = document.getElementById(`teamlead_name2`);
-// const teamlead_email = document.getElementById(`teamlead_email`);

@@ -91,7 +91,7 @@
                 <h4 class="text-section">Components</h4>
               </li>
               <li class="nav-item submenu">
-                <a href="#sidebarLayouts">
+                <a href="clients.html">
                   <i class="fas fa-user-tie"></i>
                   <p>Clients</p>
                 </a>
@@ -535,8 +535,8 @@
                   >Homepage</a
                 >
                 <div
-                  class="btn btn-primary btn-round"
-                  onclick="add_client_bar()"
+                  class="btn btn-primary btn-round reveal-btn"
+                  onclick="toggleForm()"
                 >
                   Add Event
                 </div>
@@ -557,7 +557,8 @@
                             id="inputMonth"
                             min="1"
                             max="12"
-                            placeholder="Month (1-12)"
+                            placeholder="Month"
+                            style="width: 70px; border-radius: 10%/20%;"
                           />
                           <input
                             type="number"
@@ -565,6 +566,7 @@
                             min="1900"
                             max="2100"
                             placeholder="Year"
+                            style="width: 70px; border-radius: 10%/20%;"
                           />
                            <button class="btn btn-rounded btn-secondary px-4 py-2" onclick="showCustomMonth()"><i class="fas fa-arrow-right" style="font-size: 20px;"></i></button></span>
                         </div>
@@ -574,9 +576,9 @@
                       
                     <div class="calendar" id="calendar">
                       <div class="calendar-header" id="calendar-header">
-                        <button id="prevMonthBtn">&lt;</button>
+                        <button id="prevMonthBtn"><i class="fas fa-angle-double-left"></i></button>
                         <div id="calendar-title"></div>
-                        <button id="nextMonthBtn">&gt;</button>
+                        <button id="nextMonthBtn"><i class="fas fa-angle-double-right"></i></button>
                       </div>
                       <div class="calendar-weekdays">
                         <div class="calendar-weekday">Sun</div>
@@ -595,6 +597,39 @@
             </div>
           </div>
         </div>
+
+        <!-- /////////// ADD EVENT FORM ////////////// -->
+         <div class="my-outer-layer" onclick="hide_contents(event)" id="eventForm2">
+          <div class="event-form" id="eventForm" onclick="prevent_click(event)">
+            <h2>ADD EVENT</h2>
+
+            <form action="" method="post">
+                <label for="event_name">Event Name:</label>
+                <input type="text" id="event_name" class="form_input_level" name="event_name" required>
+
+                <label for="event_description">Event Description:</label>
+                <textarea id="event_description" class="form_input_level" name="event_description" rows="3" required></textarea>
+
+                <label for="event_date">Event Date:</label>
+                <input type="date" id="event_date" class="form_input_level" name="event_date" required>
+
+                <label for="access">Event Access:</label>
+                <select id="event_access" name="access" class="form_input_level">
+                    <option value="public">Public</option>
+                    <option value="private">Private</option>
+                    <option value="teamlead">Teamlead</option>
+                </select>
+
+                <div class="btn-container" style="text-align: center;">
+                    <button type="button" onclick="add_event_dt()" class="btn btn-submit btn-success py-2">ADD</button>
+                </div>
+            </form>
+          </div>
+        </div>
+
+
+         <!-- /////////////// HIDING OVERLAY /////////////// -->
+        <div id="hiding_over_calendar" class="hide_overlay"></div>
       
         <footer class="footer">
           <div class="container-fluid d-flex justify-content-between">

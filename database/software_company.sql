@@ -76,6 +76,7 @@ CREATE TABLE software_company.task (
 CREATE TABLE software_company.events (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50),
+    description VARCHAR(100),
     evnt_date DATE, 
     access VARCHAR(50) -- private or public
 );
@@ -104,11 +105,11 @@ VALUES
 
 INSERT INTO software_company.projects (project_name, company_id, budget, notes, due_date, team_lead_id, status)
 VALUES 
-    ('Project Alpha', 1, 5000, 'Initial project for client X', '2024-09-30',1, 'ongoing'),
-    ('Project Beta', 2, 8000, 'Expansion project for client Y', '2024-09-30',2, 'ongoing'),
-    ('Project Cherry', 3, 12000, 'Enhancement project for client Z', '2024-12-31',3, 'completed'),
-    ('Project Diary', 4, 10000, 'Critical project for client X', '2024-10-31',4, 'ongoing'),
-    ('Project Eclipse', 2, 15000, 'Major project for client Y', '2025-03-31',5, 'completed');
+    ('Project Alpha', 1, 5000, 'Initial project for client X', '2024-07-5',1, 'ongoing'),
+    ('Project Beta', 2, 8000, 'Expansion project for client Y', '2024-07-9',2, 'ongoing'),
+    ('Project Cherry', 3, 12000, 'Enhancement project for client Z', '2024-07-6',3, 'completed'),
+    ('Project Diary', 4, 10000, 'Critical project for client X', '2024-07-15',4, 'ongoing'),
+    ('Project Eclipse', 2, 15000, 'Major project for client Y', '2025-07-29',5, 'completed');
 
 
 INSERT INTO software_company.employee (name, email, phone, age, gender, address, designation, team_lead_id, password) 
@@ -127,17 +128,28 @@ VALUES
     ('Bug fixing in user dashboard', 'Fix reported bugs in the user dashboard module', 4, 'Progress', 'HIGH', '2024-07-18',3),
     ('Database schema optimization', 'Optimize database queries and indexes for performance', 4, 'Progress', 'MEDIUM', '2024-07-30',4);
 
-INSERT INTO software_company.events (name, evnt_date, access) VALUES
-    ('Summer Concert', '2024-07-01', 'public'),
-    ('Tech Conference', '2024-07-03', 'private'),
-    ('Product Launch', '2024-07-05', 'public'),
-    ('Company Retreat', '2024-07-08', 'private'),
-    ('Webinar Series', '2024-07-10', 'public'),
-    ('Workshop Session', '2024-07-12', 'public'),
-    ('Team Building Day', '2024-07-15', 'private'),
-    ('Networking Event', '2024-07-18', 'public'),
-    ('Training Seminar', '2024-07-20', 'private'),
-    ('Hackathon Event', '2024-07-22', 'public');
+INSERT INTO software_company.events (name, description, evnt_date, access) VALUES
+('Summer Hackathon', 'Annual hackathon event for developers and tech enthusiasts.', '2024-07-01', 'private'),
+('Product Launch Seminar', 'Introduction of new products with keynote speakers and demos.', '2024-07-02', 'public'),
+('Client Appreciation Dinner', 'Exclusive dinner event to thank our valuable clients.', '2024-07-25', 'private'),
+('Community Outreach Day', 'Volunteer activities and support for local communities.', '2024-07-04', 'public'),
+('Team Building Workshop', 'Engaging activities to foster teamwork and collaboration.', '2024-07-15', 'other'),
+('Company Strategy Review', 'Discussion on company goals and future plans.', '2024-07-06', 'private'),
+('Customer Feedback Forum', 'Gathering customer input for product improvement.', '2024-07-07', 'public'),
+('Industry Conference', 'Attending sessions on latest trends and innovations.', '2024-07-07', 'other'),
+('Summer Picnic', 'Outdoor event with games, food, and fun for all employees.', '2024-07-09', 'private'),
+('Educational Workshop', 'Learning sessions on new technologies and skills.', '2024-07-29', 'public'),
+('Employee Recognition Ceremony', 'Awarding outstanding employees for their contributions.', '2024-07-11', 'private'),
+('Product Demo Day', 'Showcasing new products to potential clients and partners.', '2024-07-12', 'public'),
+('Charity Fundraiser', 'Raising funds for a local charity organization.', '2024-07-13', 'other'),
+('Health & Wellness Day', 'Activities promoting physical and mental well-being.', '2024-07-14', 'private'),
+('Technical Training Session', 'Hands-on training on advanced technical skills.', '2024-07-15', 'public'),
+('Networking Mixer', 'Opportunity to connect with industry peers and professionals.', '2024-07-23', 'other'),
+('Quarterly Review Meeting', 'Reviewing quarterly performance and goals.', '2024-07-17', 'private'),
+('Annual General Meeting', 'Meeting with shareholders to discuss company progress.', '2024-07-18', 'public'),
+('Project Kickoff Event', 'Launching a new project with key stakeholders.', '2024-07-19', 'other'),
+('Investor Relations Day', 'Presenting company financials and growth strategies.', '2024-07-25', 'private');
+
 
 SELECT * FROM software_company.client;
 SELECT * FROM software_company.admin_cred;
@@ -147,47 +159,7 @@ SELECT * FROM software_company.employee;
 SELECT * FROM software_company.task;
 SELECT * FROM software_company.events;
 
-SELECT t.id AS task_id,
-       t.name AS task_name,
-       t.description AS task_description,
-       t.status AS task_status,
-       t.priority AS task_priority,
-       t.start_date AS task_start_date,
-       t.due_date AS task_due_date
-FROM software_company.task AS t
-JOIN software_company.employee AS e ON t.employee_id = e.id
-JOIN software_company.team_lead AS tl ON e.team_lead_id = tl.id
-WHERE tl.id = 3;
-
-SELECT e.id AS employee_id,
-       e.name AS employee_name,
-       COUNT(t.id) AS task_count
-FROM software_company.employee AS e
-LEFT JOIN software_company.task AS t ON e.id = t.employee_id
-WHERE e.team_lead_id = 3
-GROUP BY e.id, e.name
-ORDER BY e.name;
-
-SELECT p.id, p.project_name, p.company_id, p.budget, p.notes, p.team_lead_id, p.status, p.start_date, p.due_date
-FROM software_company.projects p
-JOIN software_company.team_lead tl ON p.team_lead_id = tl.id
-JOIN software_company.employee e ON tl.id = e.team_lead_id
-WHERE e.id = 1;
-
-SELECT 
-    e.id AS event_id,
-    e.name AS event_name,
-    e.evnt_date AS event_date,
-    e.access AS event_access,
-    COUNT(DISTINCT p.id) AS project_count,
-    COUNT(t.id) AS task_count
-FROM
-    software_company.events e
-LEFT JOIN
-    software_company.projects p ON e.evnt_date = p.due_date
-LEFT JOIN
-    software_company.task t ON p.id = t.project_id AND e.evnt_date = t.due_date
-WHERE
-    e.evnt_date = '2024-07-16'  
-GROUP BY
-    e.id, e.name, e.evnt_date, e.access;
+SELECT
+    (SELECT COUNT(*) FROM software_company.events WHERE evnt_date = '2024-07-28') AS event_count,
+    (SELECT COUNT(*) FROM software_company.projects WHERE due_date = '2024-07-28') AS project_count,
+    (SELECT COUNT(*) FROM software_company.task WHERE due_date = '2024-07-28') AS task_count; 

@@ -252,7 +252,6 @@ const hide_new_project_form = () => {
 // ADD NEW PROJECT
 const save_new_project = () => {
   // Form Validation
-
   const fields = [
     new_project_name,
     new_project_clients,

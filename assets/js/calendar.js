@@ -1,5 +1,12 @@
 let currentYear = new Date().getFullYear();
-let currentMonth = new Date().getMonth() + 1; // Current month (1-12)
+let currentMonth = new Date().getMonth() + 1;
+const hiding_over_calendar = document.getElementById(`hiding_over_calendar`);
+
+// ADD EVENT
+const event_name = document.getElementById(`event_name`);
+const event_description = document.getElementById(`event_description`);
+const event_date = document.getElementById(`event_date`);
+const event_access = document.getElementById(`event_access`);
 
 // Function to generate calendar
 async function generateCalendar(year, month) {
@@ -32,6 +39,8 @@ async function generateCalendar(year, month) {
       // Fetch event counts asynchronously
       await fetchEventsCount(currentDateString)
         .then((counts) => {
+          if (counts == undefined) return;
+
           if (counts.event_count > 0) {
             const eventsHolder = `<div class="events_holder badge badge-primary"> Events ${counts.event_count} </div> </br>`;
             cell.innerHTML += eventsHolder;
@@ -85,7 +94,7 @@ async function fetchEventsCount(date) {
   }
 
   const json = await response.json();
-  return json[0]; // Assuming API returns an array with a single object containing counts
+  return json[0];
 }
 
 // Initialize calendar for current year and month
@@ -129,3 +138,108 @@ function showCustomMonth() {
   currentYear = inputYear;
   generateCalendar(currentYear, currentMonth);
 }
+
+// MAKE ADD EVENT FORM VISIBLE
+function toggleForm() {
+  var eventForm = document.getElementById("eventForm");
+  eventForm.classList.toggle("active");
+  document.getElementById(`eventForm2`).style.display = "block";
+
+  const fields = [event_name, event_description, event_date, event_access];
+
+  fields.forEach((field) => {
+    if (field.tagName.toLowerCase() !== "select") {
+      field.value = "";
+    } else {
+      field.value = "public";
+    }
+
+    field.style.border = "1px solid #eff1f5";
+  });
+}
+
+const hide_contents = (event) => {
+  event.target.style.display = "none";
+  var eventForm = document.getElementById("eventForm");
+  eventForm.classList.toggle("active");
+};
+
+// ADD NEW EVENT TO DATABASE
+const add_event_dt = () => {
+  // Form Validation
+  const fields = [event_name, event_description, event_date, event_access];
+
+  let validator = false;
+
+  fields.forEach((field) => {
+    if (field.value === "") {
+      field.style.border = "1px solid #f58389";
+      validator = true;
+    } else {
+      field.style.border = "1px solid #6ddc70";
+    }
+  });
+
+  if (validator) {
+    // Notification
+    let content = {
+      message: "Please fill out all fields to add a New Event.",
+      title: "Incomplete Event Information",
+      icon: "fas fa-calendar-times",
+      url: "calendar.html",
+      target: "_blank",
+    };
+
+    $.notify(content, {
+      type: "warning",
+      placement: {
+        from: "top",
+        align: "center",
+      },
+      time: 100,
+      delay: 1000,
+    });
+
+    return;
+  }
+
+  hiding_over_calendar.style.display = "block";
+  document.getElementById(`eventForm2`).style.display = "none";
+
+  fetch(`${localhost}/api/add_event`, {
+    method: "POST",
+    body: JSON.stringify({
+      name: event_name.value,
+      description: event_description.value,
+      evnt_date: event_date.value,
+      access: event_access.value,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      let content = {
+        message: "New Event Added to the Calendar",
+        title: "Event Added",
+        icon: "fas fa-calendar-check",
+        url: "calendar.html",
+        target: "_blank",
+      };
+
+      $.notify(content, {
+        type: `success`,
+        placement: {
+          from: `top`,
+          align: `center`,
+        },
+        time: 100,
+        delay: 1000,
+      });
+
+      setTimeout(function () {
+        window.location.href = "/calendar.html";
+      }, 3000);
+    });
+};
