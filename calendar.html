@@ -58,11 +58,11 @@
           <div class="logo-header" data-background-color="dark">
             <a href="index.html" class="logo">
               <img
-                src="https://vedhanthitechnologies.com/img/logo1.png"
+                src="assets/img/kaiadmin/logo_light.png"
                 alt="navbar brand"
                 class="navbar-brand"
                 height="20"
-              />
+              /> &nbsp;&nbsp;<span style="color: white;">Buffer Loop</span>
             </a>
             <div class="nav-toggle">
               <button class="btn btn-toggle toggle-sidebar">
@@ -141,13 +141,13 @@
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="dark">
               <a href="index.html" class="logo">
-                <img
-                  src="assets/img/kaiadmin/logo_light.svg"
-                  alt="navbar brand"
-                  class="navbar-brand"
-                  height="20"
-                />
-              </a>
+              <img
+                src="assets/img/kaiadmin/logo_light.png"
+                alt="navbar brand"
+                class="navbar-brand"
+                height="20"
+              /> &nbsp;&nbsp;<span style="color: white;">Buffer Loop</span>
+            </a>
               <button
                 class="navbar-toggler sidenav-toggler ms-auto"
                 type="button"
@@ -493,7 +493,7 @@
                             />
                           </div>
                           <div class="u-text">
-                            <h4>Hizrian</h4>
+                            <h4>Vishnu</h4>
                             <p class="text-muted">hello@example.com</p>
                             <a
                               href="profile.html"
@@ -542,6 +542,99 @@
                 </div>
               </div>
             </div>
+                        <!-- /////////////// TOP COUNTERS ////////////////// -->
+            <div class="row">
+              <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-5">
+                        <div class="icon-big text-center">
+                          <i
+                            class="icon-calendar text-primary"
+                            style="font-size: 35px"
+                          ></i>
+                        </div>
+                      </div>
+                      <div class="col-7 col-stats">
+                        <div class="numbers">
+                          <p class="card-category">This Month</p>
+                          <h4 class="card-title" id="total_calendar">0</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-5">
+                        <div class="icon-big text-center">
+                          <i
+                            class="far fa-calendar-check"
+                            style="font-size: 35px; color: rgb(204, 204, 33)"
+                          ></i>
+                        </div>
+                      </div>
+                      <div class="col-7 col-stats">
+                        <div class="numbers">
+                          <p class="card-category">Events</p>
+                          <h4 class="card-title" id="events_calendar">0</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-5">
+                        <div class="icon-big text-center">
+                          <i
+                            class="fas fa-project-diagram text-warning"
+                            style="font-size: 30px; font-weight: 100"
+                          ></i>
+                        </div>
+                      </div>
+                      <div class="col-7 col-stats">
+                        <div class="numbers">
+                          <p class="card-category">Project Due</p>
+                          <h4 class="card-title" id="project_calendar">0</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-5">
+                        <div class="icon-big text-center">
+                          <i
+                            class="fas fa-tasks text-success"
+                            style="font-size: 30px"
+                          ></i>
+                        </div>
+                      </div>
+                      <div class="col-7 col-stats">
+                        <div class="numbers">
+                          <p class="card-category">Task Due</p>
+                          <h4 class="card-title" id="task_calendar">
+                            0
+                          </h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <!-- /////////////// CLIENT DISPLAY /////////////// -->
             <div id="primary_client_display">
               <div class="row">
@@ -576,9 +669,9 @@
                       
                     <div class="calendar" id="calendar">
                       <div class="calendar-header" id="calendar-header">
-                        <button id="prevMonthBtn"><i class="fas fa-angle-double-left"></i></button>
+                        <button id="prevMonthBtn" class="mx-4"><i class="fas fa-angle-double-left"></i></button>
                         <div id="calendar-title"></div>
-                        <button id="nextMonthBtn"><i class="fas fa-angle-double-right"></i></button>
+                        <button id="nextMonthBtn" class="mx-4"><i class="fas fa-angle-double-right"></i></button>
                       </div>
                       <div class="calendar-weekdays">
                         <div class="calendar-weekday">Sun</div>
@@ -624,6 +717,29 @@
                     <button type="button" onclick="add_event_dt()" class="btn btn-submit btn-success py-2">ADD</button>
                 </div>
             </form>
+          </div>
+        </div>
+
+        <!-- ///////////// VIEW EVENT DETAILS /////////// -->
+        <div
+          onclick="hide_content(event)"
+          id="hide_view_calendar"
+          class="my-outer-layer"
+        >
+          <div
+            id="view_calendar_inner"
+            class="col-md-5 rounded px-5"
+            onclick="prevent_click(event)"
+          >
+            <div class="add_section_head pb-3" id="date_here">EVENT DATE HERE</div>
+              <div class="project_list table-responsive-min" style="min-height: 100px;">
+                <table id="event_details_table" >
+                </table>
+                <div id="no_data_view_event" class="fa-fade"> NO EVENTS 
+                </div>
+              </div>
+              <div class="btn_holder my-4 text-center"><div onclick="close_view_event()" class="btn py-1 btn-danger">Close</div></div>
+              
           </div>
         </div>
 

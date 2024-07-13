@@ -159,7 +159,3 @@ SELECT * FROM software_company.employee;
 SELECT * FROM software_company.task;
 SELECT * FROM software_company.events;
 
-SELECT
-    (SELECT COUNT(*) FROM software_company.events WHERE evnt_date = '2024-07-28') AS event_count,
-    (SELECT COUNT(*) FROM software_company.projects WHERE due_date = '2024-07-28') AS project_count,
-    (SELECT COUNT(*) FROM software_company.task WHERE due_date = '2024-07-28') AS task_count; 

@@ -407,6 +407,30 @@ app.post(`/api/get_project_with_id`, (req, res) => {
   );
 });
 
+// FETCH EVENT COUNT WITH MONTH
+app.post(`/api/get_event_month`, (req, res) => {
+  const { month, year } = req.body;
+
+  connection.query(
+    `SELECT 
+    (SELECT COUNT(*) FROM software_company.events WHERE YEAR(evnt_date) = ? AND MONTH(evnt_date) = ?) AS event_count,
+    (SELECT COUNT(*) FROM software_company.projects WHERE YEAR(due_date) = ? AND MONTH(due_date) = ?) AS project_due_count,
+    (SELECT COUNT(*) FROM software_company.task WHERE YEAR(due_date) = ? AND MONTH(due_date) = ?) AS task_due_count;`,
+    [year, month, year, month, year, month],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Project Data. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
 // FETCH PROJECT WITH TEAMLEAD ID
 app.post(`/api/get_projects_teamlead_id`, (req, res) => {
   const { id } = req.body;
@@ -591,7 +615,7 @@ app.post(`/api/get_employee_with_id`, (req, res) => {
   );
 });
 
-// FETCH EVENTS USING DATE
+// FETCH EVENTS COUNT USING DATE
 app.post(`/api/get_events_count`, (req, res) => {
   const { date } = req.body;
 
@@ -600,6 +624,34 @@ app.post(`/api/get_events_count`, (req, res) => {
     (SELECT COUNT(*) FROM software_company.events WHERE evnt_date = ? ) AS event_count,
     (SELECT COUNT(*) FROM software_company.projects WHERE due_date = ? ) AS project_count,
     (SELECT COUNT(*) FROM software_company.task WHERE due_date = ? ) AS task_count; `,
+    [date, date, date],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Events. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
+// FETCH EVENTS USING DATE
+app.post(`/api/get_events`, (req, res) => {
+  const { date } = req.body;
+
+  connection.query(
+    `SELECT  id, name, description, evnt_date, access AS event_access, 'event' AS type
+        FROM events WHERE  evnt_date = ?
+        UNION
+    SELECT  p.id, p.project_name AS name, CONCAT('Project: ', p.notes) AS description, p.due_date, 'public' AS event_access, 'project' AS type
+        FROM projects p WHERE p.due_date = ?
+        UNION
+    SELECT  t.id, t.name, t.description, t.due_date, 'public' AS event_access, 'task' AS type
+        FROM  task t WHERE  t.due_date = ?;`,
     [date, date, date],
     (err, result) => {
       if (err) {
@@ -923,6 +975,23 @@ app.delete(`/api/delete_teamlead`, (req, res) => {
       }
     }
   );
+});
+
+// DELETE EVENT LEAD USING ID
+app.delete(`/api/delete_event`, (req, res) => {
+  const { id } = req.body;
+
+  connection.query(`DELETE FROM events WHERE id = ?`, [id], (err, result) => {
+    if (err) {
+      console.error("Error Deleting Data:", err);
+      res.status(500).json({
+        success: false,
+        error: "Failed to Delete Event. Please try again later.",
+      });
+    } else {
+      res.json({ success: true });
+    }
+  });
 });
 
 // DELETE EMPLOYEE USING ID

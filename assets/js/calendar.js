@@ -2,20 +2,57 @@ let currentYear = new Date().getFullYear();
 let currentMonth = new Date().getMonth() + 1;
 const hiding_over_calendar = document.getElementById(`hiding_over_calendar`);
 
+// TOP COUNTERS
+const total_calendar = document.getElementById(`total_calendar`);
+const events_calendar = document.getElementById(`events_calendar`);
+const project_calendar = document.getElementById(`project_calendar`);
+const task_calendar = document.getElementById(`task_calendar`);
+
 // ADD EVENT
 const event_name = document.getElementById(`event_name`);
 const event_description = document.getElementById(`event_description`);
 const event_date = document.getElementById(`event_date`);
 const event_access = document.getElementById(`event_access`);
 
+// VIEW EVENTS
+const date_here = document.getElementById(`date_here`);
+const hide_view_calendar = document.getElementById(`hide_view_calendar`);
+const event_details_table = document.getElementById(`event_details_table`);
+const no_data_view_event = document.getElementById(`no_data_view_event`);
+
+// UPDATE TOP DISPLAY COUNTERS
+const update_counters = (month, year) => {
+  fetch(`${localhost}/api/get_event_month`, {
+    method: "POST",
+    body: JSON.stringify({
+      month: month,
+      year: year,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      total_calendar.innerHTML =
+        json[0].event_count +
+        json[0].project_due_count +
+        json[0].task_due_count;
+      events_calendar.innerHTML = json[0].event_count;
+      project_calendar.innerHTML = json[0].project_due_count;
+      task_calendar.innerHTML = json[0].task_due_count;
+    });
+};
+
 // Function to generate calendar
 async function generateCalendar(year, month) {
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const container = document.getElementById("calendar-body");
   const title = document.getElementById("calendar-title");
-  const currentDate = new Date(year, month - 1); // month is 0-indexed
+  const currentDate = new Date(year, month - 1);
 
   // Clear previous calendar if exists
+  update_counters;
   container.innerHTML = "";
   title.textContent = `${currentDate.toLocaleString("default", {
     month: "long",
@@ -24,6 +61,7 @@ async function generateCalendar(year, month) {
   // Calculate number of days in the month and the starting day
   const daysInMonth = new Date(year, month, 0).getDate();
   const startDay = new Date(year, month - 1, 1).getDay(); // day of the week (0 - 6)
+  update_counters(month, year);
 
   // Loop through each day in the calendar month
   for (let i = 0; i < 6 * 7; i++) {
@@ -63,7 +101,60 @@ async function generateCalendar(year, month) {
 
       // Add click event listener for the cell
       cell.addEventListener("click", () => {
-        console.log(`${formatDate_db(currentDateObj.toDateString())}`);
+        no_data_view_event.style.display = "none";
+        date_here.innerHTML = currentDateObj.toDateString();
+        hide_view_calendar.style.display = "block";
+
+        // TABLE
+        let temp = `<tr>
+                    <th style="width: 20%;">Name</th>
+                    <th style="width: 5%;">Type</th>
+                    <th style="width: 10%;">Access</th>
+                    <th style="width: 15%;">Action</th>
+                  </tr>`;
+
+        fetch(`${localhost}/api/get_events`, {
+          method: "POST",
+          body: JSON.stringify({
+            date: formatDate_db(currentDateObj.toDateString()),
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            if (json.length > 0) {
+              json.forEach((data) => {
+                temp += `<tr id="${data.id}" class="border-bottom">
+                          <td>${data.name}</td>`;
+                if (data.type === "event") {
+                  temp += `<td><span class="badge badge-primary">EVENT</span></td>`;
+                } else if (data.type === `project`) {
+                  temp += `<td><span class="badge badge-warning">PROJECT</span></td>`;
+                } else {
+                  temp += `<td><span class="badge badge-secondary">TASK</span></td>`;
+                }
+                temp += `<td>${data.event_access
+                  .slice(0, 1)
+                  .toUpperCase()}${data.event_access.slice(1)}</td>`;
+                if (data.type === "event") {
+                  temp += `<td><div onclick="edit_event(event)" class="btn btn-primary py-0 my-2 px-3 me-2">EDIT</div><div onclick="event_delete(event)" class="btn btn-danger py-0 my-2">X</div></td>
+                    </tr>`;
+                } else if (data.type === `project`) {
+                  temp += `<td><div onclick="visit_project()" class="btn btn-success ms-4 py-0 my-2 px-3 me-2">VIEW</div></td>
+                    </tr>`;
+                } else {
+                  temp += `<td><div onclick="visit_task()" class="btn btn-success ms-4 py-0 my-2 px-3 me-2">VIEW</div></td>
+                    </tr>`;
+                }
+              });
+            } else {
+              no_data_view_event.style.display = "block";
+            }
+            event_details_table.innerHTML = temp;
+            console.log(json);
+          });
       });
 
       // Add hover effects
@@ -242,4 +333,68 @@ const add_event_dt = () => {
         window.location.href = "/calendar.html";
       }, 3000);
     });
+};
+
+// CLOSE VIEW EVENT BOX
+const close_view_event = () => {
+  hide_view_calendar.style.display = "none";
+};
+
+// VISIT PROJECT PAGE
+const visit_project = () => {
+  window.location.href = `/project.html`;
+};
+
+// VISIT TASK PAGE
+const visit_task = () => {
+  window.location.href = `/task.html`;
+};
+
+// DELETE EVENT
+const event_delete = (event) => {
+  hiding_over_calendar.style.display = "block";
+  hide_view_calendar.style.display = "none";
+
+  let parent = event.target;
+  while (parent.id == ``) parent = parent.parentNode;
+
+  fetch(`${localhost}/api/delete_event`, {
+    method: "DELETE",
+    body: JSON.stringify({
+      id: parent.id,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      // Notification
+      let content = {
+        message: "Event Removed form the Calendar Successfully",
+        title: "Event Removed",
+        icon: "fas fa-calendar-times",
+        url: "calendar.html",
+        target: "_blank",
+      };
+
+      $.notify(content, {
+        type: "danger",
+        placement: {
+          from: "top",
+          align: "center",
+        },
+        time: 100,
+        delay: 1000,
+      });
+
+      setTimeout(function () {
+        window.location.href = "/calendar.html";
+      }, 3000);
+    });
+};
+
+// EDIT EVENT
+const edit_event = (event) => {
+  alert("Build on Progress 💻 ! @Source Git: Vishnu Thangaraj");
 };

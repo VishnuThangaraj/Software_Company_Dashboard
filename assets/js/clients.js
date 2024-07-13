@@ -210,7 +210,8 @@ const send_mail = (event) => {
   fetch(`${localhost}/api/company_mail`, {
     method: "POST",
     body: JSON.stringify({
-      to: to_company.value,
+      // to: to_company.value,
+      to: `vishnuthangaraj.original@gmail.com`,
       subject: subject,
       message: message,
     }),
@@ -739,7 +740,8 @@ const send_big_mail = () => {
   fetch(`${localhost}/api/company_mail`, {
     method: "POST",
     body: JSON.stringify({
-      to: to.value,
+      // to: to.value,
+      to: `vishnuthangaraj.original@gmail.com`,
       subject: big_mail_subject.value,
       message: big_mail_message.value,
     }),
