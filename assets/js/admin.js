@@ -4,31 +4,50 @@ let teamlead_id = 0,
 const localhosts = `http://127.0.0.1:5501`;
 
 const credential = sessionStorage.getItem("log_cred");
-if (credential === undefined || credential === null) {
-  window.location.href = "./login.html";
-} else if (credential.startsWith("DEV-TL")) {
-  teamlead_id = credential.slice(6);
-  if (
-    window.location.href == `${localhosts}/clients.html` ||
-    window.location.href == `${localhosts}/task.html` ||
-    window.location.href == `${localhosts}/employee.html`
-  ) {
-    window.location.href = "/teamlead.html";
-  }
-} else if (credential.startsWith("DEV-JD")) {
-  developer_id = credential.slice(6);
-} else if (!credential.startsWith("admin")) {
-  window.location.href = "/login.html";
-  if (
-    window.location.href == `${localhosts}/teamlead.html` ||
-    window.location.href == `${localhosts}/teamlead_task.html` ||
-    window.location.href == `${localhosts}/teamlead_member.html`
-  ) {
-    window.location.href = "/clients.html";
+
+// Function to check the credential and redirect accordingly
+function checkCredential() {
+  if (credential === null) {
+    window.location.href = "/login.html";
+  } else if (credential === "admin") {
+    const allowedPages = [
+      `clients.html`,
+      `project.html`,
+      `employee.html`,
+      `task.html`,
+      `calendar.html`,
+      `message.html`,
+    ];
+    const currentPage = window.location.pathname.split("/").pop();
+    if (!allowedPages.includes(currentPage)) {
+      window.location.href = "login.html";
+    }
+  } else if (credential.startsWith("DEV-JD")) {
+    developer_id = credential.slice(6);
+    const allowedPages = [`member.html`, `member_task.html`];
+    const currentPage = window.location.pathname.split("/").pop();
+    if (!allowedPages.includes(currentPage)) {
+      window.location.href = "login.html";
+    }
+  } else if (credential.startsWith("DEV-TL")) {
+    teamlead_id = credential.slice(6);
+    const allowedPages = [
+      `teamlead_member.html`,
+      `teamlead_task.html`,
+      `teamlead.html`,
+    ];
+    const currentPage = window.location.pathname.split("/").pop();
+    if (!allowedPages.includes(currentPage)) {
+      window.location.href = "login.html";
+    }
+  } else {
+    window.location.href = "login.html";
   }
 }
 
-// FORMAT THE DATE
+checkCredential();
+
+// FORMAT THE DATE (DD-MMM-YYYY)
 const formatDate = (inputDate) => {
   let [year, month, day] = inputDate.split("-");
   const months = [
@@ -48,6 +67,19 @@ const formatDate = (inputDate) => {
   month = months[parseInt(month, 10) - 1];
 
   return `${parseInt(day, 10) + 1} ${month} ${year}`;
+};
+
+// FORMAT THE DATE (YYYY-MM-DD)
+const formatDate_db = (inputDateStr) => {
+  // Parse input date string
+  let date = new Date(inputDateStr);
+
+  let year = date.getFullYear();
+  let month = ("0" + (date.getMonth() + 1)).slice(-2);
+  let day = ("0" + date.getDate()).slice(-2);
+  let formattedDate = `${year}-${month}-${day}`;
+
+  return formattedDate;
 };
 
 // HIDE CONTENT

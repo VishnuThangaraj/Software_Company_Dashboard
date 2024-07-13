@@ -570,6 +570,76 @@ app.post(`/api/get_employee_with_id`, (req, res) => {
   );
 });
 
+// FETCH EVENTS USING DATE
+app.post(`/api/get_events`, (req, res) => {
+  const { date } = req.body;
+
+  connection.query(
+    `SELECT 
+    e.id AS event_id,
+    e.name AS event_name,
+    e.evnt_date AS event_date,
+    e.access AS event_access,
+    COUNT(DISTINCT p.id) AS project_count,
+    COUNT(t.id) AS task_count
+    FROM
+        software_company.events e
+    LEFT JOIN
+        software_company.projects p ON e.evnt_date = p.due_date
+    LEFT JOIN
+        software_company.task t ON p.id = t.project_id AND e.evnt_date = t.due_date
+    WHERE
+        e.evnt_date = ?
+    GROUP BY
+        e.id, e.name, e.evnt_date, e.access;
+    `,
+    [date],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Events. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
+// FETCH EVENTS USING DATE
+app.post(`/api/get_events_count`, (req, res) => {
+  const { date } = req.body;
+
+  connection.query(
+    `SELECT
+        COUNT(DISTINCT p.id) AS project_count,
+        COUNT(DISTINCT e.id) AS event_count,
+        COUNT(DISTINCT t.id) AS task_count
+    FROM
+        software_company.projects p
+        LEFT JOIN software_company.events e ON p.id = e.id
+        LEFT JOIN software_company.task t ON p.id = t.project_id
+    WHERE
+        p.due_date = ?
+        OR e.evnt_date = ?
+        OR t.due_date = ?`,
+    [date, date, date],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Events. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
 // FETCH TEAMLEAD WITH ID
 app.post(`/api/get_teamlead_with_id`, (req, res) => {
   const { id } = req.body;

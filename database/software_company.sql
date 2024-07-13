@@ -73,6 +73,13 @@ CREATE TABLE software_company.task (
     FOREIGN KEY (project_id) REFERENCES software_company.projects(id)
 );
 
+CREATE TABLE software_company.events (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    evnt_date DATE, 
+    access VARCHAR(50) -- private or public
+);
+
 INSERT INTO software_company.admin_cred (user_id, password)
 VALUES
 	("admin","admin123");
@@ -120,6 +127,17 @@ VALUES
     ('Bug fixing in user dashboard', 'Fix reported bugs in the user dashboard module', 4, 'Progress', 'HIGH', '2024-07-18',3),
     ('Database schema optimization', 'Optimize database queries and indexes for performance', 4, 'Progress', 'MEDIUM', '2024-07-30',4);
 
+INSERT INTO software_company.events (name, evnt_date, access) VALUES
+    ('Summer Concert', '2024-07-01', 'public'),
+    ('Tech Conference', '2024-07-03', 'private'),
+    ('Product Launch', '2024-07-05', 'public'),
+    ('Company Retreat', '2024-07-08', 'private'),
+    ('Webinar Series', '2024-07-10', 'public'),
+    ('Workshop Session', '2024-07-12', 'public'),
+    ('Team Building Day', '2024-07-15', 'private'),
+    ('Networking Event', '2024-07-18', 'public'),
+    ('Training Seminar', '2024-07-20', 'private'),
+    ('Hackathon Event', '2024-07-22', 'public');
 
 SELECT * FROM software_company.client;
 SELECT * FROM software_company.admin_cred;
@@ -127,6 +145,7 @@ SELECT * FROM software_company.projects;
 SELECT * FROM software_company.team_lead;
 SELECT * FROM software_company.employee;
 SELECT * FROM software_company.task;
+SELECT * FROM software_company.events;
 
 SELECT t.id AS task_id,
        t.name AS task_name,
@@ -155,3 +174,20 @@ JOIN software_company.team_lead tl ON p.team_lead_id = tl.id
 JOIN software_company.employee e ON tl.id = e.team_lead_id
 WHERE e.id = 1;
 
+SELECT 
+    e.id AS event_id,
+    e.name AS event_name,
+    e.evnt_date AS event_date,
+    e.access AS event_access,
+    COUNT(DISTINCT p.id) AS project_count,
+    COUNT(t.id) AS task_count
+FROM
+    software_company.events e
+LEFT JOIN
+    software_company.projects p ON e.evnt_date = p.due_date
+LEFT JOIN
+    software_company.task t ON p.id = t.project_id AND e.evnt_date = t.due_date
+WHERE
+    e.evnt_date = '2024-07-16'  
+GROUP BY
+    e.id, e.name, e.evnt_date, e.access;

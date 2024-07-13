@@ -47,7 +47,7 @@
     <link rel="stylesheet" href="assets/css/plugins.min.css" />
     <link rel="stylesheet" href="assets/css/kaiadmin.min.css" />
     <link rel="stylesheet" href="assets/css/admin.css" />
-    <link rel="stylesheet" href="assets/css/task.css" />
+    <link rel="stylesheet" href="assets/css/calendar.css" />
   </head>
   <body>
     <div class="wrapper">
@@ -58,7 +58,7 @@
           <div class="logo-header" data-background-color="dark">
             <a href="index.html" class="logo">
               <img
-                src="assets/img/kaiadmin/logfo_light.svg"
+                src="https://vedhanthitechnologies.com/img/logo1.png"
                 alt="navbar brand"
                 class="navbar-brand"
                 height="20"
@@ -91,7 +91,7 @@
                 <h4 class="text-section">Components</h4>
               </li>
               <li class="nav-item submenu">
-                <a href="clients.html">
+                <a href="#sidebarLayouts">
                   <i class="fas fa-user-tie"></i>
                   <p>Clients</p>
                 </a>
@@ -102,25 +102,27 @@
                   <p>Project</p>
                 </a>
               </li>
-
+              
+              </li>
               <li class="nav-item submenu">
                 <a href="employee.html">
                   <i class="fas fa-users"></i>
                   <p>Employee</p>
                 </a>
               </li>
-              <li class="nav-item active submenu">
+              <li class="nav-item submenu">
                 <a href="task.html">
                   <i class="fas fa-tasks"></i>
                   <p>Tasks</p>
                 </a>
               </li>
-              <li class="nav-item submenu">
+              <li class="nav-item active submenu">
                 <a href="calendar.html">
                   <i class="fas fa-calendar"></i>
                   <p>Calendar</p>
                 </a>
               </li>
+
               <li class="nav-item submenu">
                 <a href="message.html">
                   <i class="fas fa-envelope"></i>
@@ -509,12 +511,7 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">Account Setting</a>
                         <div class="dropdown-divider"></div>
-                        <a
-                          class="dropdown-item"
-                          href="#"
-                          onclick="logout_admin()"
-                          >Logout</a
-                        >
+                        <a class="dropdown-item" href="#" onclick="logout_admin()">Logout</a>
                       </li>
                     </div>
                   </ul>
@@ -532,7 +529,6 @@
             >
               <div>
                 <h3 class="fw-bold mb-3">Dashboard</h3>
-                <!-- <h6 class="op-7 mb-2">Free Bootstrap 5 Admin Dashboard</h6> -->
               </div>
               <div class="ms-md-auto py-2 py-md-0">
                 <a href="#" class="btn btn-label-info btn-round me-2"
@@ -540,530 +536,66 @@
                 >
                 <div
                   class="btn btn-primary btn-round"
-                  onclick="view_add_task_form()"
+                  onclick="add_client_bar()"
                 >
-                  New Task
+                  Add Event
                 </div>
               </div>
             </div>
-            <!-- /////////////// TOP COUNTERS ////////////////// -->
-            <div class="row">
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-5">
-                        <div class="icon-big text-center">
-                          <i
-                            class="icon-drawer text-primary"
-                            style="font-size: 35px"
-                          ></i>
-                        </div>
-                      </div>
-                      <div class="col-7 col-stats">
-                        <div class="numbers">
-                          <p class="card-category">Total Tasks</p>
-                          <h4 class="card-title" id="total_task_count">0</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-5">
-                        <div class="icon-big text-center">
-                          <i
-                            class="icon-hourglass fa-3x"
-                            style="font-size: 35px; color: rgb(204, 204, 33)"
-                          ></i>
-                        </div>
-                      </div>
-                      <div class="col-7 col-stats">
-                        <div class="numbers">
-                          <p class="card-category">Pending</p>
-                          <h4 class="card-title" id="pending_task_count">0</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-5">
-                        <div class="icon-big text-center">
-                          <i
-                            class="icon-refresh text-warning"
-                            style="font-size: 35px; font-weight: 100"
-                          ></i>
-                        </div>
-                      </div>
-                      <div class="col-7 col-stats">
-                        <div class="numbers">
-                          <p class="card-category">In Progress</p>
-                          <h4 class="card-title" id="progress_task_count">0</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-5">
-                        <div class="icon-big text-center">
-                          <i
-                            class="icon-check text-success"
-                            style="font-size: 35px"
-                          ></i>
-                        </div>
-                      </div>
-                      <div class="col-7 col-stats">
-                        <div class="numbers">
-                          <p class="card-category">Completed</p>
-                          <h4 class="card-title" id="completed_task_count">
-                            0
-                          </h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- /////////////// TASK DISPLAY /////////////// -->
-            <div id="task_client_display">
+            <!-- /////////////// CLIENT DISPLAY /////////////// -->
+            <div id="primary_client_display">
               <div class="row">
-                <div class="col-md-9">
+                <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
                       <div class="card-head-row">
-                        <div class="card-title">Tasks</div>
+                        <div class="card-title">Calendar</div>
                         <div class="card-tools">
-                          <a
-                            href="#"
-                            class="btn btn-label-success btn-round btn-sm me-2"
-                          >
-                            <span class="btn-label">
-                              <i class="fa fa-pencil"></i>
-                            </span>
-                            Export
-                          </a>
-                          <a
-                            href="#"
-                            class="btn btn-label-info btn-round btn-sm"
-                          >
-                            <span class="btn-label">
-                              <i class="fa fa-print"></i>
-                            </span>
-                            Print
-                          </a>
+                          <span class="form-container">
+                          <input
+                            type="number"
+                            id="inputMonth"
+                            min="1"
+                            max="12"
+                            placeholder="Month (1-12)"
+                          />
+                          <input
+                            type="number"
+                            id="inputYear"
+                            min="1900"
+                            max="2100"
+                            placeholder="Year"
+                          />
+                           <button class="btn btn-rounded btn-secondary px-4 py-2" onclick="showCustomMonth()"><i class="fas fa-arrow-right" style="font-size: 20px;"></i></button></span>
                         </div>
                       </div>
                     </div>
-                    <div class="card-body table-responsive">
-                      <div class="table_holder ps-3">
-                        <table id="task_table"></table>
+                    <div class="card-body px-5" style="height: 1050px;">
+                      
+                    <div class="calendar" id="calendar">
+                      <div class="calendar-header" id="calendar-header">
+                        <button id="prevMonthBtn">&lt;</button>
+                        <div id="calendar-title"></div>
+                        <button id="nextMonthBtn">&gt;</button>
                       </div>
+                      <div class="calendar-weekdays">
+                        <div class="calendar-weekday">Sun</div>
+                        <div class="calendar-weekday">Mon</div>
+                        <div class="calendar-weekday">Tue</div>
+                        <div class="calendar-weekday">Wed</div>
+                        <div class="calendar-weekday">Thu</div>
+                        <div class="calendar-weekday">Fri</div>
+                        <div class="calendar-weekday">Sat</div>
+                      </div>
+                      <div class="calendar-grid" id="calendar-body"></div>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-3">
-                  <div class="card">
-                    <div class="card-header">
-                      <div class="card-title text-center">
-                        <i class="fas fa-user-plus fa-fade"></i>
-                        &nbsp; Resource Pool
-                      </div>
-                    </div>
-                    <div
-                      class="card-body table-responsive"
-                      style="height: 380px"
-                      id="resource_pool"
-                    ></div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- /////////////// ADD NEW TASK //////////// -->
-        <div
-          onclick="hide_content(event)"
-          id="add_new_task"
-          class="my-outer-layer"
-        >
-          <div
-            id="add_new_task_inner"
-            class="col-md-5 rounded-start"
-            onclick="prevent_click(event)"
-          >
-            <div class="add_section_head pb-4">NEW TASK</div>
-            <div class="row">
-              <div class="input-group ms-2" style="width: 400px">
-                <span class="input-group-text"
-                  ><i
-                    class="fas fa-buildingfas fa-tasks px-2"
-                    style="font-size: 18px"
-                  ></i>
-                </span>
-                <input
-                  id="new_task_name"
-                  type="text"
-                  class="form-control form_input_level add_user_input py-3"
-                  placeholder="Task Name"
-                />
-              </div>
-            </div>
-
-            <div class="row pt-2">
-              <div class="form-group ms-2">
-                <div class="input-group ms-2 pt-3" style="width: 370px">
-                  <span class="input-group-text"
-                    ><i
-                      class="fas fa-sticky-note px-2"
-                      style="font-size: 20px"
-                    ></i>
-                  </span>
-                  <input
-                    id="new_task_description"
-                    type="text"
-                    class="form-control form_input_level py-3"
-                    placeholder="Description"
-                    aria-describedby="basic-addon2"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="row pt-2">
-              <div
-                class="input-group ms-2 pt-3"
-                style="width: 400px; padding-inline-start: 18px"
-              >
-                <span class="input-group-text" style="padding-inline: 9px"
-                  ><i class="far fa-clock px-2" style="font-size: 20px"></i>
-                </span>
-                <input
-                  style="height: 50px; width: 312px; border: 1px solid #e6e6e6"
-                  type="date"
-                  id="due_date_task"
-                  name="end_date"
-                  class="px-3 form_input_level rounded-end"
-                  required
-                />
-              </div>
-            </div>
-
-            <div class="row mt-2 ps-3 pt-3" style="padding-inline: 10px">
-              <div class="form-group">
-                <div class="input-group">
-                  <span class="input-group-text" id="basic-addon3"
-                    ><i
-                      class="fas fa-project-diagram"
-                      style="
-                        width: 35px;
-                        height: 40px;
-                        padding-top: 10px;
-                        font-size: 18px;
-                      "
-                    ></i>
-                    Project
-                  </span>
-                  <select
-                    class="form-select form_input_level form-control py-3 ps-4"
-                    id="new_task_project"
-                    onchange="render_members()"
-                  ></select>
-                </div>
-              </div>
-            </div>
-
-            <div class="row mt-2 ps-3 pt-2" style="padding-inline: 10px">
-              <div class="form-group">
-                <div class="input-group">
-                  <span class="input-group-text" id="basic-addon3"
-                    ><i
-                      class="fas fa-user-alt"
-                      style="
-                        width: 35px;
-                        height: 40px;
-                        padding-top: 10px;
-                        font-size: 15px;
-                      "
-                    ></i
-                    >Member
-                  </span>
-                  <select
-                    class="form-select form_input_level form-control py-3 ps-4"
-                    id="new_task_user"
-                    disabled
-                  ></select>
-                </div>
-              </div>
-            </div>
-
-            <div class="row mt-2 ps-3 pt-2" style="padding-inline: 10px">
-              <div class="form-group">
-                <div class="input-group">
-                  <span class="input-group-text"
-                    ><i
-                      class="fas fa-fire"
-                      style="
-                        width: 35px;
-                        height: 40px;
-                        padding-top: 10px;
-                        font-size: 18px;
-                      "
-                    ></i>
-                    Priority
-                  </span>
-                  <select
-                    class="form-select form_input_level form-control py-3 ps-4"
-                    id="new_task_priority"
-                  >
-                    <option value="LOW">Low</option>
-                    <option value="MEDIUM">Medium</option>
-                    <option value="HIGH">High</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="my-btn-holder mt-5">
-                <div
-                  class="btn btn-danger px-5 me-5"
-                  onclick="hide_add_task_form()"
-                >
-                  CLOSE
-                </div>
-                <div
-                  id="new_client_add"
-                  class="btn btn-success px-5"
-                  onclick="save_new_task()"
-                >
-                  ADD
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- /////////////// EDIT TASK //////////// -->
-        <div
-          onclick="hide_content(event)"
-          id="edit_task"
-          class="my-outer-layer"
-        >
-          <div
-            id="edit_task_inner"
-            class="col-md-5 rounded-start"
-            onclick="prevent_click(event)"
-          >
-            <div class="add_section_head pb-4">EDIT TASK</div>
-            <div class="row">
-              <div class="input-group ms-2" style="width: 400px">
-                <span class="input-group-text"
-                  ><i
-                    class="fas fa-buildingfas fa-tasks px-2"
-                    style="font-size: 18px"
-                  ></i>
-                </span>
-                <input
-                  id="edit_task_name"
-                  type="text"
-                  class="form-control form_input_level edit_form_input_level add_user_input py-3"
-                  placeholder="Task Name"
-                />
-              </div>
-            </div>
-
-            <div class="row pt-2">
-              <div class="form-group ms-2">
-                <div class="input-group ms-2 pt-3" style="width: 370px">
-                  <span class="input-group-text"
-                    ><i
-                      class="fas fa-sticky-note px-2"
-                      style="font-size: 20px"
-                    ></i>
-                  </span>
-                  <input
-                    id="edit_task_description"
-                    type="text"
-                    class="form-control form_input_level edit_form_input_level py-3"
-                    placeholder="Description"
-                    aria-describedby="basic-addon2"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="row pt-2">
-              <div
-                class="input-group ms-2 pt-3"
-                style="width: 400px; padding-inline-start: 18px"
-              >
-                <span class="input-group-text" style="padding-inline: 9px"
-                  ><i class="far fa-clock px-2" style="font-size: 20px"></i>
-                </span>
-                <input
-                  style="height: 50px; width: 312px; border: 1px solid #e6e6e6"
-                  type="date"
-                  id="edit_date_task"
-                  name="end_date"
-                  class="px-3 edit_form_input_level rounded-end"
-                  required
-                />
-              </div>
-            </div>
-
-            <div class="row mt-2 ps-3 pt-3" style="padding-inline: 10px">
-              <div class="form-group">
-                <div class="input-group">
-                  <span class="input-group-text" id="basic-addon3"
-                    ><i
-                      class="fas fa-project-diagram"
-                      style="
-                        width: 35px;
-                        height: 40px;
-                        padding-top: 10px;
-                        font-size: 18px;
-                      "
-                    ></i>
-                    Project
-                  </span>
-                  <select
-                    class="form-select edit_form_input_level form-control py-3 ps-4"
-                    id="edit_task_project"
-                    onclick="render_members_edit()"
-                  ></select>
-                </div>
-              </div>
-            </div>
-            <div class="row mt-2 ps-3 pt-2" style="padding-inline: 10px">
-              <div class="form-group">
-                <div class="input-group">
-                  <span class="input-group-text" id="basic-addon3"
-                    ><i
-                      class="fas fa-user-alt"
-                      style="
-                        width: 35px;
-                        height: 40px;
-                        padding-top: 10px;
-                        font-size: 15px;
-                      "
-                    ></i
-                    >Member
-                  </span>
-                  <select
-                    class="form-select edit_form_input_level form-control py-3 ps-4"
-                    id="edit_task_user"
-                  ></select>
-                </div>
-              </div>
-            </div>
-            <div class="row mt-2 ps-3 pt-2" style="padding-inline: 10px">
-              <div class="form-group">
-                <div class="input-group">
-                  <span class="input-group-text"
-                    ><i
-                      class="fas fa-fire"
-                      style="
-                        width: 35px;
-                        height: 40px;
-                        padding-top: 10px;
-                        font-size: 18px;
-                      "
-                    ></i>
-                    Priority
-                  </span>
-                  <select
-                    class="form-select edit_form_input_level form-control py-3 ps-4"
-                    id="edit_task_priority"
-                  >
-                    <option value="LOW">Low</option>
-                    <option value="MEDIUM">Medium</option>
-                    <option value="HIGH">High</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="my-btn-holder mt-5">
-                <div
-                  class="btn btn-danger px-5 me-5"
-                  onclick="hide_edit_task_form()"
-                >
-                  CLOSE
-                </div>
-                <div
-                  id="new_client_add"
-                  class="btn btn-success px-5"
-                  onclick="update_task()"
-                >
-                  UPDATE
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ///////////// DELETE CONFIRMATION OVERLAY //////////// -->
-        <div
-          id="delete_overlay_task"
-          class="swal-overlay swal-overlay--show-modal"
-          tabindex="-1"
-          style="display: none"
-        >
-          <div class="swal-modal" role="dialog" aria-modal="true">
-            <div class="swal-title">Are you sure?</div>
-            <div class="swal-text">You won't be able to revert this!</div>
-            <div class="swal-footer">
-              <div class="swal-button-container">
-                <button
-                  id="proceed_task_delete"
-                  class="swal-button swal-button--confirm btn btn-success"
-                >
-                  Yes, delete it!
-                </button>
-
-                <div class="swal-button__loader">
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                </div>
-              </div>
-              <div class="swal-button-container">
-                <button
-                  id="cancel_task_delete"
-                  class="swal-button swal-button--cancel btn btn-danger"
-                >
-                  Cancel
-                </button>
-
-                <div class="swal-button__loader">
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- /////////////// HIDING OVERLAY /////////////// -->
-        <div id="hiding_over_task" class="hide_overlay"></div>
-
+      
         <footer class="footer">
           <div class="container-fluid d-flex justify-content-between">
             <nav class="pull-left">
@@ -1127,9 +659,9 @@
     <script src="assets/js/kaiadmin.min.js"></script>
 
     <!-- External JS -->
-    <script src="assets/js/config.js"></script>
+     <script src="assets/js/config.js"></script>
     <script src="assets/js/admin.js"></script>
-    <script src="assets/js/task.js"></script>
+    <script src="assets/js/calendar.js"></script>
 
     <!-- INTERNAL SCRIPT -->
   </body>
