@@ -202,16 +202,15 @@ const send_mail = (event) => {
   let to_company = "";
 
   Array.from(company_mail_list.children).forEach((element) => {
-    if (element.value === company_mail_list.value) {
-      to_company = element.innerHTML;
+    if (element.value == company_mail_list.value) {
+      to_company = element.value;
     }
   });
 
   fetch(`${localhost}/api/company_mail`, {
     method: "POST",
     body: JSON.stringify({
-      // to: to_company.value,
-      to: `vishnuthangaraj.original@gmail.com`,
+      to: to_company.value,
       subject: subject,
       message: message,
     }),
@@ -740,8 +739,7 @@ const send_big_mail = () => {
   fetch(`${localhost}/api/company_mail`, {
     method: "POST",
     body: JSON.stringify({
-      // to: to.value,
-      to: `vishnuthangaraj.original@gmail.com`,
+      to: to.value,
       subject: big_mail_subject.value,
       message: big_mail_message.value,
     }),

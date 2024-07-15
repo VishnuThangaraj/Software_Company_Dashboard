@@ -94,3 +94,14 @@
 .slider:focus::-moz-range-thumb {
   background: #45a049;
 }
+
+#view_task_inner {
+  position: fixed;
+  top: 54.5%;
+  height: 38%;
+  left: 55%;
+  width: 35%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #ffffffe5;
+}

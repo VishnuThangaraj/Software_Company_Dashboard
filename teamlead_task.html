@@ -9,7 +9,7 @@
     />
     <link
       rel="icon"
-      href="assets/img/kaiadmin/favicon.ico"
+      href="assets/img/myadmin/favicon.ico"
       type="image/x-icon"
     />
 
@@ -45,7 +45,7 @@
     <!-- CSS Files -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/css/plugins.min.css" />
-    <link rel="stylesheet" href="assets/css/kaiadmin.min.css" />
+    <link rel="stylesheet" href="assets/css/myadmin.min.css" />
     <link rel="stylesheet" href="assets/css/admin.css" />
     <link rel="stylesheet" href="assets/css/task.css" />
   </head>
@@ -58,7 +58,7 @@
           <div class="logo-header" data-background-color="dark">
             <a href="index.html" class="logo">
               <img
-                src="assets/img/kaiadmin/logo_light.png"
+                src="assets/img/myadmin/logo_light.png"
                 alt="navbar brand"
                 class="navbar-brand"
                 height="20"
@@ -110,9 +110,9 @@
                 </a>
               </li>
               <li class="nav-item submenu">
-                <a href="teamlead_message.html">
-                  <i class="fas fa-envelope"></i>
-                  <p>Message</p>
+                <a href="teamlead_calendar.html">
+                  <i class="fas fa-calendar"></i>
+                  <p>Calendar</p>
                 </a>
               </li>
             </ul>
@@ -128,7 +128,7 @@
             <div class="logo-header" data-background-color="dark">
               <a href="index.html" class="logo">
                 <img
-                  src="assets/img/kaiadmin/logo_light.png"
+                  src="assets/img/myadmin/logo_light.png"
                   alt="navbar brand"
                   class="navbar-brand"
                   height="20"
@@ -465,7 +465,7 @@
                     </div>
                     <span class="profile-username">
                       <span class="op-7">Hi,</span>
-                      <span class="fw-bold">Vishnu</span>
+                      <span class="fw-bold" id="tl_name_current2">Vishnu</span>
                     </span>
                   </a>
                   <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -480,8 +480,10 @@
                             />
                           </div>
                           <div class="u-text">
-                            <h4>Vishnu</h4>
-                            <p class="text-muted">hello@example.com</p>
+                            <h4 id="tl_name_current1">Vishnu</h4>
+                            <p class="text-muted" id="email_current_tl">
+                              hello@example.com
+                            </p>
                             <a
                               href="profile.html"
                               class="btn btn-xs btn-secondary btn-sm"
@@ -493,7 +495,7 @@
                       <li>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">My Profile</a>
-                        <a class="dropdown-item" href="#">My Balance</a>
+                        
                         <a class="dropdown-item" href="#">Inbox</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">Account Setting</a>
@@ -1046,6 +1048,38 @@
           </div>
         </div>
 
+        <!-- //////////////////// VIEW TASK DETAILS /////////////// -->
+        <div
+          onclick="hide_content(event)"
+          id="hide_view_task"
+          class="my-outer-layer"
+        >
+          <div
+            id="view_task_inner"
+            class="col-md-5 rounded px-5"
+            onclick="prevent_click(event)"
+          >
+            <div class="add_section_head pb-3" id="show_task_name">
+              TASK NAME HERE
+            </div>
+            <div class="project_list" style="min-height: 100px">
+              <div class="pt-3" style="font-size: 19px">
+                PROGRESS PERCENTAGE :
+                <span id="percentage_show_task">50 %</span>
+              </div>
+              <div class="pt-4" style="font-size: 19px; font-weight: 600">
+                COMMENTS
+              </div>
+              <div class="ms-5 ps-5 pt-2" id="comment_show_task"></div>
+            </div>
+            <div class="btn_holder my-4 pt-4 text-center">
+              <div onclick="hide_task_details()" class="btn py-1 btn-danger">
+                Close
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- /////////////// HIDING OVERLAY /////////////// -->
         <div id="hiding_over_task" class="hide_overlay"></div>
 
@@ -1068,8 +1102,10 @@
             </div>
             <div>
               Distributed by
-              <a target="_blank" href="https://vedhanthitechnologies.com/"
-                >Vedhanthi Technologies</a
+              <a
+                target="_blank"
+                href="https://www.linkedin.com/in/vishnuthangaraj/"
+                >Vishnu</a
               >.
             </div>
           </div>
@@ -1086,30 +1122,17 @@
     <!-- jQuery Scrollbar -->
     <script src="assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
 
-    <!-- Chart JS -->
-    <script src="assets/js/plugin/chart.js/chart.min.js"></script>
-
     <!-- jQuery Sparkline -->
     <script src="assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-
-    <!-- Chart Circle -->
-    <script src="assets/js/plugin/chart-circle/circles.min.js"></script>
-
-    <!-- Datatables -->
-    <script src="assets/js/plugin/datatables/datatables.min.js"></script>
 
     <!-- Bootstrap Notify -->
     <script src="assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
 
-    <!-- jQuery Vector Maps -->
-    <script src="assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
-    <script src="assets/js/plugin/jsvectormap/world.js"></script>
-
     <!-- Sweet Alert -->
     <script src="assets/js/plugin/sweetalert/sweetalert.min.js"></script>
 
-    <!-- Kaiadmin JS -->
-    <script src="assets/js/kaiadmin.min.js"></script>
+    <!-- myadmin JS -->
+    <script src="assets/js/myadmin.min.js"></script>
 
     <!-- External JS -->
     <script src="assets/js/config.js"></script>

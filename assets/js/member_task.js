@@ -261,6 +261,7 @@ const update_task_visible = (event) => {
       }
       output.innerHTML = myRange.value + "%";
       const value = data[0].percentage;
+      slider.min = data[0].percentage;
       slider.style.background = `linear-gradient(to right, #4CAF50 0%, #4CAF50 ${value}%, #ddd ${value}%, #ddd 100%)`;
       comment_task.innerHTML = data[0].comments;
     });

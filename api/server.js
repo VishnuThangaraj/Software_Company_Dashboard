@@ -431,6 +431,55 @@ app.post(`/api/get_event_month`, (req, res) => {
   );
 });
 
+// FETCH EVENT COUNT WITH MONTH (TEAMLEAD)
+app.post(`/api/get_event_month_tl`, (req, res) => {
+  const { month, year, teamlead } = req.body;
+
+  connection.query(
+    `SELECT 
+    (SELECT COUNT(*) FROM software_company.events WHERE YEAR(evnt_date) = ? AND MONTH(evnt_date) = ? AND (access = 'public'OR access = 'teamlead')) AS event_count,
+    (SELECT COUNT(*) FROM software_company.projects WHERE YEAR(due_date) = ? AND MONTH(due_date) = ? AND team_lead_id = ?) AS project_due_count,
+    (SELECT COUNT(t.id) AS task_count FROM software_company.task t JOIN software_company.employee e ON t.employee_id = e.id WHERE e.team_lead_id = ?
+      AND YEAR(t.due_date) = ? AND MONTH(t.due_date) = ?) AS task_due_count;`,
+    [year, month, year, month, teamlead, teamlead, year, month],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Project Data. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
+// FETCH EVENT COUNT WITH MONTH (MEMBER)
+app.post(`/api/get_event_month_mbr`, (req, res) => {
+  const { month, year, member } = req.body;
+
+  connection.query(
+    `SELECT 
+    (SELECT COUNT(*) FROM software_company.events WHERE YEAR(evnt_date) = ? AND MONTH(evnt_date) = ? AND access = 'public') AS event_count,
+    (SELECT COUNT(*) FROM software_company.projects WHERE YEAR(due_date) = ? AND MONTH(due_date) = ?) AS project_due_count,
+    (SELECT COUNT(*) FROM software_company.task WHERE YEAR(due_date) = ? AND MONTH(due_date) = ? AND employee_id = ?) AS task_due_count;`,
+    [year, month, year, month, year, month, member],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Project Data. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
 // FETCH PROJECT WITH TEAMLEAD ID
 app.post(`/api/get_projects_teamlead_id`, (req, res) => {
   const { id } = req.body;
@@ -594,7 +643,7 @@ app.get(`/api/get_all_client_names_id`, (req, res) => {
   });
 });
 
-// FETCH ALL EMPLOYEE WITH ID
+// FETCH EMPLOYEE WITH ID
 app.post(`/api/get_employee_with_id`, (req, res) => {
   const { id } = req.body;
 
@@ -639,6 +688,64 @@ app.post(`/api/get_events_count`, (req, res) => {
   );
 });
 
+// FETCH EVENTS COUNT USING DATE (TEAMLEAD)
+app.post(`/api/get_events_count_tl`, (req, res) => {
+  const { date, teamlead } = req.body;
+
+  connection.query(
+    `SELECT
+    (SELECT COUNT(*) FROM software_company.events WHERE evnt_date = ? AND (access = 'public' OR access = 'teamlead')) AS event_count,
+    (SELECT COUNT(*) FROM software_company.projects WHERE due_date = ? AND team_lead_id = ?) AS project_count,
+    (SELECT COUNT(t.id)
+     FROM software_company.task t
+     JOIN software_company.employee e ON t.employee_id = e.id
+     WHERE e.team_lead_id = ?
+     AND t.due_date = ?
+    ) AS task_count;
+ `,
+    [date, date, teamlead, teamlead, date],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Events. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
+// FETCH EVENTS COUNT USING DATE (MEMBER)
+app.post(`/api/get_events_count_mbr`, (req, res) => {
+  const { date, member } = req.body;
+
+  connection.query(
+    `SELECT
+    (SELECT COUNT(*) FROM software_company.events WHERE evnt_date = ? AND access = 'public') AS event_count,
+    (SELECT COUNT(p.id) 
+      FROM software_company.employee e
+      JOIN software_company.team_lead tl ON e.team_lead_id = tl.id
+      JOIN software_company.projects p ON tl.id = p.team_lead_id
+      WHERE due_date = ? AND e.id = ?) AS project_count,
+    (SELECT COUNT(*) FROM software_company.task WHERE due_date = ? AND employee_id = ?) AS task_count; `,
+    [date, date, member, date, member],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Events. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
 // FETCH EVENTS USING DATE
 app.post(`/api/get_events`, (req, res) => {
   const { date } = req.body;
@@ -653,6 +760,63 @@ app.post(`/api/get_events`, (req, res) => {
     SELECT  t.id, t.name, t.description, t.due_date, 'public' AS event_access, 'task' AS type
         FROM  task t WHERE  t.due_date = ?;`,
     [date, date, date],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Events. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
+// FETCH EVENTS USING DATE (TEAMLEAD)
+app.post(`/api/get_events_tl`, (req, res) => {
+  const { date, teamlead } = req.body;
+
+  connection.query(
+    `SELECT  id, name, description, evnt_date, access AS event_access, 'event' AS type
+        FROM events WHERE  evnt_date = ? AND (access = 'public' OR access = 'teamlead')
+        UNION
+    SELECT  p.id, p.project_name AS name, CONCAT('Project: ', p.notes) AS description, p.due_date, 'public' AS event_access, 'project' AS type
+        FROM projects p WHERE p.due_date = ? AND team_lead_id = ?
+        UNION
+    SELECT t.id, t.name, t.description, t.due_date, 'public' AS event_access, 'task' AS type
+        FROM software_company.task t JOIN software_company.employee e ON t.employee_id = e.id WHERE e.team_lead_id = ?
+        AND t.due_date = ?`,
+    [date, date, teamlead, teamlead, date],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Fetch Events. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
+// FETCH EVENTS USING DATE (MEMBER)
+app.post(`/api/get_events_mbr`, (req, res) => {
+  const { date, member } = req.body;
+
+  connection.query(
+    `SELECT  id, name, description, evnt_date, access AS event_access, 'event' AS type
+        FROM events WHERE  evnt_date = ? AND access = 'public'
+        UNION
+    SELECT p.id, p.project_name AS name, CONCAT('Project: ', p.notes) AS description, p.due_date, 'public' AS event_access, 'project' AS type
+        FROM projects p JOIN employee e ON p.team_lead_id = e.team_lead_id WHERE p.due_date = ? AND e.id = ?
+        UNION
+    SELECT  t.id, t.name, t.description, t.due_date, 'public' AS event_access, 'task' AS type
+        FROM  task t WHERE  t.due_date = ? AND employee_id = ?`,
+    [date, date, member, date, member],
     (err, result) => {
       if (err) {
         console.error("Error Fetching Data:", err);

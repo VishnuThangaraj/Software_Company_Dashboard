@@ -22,11 +22,12 @@ const no_data_view_event = document.getElementById(`no_data_view_event`);
 
 // UPDATE TOP DISPLAY COUNTERS
 const update_counters = (month, year) => {
-  fetch(`${localhost}/api/get_event_month`, {
+  fetch(`${localhost}/api/get_event_month_tl`, {
     method: "POST",
     body: JSON.stringify({
       month: month,
       year: year,
+      teamlead: teamlead_id,
     }),
     headers: {
       "Content-type": "application/json; charset=UTF-8",
@@ -34,6 +35,7 @@ const update_counters = (month, year) => {
   })
     .then((response) => response.json())
     .then((json) => {
+      console.log(json);
       total_calendar.innerHTML =
         json[0].event_count +
         json[0].project_due_count +
@@ -114,10 +116,11 @@ async function generateCalendar(year, month) {
                     <th style="width: 5%;">Action</th>
                   </tr>`;
 
-        fetch(`${localhost}/api/get_events`, {
+        fetch(`${localhost}/api/get_events_tl`, {
           method: "POST",
           body: JSON.stringify({
             date: formatDate_db(currentDateObj.toDateString()),
+            teamlead: teamlead_id,
           }),
           headers: {
             "Content-type": "application/json; charset=UTF-8",
@@ -141,7 +144,7 @@ async function generateCalendar(year, month) {
                   .slice(0, 1)
                   .toUpperCase()}${data.event_access.slice(1)}</td>`;
                 if (data.type === "event") {
-                  temp += `<td><div onclick="event_delete(event)" class=" btn btn-danger py-1 px-3 my-2"><i class="icon-trash"></i></div></td>
+                  temp += `<td><div id="del_btn" onclick="event_delete(event)" class=" btn btn-danger py-1 px-3 my-2" ><i class="icon-trash"></i></div></td>
                     </tr>`;
                 } else if (data.type === `project`) {
                   temp += `<td><div onclick="visit_project()" class="btn btn-success py-1 my-2 px-3 me-2"><i class="icon-action-redo"></i></div></td>
@@ -174,9 +177,9 @@ async function generateCalendar(year, month) {
 
 // Function to fetch event counts for a specific date
 async function fetchEventsCount(date) {
-  const response = await fetch(`${localhost}/api/get_events_count`, {
+  const response = await fetch(`${localhost}/api/get_events_count_tl`, {
     method: "POST",
-    body: JSON.stringify({ date }),
+    body: JSON.stringify({ date, teamlead: teamlead_id }),
     headers: {
       "Content-type": "application/json; charset=UTF-8",
     },
@@ -257,86 +260,6 @@ const hide_contents = (event) => {
   eventForm.classList.toggle("active");
 };
 
-// ADD NEW EVENT TO DATABASE
-const add_event_dt = () => {
-  // Form Validation
-  const fields = [event_name, event_description, event_date, event_access];
-
-  let validator = false;
-
-  fields.forEach((field) => {
-    if (field.value === "") {
-      field.style.border = "1px solid #f58389";
-      validator = true;
-    } else {
-      field.style.border = "1px solid #6ddc70";
-    }
-  });
-
-  if (validator) {
-    // Notification
-    let content = {
-      message: "Please fill out all fields to add a New Event.",
-      title: "Incomplete Event Information",
-      icon: "fas fa-calendar-times",
-      url: "calendar.html",
-      target: "_blank",
-    };
-
-    $.notify(content, {
-      type: "warning",
-      placement: {
-        from: "top",
-        align: "center",
-      },
-      time: 100,
-      delay: 1000,
-    });
-
-    return;
-  }
-
-  hiding_over_calendar.style.display = "block";
-  document.getElementById(`eventForm2`).style.display = "none";
-
-  fetch(`${localhost}/api/add_event`, {
-    method: "POST",
-    body: JSON.stringify({
-      name: event_name.value,
-      description: event_description.value,
-      evnt_date: event_date.value,
-      access: event_access.value,
-    }),
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-  })
-    .then((response) => response.json())
-    .then((json) => {
-      let content = {
-        message: "New Event Added to the Calendar",
-        title: "Event Added",
-        icon: "fas fa-calendar-check",
-        url: "calendar.html",
-        target: "_blank",
-      };
-
-      $.notify(content, {
-        type: `success`,
-        placement: {
-          from: `top`,
-          align: `center`,
-        },
-        time: 100,
-        delay: 1000,
-      });
-
-      setTimeout(function () {
-        window.location.href = "/calendar.html";
-      }, 3000);
-    });
-};
-
 // CLOSE VIEW EVENT BOX
 const close_view_event = () => {
   hide_view_calendar.style.display = "none";
@@ -344,56 +267,34 @@ const close_view_event = () => {
 
 // VISIT PROJECT PAGE
 const visit_project = () => {
-  window.location.href = `/project.html`;
+  window.location.href = `/teamlead_project.html`;
 };
 
 // VISIT TASK PAGE
 const visit_task = () => {
-  window.location.href = `/task.html`;
+  window.location.href = `/teamlead_task.html`;
 };
 
 // DELETE EVENT
 const event_delete = (event) => {
-  hiding_over_calendar.style.display = "block";
-  hide_view_calendar.style.display = "none";
+  // Notification
+  let content = {
+    message: "Access Denied to Remove Event from Calendar",
+    title: "Access Denied",
+    icon: "fas fa-calendar-times",
+    url: "teamlead_calendar.html",
+    target: "_blank",
+  };
 
-  let parent = event.target;
-  while (parent.id == ``) parent = parent.parentNode;
-
-  fetch(`${localhost}/api/delete_event`, {
-    method: "DELETE",
-    body: JSON.stringify({
-      id: parent.id,
-    }),
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
+  $.notify(content, {
+    type: "warning",
+    placement: {
+      from: "top",
+      align: "center",
     },
-  })
-    .then((response) => response.json())
-    .then((json) => {
-      // Notification
-      let content = {
-        message: "Event Removed form the Calendar Successfully",
-        title: "Event Removed",
-        icon: "fas fa-calendar-times",
-        url: "calendar.html",
-        target: "_blank",
-      };
-
-      $.notify(content, {
-        type: "danger",
-        placement: {
-          from: "top",
-          align: "center",
-        },
-        time: 100,
-        delay: 1000,
-      });
-
-      setTimeout(function () {
-        window.location.href = "/calendar.html";
-      }, 3000);
-    });
+    time: 100,
+    delay: 1000,
+  });
 };
 
 // EDIT EVENT

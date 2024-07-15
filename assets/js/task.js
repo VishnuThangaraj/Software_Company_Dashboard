@@ -25,6 +25,12 @@ const edit_task_priority = document.getElementById(`edit_task_priority`);
 const edit_task_user = document.getElementById(`edit_task_user`);
 const edit_date_task = document.getElementById(`edit_date_task`);
 
+// View Task
+const hide_view_task = document.getElementById(`hide_view_task`);
+const show_task_name = document.getElementById(`show_task_name`);
+const percentage_show_task = document.getElementById(`percentage_show_task`);
+const comment_show_task = document.getElementById(`comment_show_task`);
+
 let current_editing_task = 1;
 
 // Edit Task
@@ -55,7 +61,7 @@ const make_task_table_ready = () => {
       total_task = data.length;
       data.forEach((task) => {
         let current_date = `${task.due_date.slice(0, 10)}`;
-        temp += `<tr id="${task.id}" class="border-bottom">`;
+        temp += `<tr id="${task.id}" class="border-bottom" onclick="view_pannel(event)">`;
         temp += `<td>TAS-BL${task.id}</td>`;
         temp += `<td>${task.name}</td>`;
         temp += `<td style="padding-inline-end:15px">${task.description}</td>`;
@@ -593,6 +599,36 @@ const view_edit_task_form = (event) => {
 
   current_editing_task = parent.id;
   edit_task.style.display = "block";
+};
+
+// DISPLAY VIEW PANNEL
+const view_pannel = (event) => {
+  let parent = event.target;
+  while (parent.id == ``) parent = parent.parentNode;
+
+  hide_view_task.style.display = "block";
+  // Fetch Task Details
+  fetch(`${localhost}/api/get_task_with_id`, {
+    method: "POST",
+    body: JSON.stringify({
+      id: parent.id,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      show_task_name.innerHTML = json[0].name;
+      percentage_show_task.innerHTML = `${json[0].percentage} %`;
+      comment_show_task.innerHTML = json[0].comments;
+      console.log(json[0]);
+    });
+};
+
+// HIDE TASK DETAILS
+const hide_task_details = () => {
+  hide_view_task.style.display = "none";
 };
 
 make_task_table_ready();

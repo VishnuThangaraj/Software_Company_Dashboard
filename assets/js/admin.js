@@ -24,22 +24,61 @@ function checkCredential() {
     }
   } else if (credential.startsWith("DEV-JD")) {
     developer_id = credential.slice(6);
-    const allowedPages = [`member.html`, `member_task.html`];
+    const allowedPages = [
+      `member.html`,
+      `member_task.html`,
+      `member_calendar.html`,
+    ];
     const currentPage = window.location.pathname.split("/").pop();
     if (!allowedPages.includes(currentPage)) {
       window.location.href = "login.html";
     }
+
+    // Fix Names and Email
+    fetch(`${localhost}/api/get_employee_with_id`, {
+      method: "POST",
+      body: JSON.stringify({
+        id: developer_id,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        document.getElementById(`mbr_name_current1`).innerHTML = json[0].name;
+        document.getElementById(`mbr_name_current2`).innerHTML = json[0].name;
+        document.getElementById(`email_current_mbr`).innerHTML = json[0].email;
+      });
   } else if (credential.startsWith("DEV-TL")) {
     teamlead_id = credential.slice(6);
     const allowedPages = [
       `teamlead_member.html`,
       `teamlead_task.html`,
       `teamlead.html`,
+      `teamlead_calendar.html`,
     ];
     const currentPage = window.location.pathname.split("/").pop();
     if (!allowedPages.includes(currentPage)) {
       window.location.href = "login.html";
     }
+
+    // Fix Names and Email
+    fetch(`${localhost}/api/get_teamlead_with_id`, {
+      method: "POST",
+      body: JSON.stringify({
+        id: teamlead_id,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        document.getElementById(`tl_name_current1`).innerHTML = json[0].name;
+        document.getElementById(`tl_name_current2`).innerHTML = json[0].name;
+        document.getElementById(`email_current_tl`).innerHTML = json[0].email;
+      });
   } else {
     window.location.href = "login.html";
   }

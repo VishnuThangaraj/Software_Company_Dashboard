@@ -78,7 +78,7 @@ CREATE TABLE software_company.events (
     name VARCHAR(50),
     description VARCHAR(100),
     evnt_date DATE, 
-    access VARCHAR(50) -- private or public
+    access VARCHAR(50) -- private or public or teamlead
 );
 
 INSERT INTO software_company.admin_cred (user_id, password)
@@ -120,34 +120,34 @@ VALUES
     ('Daniel Wilson', 'daniel.wilson@example.com', '5556667777', 35, 'Male', '555 Pine Ln, Anycity, USA', 'Dotnet Developer', 3, 'Daniel Wilson+123'),
     ('Eve Taylor', 'eve.taylor@example.com', '8889990000', 27, 'Female', '987 Cedar St, Anystate, USA', 'Dotnet Developer', 2, 'Eve Taylor+123');
 
-INSERT INTO software_company.task (name, description, employee_id, status, priority, due_date, project_id)
+INSERT INTO software_company.task (name, description, employee_id, status, priority, due_date, project_id, comments, percentage)
 VALUES
-    ('Design homepage layout', 'Create a new design for the company homepage', 1, 'Progress', 'HIGH',  '2024-07-20',1),
-    ('Implement login functionality', 'Develop login feature with OAuth integration', 2, 'Completed', 'MEDIUM', '2024-07-25',1),
-    ('Write API documentation', 'Document RESTful API endpoints for version 2.0', 3, 'Completed', 'LOW', '2024-07-15',2),
-    ('Bug fixing in user dashboard', 'Fix reported bugs in the user dashboard module', 4, 'Progress', 'HIGH', '2024-07-18',3),
-    ('Database schema optimization', 'Optimize database queries and indexes for performance', 4, 'Progress', 'MEDIUM', '2024-07-30',4);
+    ('Design homepage layout', 'Create a new design for the company homepage', 1, 'Progress', 'HIGH',  '2024-07-20',1,"UI designing Done", 20),
+    ('Implement login functionality', 'Develop login feature with OAuth integration', 2, 'Completed', 'MEDIUM', '2024-07-25',1, "Backend Connectivity on Progress",30),
+    ('Write API documentation', 'Document RESTful API endpoints for version 2.0', 3, 'Completed', 'LOW', '2024-07-15',2, "Router Bug Fix Done",45),
+    ('Bug fixing in user dashboard', 'Fix reported bugs in the user dashboard module', 4, 'Progress', 'HIGH', '2024-07-18',3, "Component Rendering Done",50),
+    ('Database schema optimization', 'Optimize database queries and indexes for performance', 4, 'Progress', 'MEDIUM', '2024-07-30',4,"Paused Task for Completing High Priority Task",80);
 
 INSERT INTO software_company.events (name, description, evnt_date, access) VALUES
 ('Summer Hackathon', 'Annual hackathon event for developers and tech enthusiasts.', '2024-07-01', 'private'),
 ('Product Launch Seminar', 'Introduction of new products with keynote speakers and demos.', '2024-07-02', 'public'),
 ('Client Appreciation Dinner', 'Exclusive dinner event to thank our valuable clients.', '2024-07-25', 'private'),
 ('Community Outreach Day', 'Volunteer activities and support for local communities.', '2024-07-04', 'public'),
-('Team Building Workshop', 'Engaging activities to foster teamwork and collaboration.', '2024-07-15', 'other'),
+('Team Building Workshop', 'Engaging activities to foster teamwork and collaboration.', '2024-07-15', 'teamlead'),
 ('Company Strategy Review', 'Discussion on company goals and future plans.', '2024-07-06', 'private'),
 ('Customer Feedback Forum', 'Gathering customer input for product improvement.', '2024-07-07', 'public'),
-('Industry Conference', 'Attending sessions on latest trends and innovations.', '2024-07-07', 'other'),
+('Industry Conference', 'Attending sessions on latest trends and innovations.', '2024-07-07', 'teamlead'),
 ('Summer Picnic', 'Outdoor event with games, food, and fun for all employees.', '2024-07-09', 'private'),
 ('Educational Workshop', 'Learning sessions on new technologies and skills.', '2024-07-29', 'public'),
 ('Employee Recognition Ceremony', 'Awarding outstanding employees for their contributions.', '2024-07-11', 'private'),
 ('Product Demo Day', 'Showcasing new products to potential clients and partners.', '2024-07-12', 'public'),
-('Charity Fundraiser', 'Raising funds for a local charity organization.', '2024-07-13', 'other'),
+('Charity Fundraiser', 'Raising funds for a local charity organization.', '2024-07-13', 'teamlead'),
 ('Health & Wellness Day', 'Activities promoting physical and mental well-being.', '2024-07-14', 'private'),
 ('Technical Training Session', 'Hands-on training on advanced technical skills.', '2024-07-15', 'public'),
-('Networking Mixer', 'Opportunity to connect with industry peers and professionals.', '2024-07-23', 'other'),
+('Networking Mixer', 'Opportunity to connect with industry peers and professionals.', '2024-07-23', 'teamlead'),
 ('Quarterly Review Meeting', 'Reviewing quarterly performance and goals.', '2024-07-17', 'private'),
 ('Annual General Meeting', 'Meeting with shareholders to discuss company progress.', '2024-07-18', 'public'),
-('Project Kickoff Event', 'Launching a new project with key stakeholders.', '2024-07-19', 'other'),
+('Project Kickoff Event', 'Launching a new project with key stakeholders.', '2024-07-19', 'teamlead'),
 ('Investor Relations Day', 'Presenting company financials and growth strategies.', '2024-07-25', 'private');
 
 
@@ -159,3 +159,7 @@ SELECT * FROM software_company.employee;
 SELECT * FROM software_company.task;
 SELECT * FROM software_company.events;
 
+SELECT 
+    (SELECT COUNT(*) FROM software_company.events WHERE YEAR(evnt_date) = '2024' AND MONTH(evnt_date) = '7' AND (access = 'private'OR access = 'teamlead')) AS event_count,
+    (SELECT COUNT(*) FROM software_company.projects WHERE YEAR(due_date) = '2024' AND MONTH(due_date) = '7') AS project_due_count,
+    (SELECT COUNT(*) FROM software_company.task WHERE YEAR(due_date) = '2024' AND MONTH(due_date) = '7') AS task_due_count;
