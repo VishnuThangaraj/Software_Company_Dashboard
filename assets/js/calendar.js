@@ -335,6 +335,53 @@ const add_event_dt = () => {
         window.location.href = "/calendar.html";
       }, 3000);
     });
+
+  // Send Email
+  if (event_access.value == "teamlead") {
+    fetch(`${localhost}/api/get_teamlead`)
+      .then((response) => response.json())
+      .then((json) => {
+        json.forEach((tl) => {
+          fetch(`${localhost}/api/company_mail`, {
+            method: "POST",
+            body: JSON.stringify({
+              to: tl.email,
+              subject: event_name.value,
+              message: event_description.value,
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          })
+            .then((response) => response.json())
+            .then((json) => {
+              console.log(`done`);
+            });
+        });
+      });
+  } else if (event_access.value == "public") {
+    fetch(`${localhost}/api/get_employee`)
+      .then((response) => response.json())
+      .then((json) => {
+        json.forEach((tl) => {
+          fetch(`${localhost}/api/company_mail`, {
+            method: "POST",
+            body: JSON.stringify({
+              to: tl.email,
+              subject: event_name.value,
+              message: event_description.value,
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          })
+            .then((response) => response.json())
+            .then((json) => {
+              console.log(`done`);
+            });
+        });
+      });
+  }
 };
 
 // CLOSE VIEW EVENT BOX

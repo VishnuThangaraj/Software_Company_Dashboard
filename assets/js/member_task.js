@@ -128,6 +128,7 @@ const make_task_table_ready = () => {
 
 // UPDATE TASK STATUS
 const update_task_status = (task_id, status, percentage = 0) => {
+  // UPDATE TASK STATUS
   fetch(`${localhost}/api/update_task_status`, {
     method: "PUT",
     body: JSON.stringify({
@@ -142,7 +143,7 @@ const update_task_status = (task_id, status, percentage = 0) => {
     .then((response) => response.json())
     .then((data) => {
       let content = {
-        message: "New Project Added to the Database",
+        message: "Task Accepted By the Developer",
         title: "Task Updated",
         icon: "fas fa-tasks",
         url: "project.html",
@@ -172,6 +173,24 @@ const update_task_status_with_comment = (
   comment,
   percentage = 0
 ) => {
+  // UPDATE IN SECONDARY TABLE STATUS
+  fetch(`${localhost}/api/add_new_task_status`, {
+    method: "POST",
+    body: JSON.stringify({
+      task_id: task_id,
+      percentage: percentage,
+      comments: comment,
+      employee_id: developer_id,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    });
+
   fetch(`${localhost}/api/update_task_status_comment`, {
     method: "PUT",
     body: JSON.stringify({

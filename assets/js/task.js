@@ -28,8 +28,7 @@ const edit_date_task = document.getElementById(`edit_date_task`);
 // View Task
 const hide_view_task = document.getElementById(`hide_view_task`);
 const show_task_name = document.getElementById(`show_task_name`);
-const percentage_show_task = document.getElementById(`percentage_show_task`);
-const comment_show_task = document.getElementById(`comment_show_task`);
+const task_details_table = document.getElementById(`task_details_table`);
 
 let current_editing_task = 1;
 
@@ -604,10 +603,11 @@ const view_edit_task_form = (event) => {
 // DISPLAY VIEW PANNEL
 const view_pannel = (event) => {
   let parent = event.target;
-  while (parent.id == ``) parent = parent.parentNode;
+  while (parent.id === "") parent = parent.parentNode;
 
   hide_view_task.style.display = "block";
-  // Fetch Task Details
+
+  // Fetch Task Name
   fetch(`${localhost}/api/get_task_with_id`, {
     method: "POST",
     body: JSON.stringify({
@@ -620,9 +620,68 @@ const view_pannel = (event) => {
     .then((response) => response.json())
     .then((json) => {
       show_task_name.innerHTML = json[0].name;
-      percentage_show_task.innerHTML = `${json[0].percentage} %`;
-      comment_show_task.innerHTML = json[0].comments;
-      console.log(json[0]);
+    });
+
+  // Fetch Task Details
+  fetch(`${localhost}/api/get_task_status_with_id`, {
+    method: "POST",
+    body: JSON.stringify({
+      id: parent.id,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      // Array to store all promises from fetch calls
+      let fetchPromises = [];
+
+      let temp = `<tr>
+                  <th style="width: 15%">Member</th>
+                  <th style="width: 5%">Percentage</th>
+                  <th style="width: 20%">Comment</th>
+                  <th style="width: 10%">Date</th>
+                </tr>`;
+
+      if (json.length > 0) {
+        json.forEach((data) => {
+          // Fetch employee details for each entry
+          let fetchPromise = fetch(`${localhost}/api/get_employee_with_id`, {
+            method: "POST",
+            body: JSON.stringify({
+              id: data.employee_id,
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          })
+            .then((response) => response.json())
+            .then((employeeJson) => {
+              // Append row to temp string after fetching employee details
+              temp += `<tr class="border-bottom">
+                        <td>${employeeJson[0].name}</td>
+                        <td>${data.percentage} %</td>
+                        <td>${data.comments}</td>
+                        <td>${formatDate(data.date.slice(0, 10))}</td>
+                      </tr>`;
+            });
+
+          fetchPromises.push(fetchPromise);
+        });
+
+        // Wait for all fetch calls to complete before updating the table
+        Promise.all(fetchPromises).then(() => {
+          task_details_table.innerHTML = temp;
+        });
+      } else {
+        console.log("No data found");
+        task_details_table.innerHTML = temp; // Ensure table is cleared or shows appropriate message
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+      // Handle error scenario
     });
 };
 

@@ -117,41 +117,44 @@ app.post(`/api/add_teamlead`, (req, res) => {
   );
 });
 
-// ADD NEW EMPLOYEE
-app.post(`/api/add_employee`, (req, res) => {
-  const {
-    name,
-    email,
-    phone,
-    age,
-    gender,
-    address,
-    designation,
-    team_lead_id,
-  } = req.body;
+// ADD NEW TASK STATUS
+app.post(`/api/add_new_task_status`, (req, res) => {
+  const { task_id, percentage, comments, employee_id } = req.body;
 
   connection.query(
-    `INSERT INTO employee (name, email, phone, age, gender, address, designation, team_lead_id, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    [
-      name,
-      email,
-      phone,
-      age,
-      gender,
-      address,
-      designation,
-      team_lead_id,
-      `${name}+123`,
-    ],
+    `INSERT INTO task_status (task_id, percentage, comments, employee_id) VALUES (?, ?, ?, ?)`,
+    [task_id, percentage, comments, employee_id],
     (err, result) => {
       if (err) {
         console.error("Error Inserting Data:", err);
         res.status(500).json({
           success: false,
-          error: "Failed to add Employee. Please try again later.",
+          error: "Failed to add Task Status. Please try again later.",
         });
       } else {
-        res.json({ success: true, message: "Employee added successfully" });
+        res.json({ success: true, message: "Task Status added successfully" });
+      }
+    }
+  );
+});
+
+// ADD NEW TASK
+app.post(`/api/add_task`, (req, res) => {
+  const { name, description, employee_id, priority, due_date, project_id } =
+    req.body;
+
+  connection.query(
+    `INSERT INTO task (name, description, employee_id, priority, due_date, project_id) VALUES (?, ?, ?, ?, ?, ?)`,
+    [name, description, employee_id, priority, due_date, project_id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Inserting Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to add Task. Please try again later.",
+        });
+      } else {
+        res.json({ success: true, message: "Task added successfully" });
       }
     }
   );
@@ -297,6 +300,27 @@ app.post(`/api/get_task_tl_id`, (req, res) => {
         res.status(500).json({
           success: false,
           error: "Failed to Fetch Task. Please try again later.",
+        });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+});
+
+// FETCH TASK STATUS WITH ID
+app.post(`/api/get_task_status_with_id`, (req, res) => {
+  const { id } = req.body;
+
+  connection.query(
+    `SELECT * FROM task_status WHERE task_id = ?`,
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error Fetching Data:", err);
+        res.status(500).json({
+          success: false,
+          error: "Failed to Employee Count. Please try again later.",
         });
       } else {
         res.json(result);

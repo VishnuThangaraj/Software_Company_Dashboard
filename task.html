@@ -500,7 +500,7 @@
                       <li>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">My Profile</a>
-                        
+
                         <a class="dropdown-item" href="#">Inbox</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">Account Setting</a>
@@ -1028,17 +1028,14 @@
             <div class="add_section_head pb-3" id="show_task_name">
               TASK NAME HERE
             </div>
-            <div class="project_list" style="min-height: 100px">
-              <div class="pt-3" style="font-size: 19px">
-                PROGRESS PERCENTAGE :
-                <span id="percentage_show_task">50 %</span>
-              </div>
-              <div class="pt-4" style="font-size: 19px; font-weight: 600">
-                COMMENTS
-              </div>
-              <div class="ms-5 ps-5 pt-2" id="comment_show_task"></div>
+            <div
+              class="project_list table-responsive-min"
+              style="min-height: 100px"
+            >
+              <table id="task_details_table"></table>
+              <div id="no_data_view_task"></div>
             </div>
-            <div class="btn_holder my-4 pt-4 text-center">
+            <div class="btn_holder text-center">
               <div onclick="hide_task_details()" class="btn py-1 btn-danger">
                 Close
               </div>
