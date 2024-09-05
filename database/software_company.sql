@@ -73,6 +73,17 @@ CREATE TABLE software_company.task (
     FOREIGN KEY (project_id) REFERENCES software_company.projects(id)
 );
 
+CREATE TABLE software_company.task_status (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    task_id INT,
+    percentage INT,
+    comments VARCHAR(100),
+    date DATE DEFAULT (current_date()),
+    employee_id INT,
+    FOREIGN KEY (task_id) REFERENCES software_company.task(id),
+    FOREIGN KEY (employee_id) REFERENCES software_company.employee(id)
+);
+
 CREATE TABLE software_company.events (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50),
@@ -128,6 +139,28 @@ VALUES
     ('Bug fixing in user dashboard', 'Fix reported bugs in the user dashboard module', 4, 'Progress', 'HIGH', '2024-07-18',3, "Component Rendering Done",50),
     ('Database schema optimization', 'Optimize database queries and indexes for performance', 4, 'Progress', 'MEDIUM', '2024-07-30',4,"Paused Task for Completing High Priority Task",80);
 
+INSERT INTO software_company.task_status (task_id, percentage, comments, employee_id) 
+VALUES 
+    ("1", "10", "Initial setup of project structure and environment.",1),
+    ("1", "20", "Completed basic UI wireframes.",1),
+    ("2", "15", "Started backend API development.",2),
+    ("2", "20", "Implemented user authentication.",2),
+    ("2", "30", "Added CRUD operations for main entities.",2),
+    ("3", "10", "Set up database schema.",2),
+    ("3", "30", "Implemented core business logic.",3),
+    ("3", "45", "Integrated third-party API for data synchronization.",3),
+    ("4", "10", "Initial frontend layout design.",4),
+    ("4", "30", "Added responsiveness using Bootstrap.",4),
+    ("4", "45", "Implemented client-side form validation.",4),
+    ("4", "50", "Integrated with backend APIs.",4),
+    ("5", "10", "Started testing phase.",4),
+    ("5", "30", "Fixed initial bugs reported in testing.",5),
+    ("5", "45", "Optimized database queries.",5),
+    ("5", "50", "Implemented caching mechanism.",4),
+    ("5", "60", "Added user management functionalities.",4),
+    ("5", "80", "Final round of testing and bug fixing.",4);
+
+
 INSERT INTO software_company.events (name, description, evnt_date, access) VALUES
 ('Summer Hackathon', 'Annual hackathon event for developers and tech enthusiasts.', '2024-07-01', 'private'),
 ('Product Launch Seminar', 'Introduction of new products with keynote speakers and demos.', '2024-07-02', 'public'),
@@ -158,6 +191,7 @@ SELECT * FROM software_company.team_lead;
 SELECT * FROM software_company.employee;
 SELECT * FROM software_company.task;
 SELECT * FROM software_company.events;
+SELECT * FROM software_company.task_status;
 
 SELECT 
     (SELECT COUNT(*) FROM software_company.events WHERE YEAR(evnt_date) = '2024' AND MONTH(evnt_date) = '7' AND (access = 'private'OR access = 'teamlead')) AS event_count,
