@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql2");
@@ -14,11 +16,11 @@ const port = 3005;
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "vishnuthangaraj",
-  database: "software_company",
+  password: process.env.MYSQL_DB_PASS,
+  database: process.env.MYSQL_DB,
 });
 
-app.use(cors()); // Enable CORS for cross-origin requests
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -26,8 +28,8 @@ app.use(bodyParser.json());
 const transporter = nodemailer.createTransport({
   service: "Gmail",
   auth: {
-    user: "vishnuthangaraj.vedhanthi@gmail.com",
-    pass: `cyrd rdon nvaa falc`,
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
